@@ -1,0 +1,419 @@
+\section{Quasiconvex Functions}
+Let $h \colon \bbR^{m \times d} \to \bbR$ be locally bounded and Borel measurable. We say $h$ is \textit{quasiconvex} if 
+\begin{equation}
+    h(A) \leq \dashint_{B(0,1)} h(A + \nabla \psi(x)) \; \d x
+\end{equation}
+for all $A \in \bbR^{m \times d}$ and $\psi \in W_0^{1,\infty}(B(0,1);\bbR^m)$, where $B(0,1) \subseteq \bbR^d$ is the unit open ball. We can give a physical interpretation of quasiconvexity: suppose 
+\begin{equation}
+    \scrF[y] := \int_{B(0,1)} h(\nabla y(x)) \; \d x
+\end{equation}
+models the elastic energy of deforming the ball $B(0,1)$ via a deformation $y \in W^{1,\infty}(B(0,1);\bbR^m)$. If $y$ is affine, i.e. $y(x) = x_0 + Ax$ for a linear map $A$, we would expect this deformation to cost no energy. Thus if we add an internal deformation $\psi \in W_0^{1,\infty}(B(0,1);\bbR^m)$, we should expect $y + \psi$ should cost more energy than just $y$. That is,
+\begin{equation}
+    \abs{B(0,1)} h(A) = \int_{B(0,1)} h(A) \; \d x = \scrF[y] \leq \scrF[y + \psi] = \int_{B(0,1)} h(A + \nabla\psi(x)) \; \d x.
+\end{equation}
+In particular, if $h$ is quasiconvex, then this physical condition is necessarily true.
+
+Let's show that quasiconvexity is actually a notion of convexity:
+\begin{lemma}
+    Suppose $h \colon \bbR^{m \times d} \to \bbR$ is locally bounded and convex. Then $h$ is quasiconvex.
+\end{lemma}
+\begin{proof}
+    Choose $V \in L^1(B(0,1);\bbR^m)$ with $\int_{B(0,1)} V(x) \; \d x = 0$, and fix $A \in \bbR^{m \times d}$. Define a probability measure $\mu \in \scrM^1(\bbR^{m \times d})$ by 
+    \begin{equation}
+        \angles{f,\mu} := \dashint_{B(0,1)} f(A + V(x)) \; \d x \quad \text{for } f \in C_0(\bbR^{m \times d}).
+    \end{equation}
+    By Jensen's inequality,
+    \begin{equation} \begin{aligned}
+        h(A) &= h\parens{ \int_{\bbR^{m \times d}} \id \; \d\mu } \\
+             &\leq \int_{\bbR^{m \times d}} h \; \d\mu \\
+             &= \dashint_{B(0,1)} h(A + V(x)) \; \d x.
+    \end{aligned} \end{equation}
+    Taking $V := \nabla \psi$ for $\psi \in W^{1,\infty}_0(B(0,1);\bbR^m)$, the proof is finished.
+\end{proof}
+
+Some more aspects surrounding the definition of quasiconvexity are encapsulated in the following lemma.
+\begin{lemma} \label{lem:propertiesOfQuasiconvexity}
+    \begin{enumerate}[label={\rm (\arabic*)}]
+        \item Let $\Omega \subseteq \bbR^d$ be a bounded Lipschitz domain. Suppose $h \colon \bbR^{m \times d} \to \bbR$ is locally bounded and satisfies 
+        \begin{equation} \label{eq:quasiconvexity}
+            h(A) \leq \dashint_\Omega h(A + \nabla \psi(x)) \; \d x
+        \end{equation}
+        for all $A \in \bbR^{m \times d}$ and $\psi \in W_0^{1,\infty}(\Omega;\bbR^m)$. Then $h$ is quasiconvex.
+
+        \item Suppose $h$ is locally bounded and has $p$-growth for some $p \in [1,\infty)$. If $h$ satisfies (\ref{eq:quasiconvexity}) for all $\psi \in W_0^{1,p}(\Omega;\bbR^m)$, then $h$ is quasiconvex.
+    \end{enumerate}
+\end{lemma}  
+\begin{proof}
+    (1) Given $\psi \in W_0^{1,p}(\Omega;\bbR^m)$ and another bounded Lipschitz domain $\widetilde{\Omega}$, we will show there exists $\widetilde{\psi} \in W_0^{1,p}(\widetilde{\Omega};\bbR^m)$ such that for all $A \in \bbR^{m \times d}$ and measurable $h \colon \bbR^{m \times d} \to \bbR$, we have 
+    \begin{equation}
+        \dashint_{\Omega} h(A + \nabla\psi(x)) \; \d x = \dashint_{\widetilde{\Omega}} h(A + \nabla\widetilde{\psi}(x)) \; \d x,
+    \end{equation}
+    in the sense that if one of the above integrals exists and is finite, then both exist and are finite, and the above equality holds. Property (i) will then follow from taking $\widetilde{\Omega} = B(0,1)$ and $p = \infty$
+
+    We use the Vitali covering theorem to write 
+    \begin{equation}
+        \widetilde{\Omega} = Z \cup \bigcup_{i=1}^\infty \Omega(a_i,r_i)
+    \end{equation}
+    for some $a_i \in \widetilde{\Omega}$, $r_i > 0$ and $Z \subseteq \widetilde{\Omega}$ with $\abs{Z} = 0$, where $\Omega(a,r) = a + r\Omega$. Given $x \in \Omega(a_i,r_i)$, we define 
+    \begin{equation}
+        \widetilde{\psi}(x) = r_i \psi\parens{\frac{x-a_i}{r_i}}.
+    \end{equation}
+    This defines an element of $L^p(\widetilde{\Omega})$. Evidently, $\widetilde{\psi}$ is weakly differentiable on each $\Omega(a_i,r_i)$ with weak gradient $\nabla\psi$. Thus $\widetilde{\psi}$ is weakly differentiable on $\widetilde{\Omega}$, and since $\nabla\widetilde{\psi} = \nabla\psi$, we see $\widetilde{\psi}$ lies in $W^{1,p}(\widetilde{\Omega};\bbR^m)$. 
+    {\color{red} finish}  
+\end{proof}
+
+A weaker notion of convexity is the following: a locally bounded Borel-measurable function $h \colon \bbR^{m \times d} \to \bbR$ is \textit{rank-one convex} if 
+\begin{equation}
+    h(\theta A + (1-\theta)B) \leq \theta h(A) + (1-\theta) h(B).
+\end{equation}
+for all $A,B \in \bbR^{m \times d}$ with $\rank(A-B) \leq 1$ and $\theta \in [0,1]$.
+That is, $h$ is convex along any rank-1 line.
+\begin{theorem}
+    If $h$ is quasiconvex, then it is rank-one convex.
+\end{theorem}
+\begin{proof}
+    Fix $A,B \in \bbR^{m \times d}$ with $B - A = an^\T$ for some $a \in \bbR^m \setminus \set{0}$ and $n \in S^{d-1}$. Choose $\theta \in (0,1)$. Define $Q \subseteq \bbR^d$ to be an open cube with two faces orthogonal to $n$, and with unit volume. Write $F := \theta A + (1-\theta)B$, and define the \textit{laminate} $u_j \in W_0^{1,\infty}(Q;\bbR^m)$ as follows: set
+    \begin{equation}
+        \phi_0(t) :=
+        \begin{cases}
+            -(1-\theta)t & t \in [0,\theta], \\
+            \theta(t-1)  & t \in (\theta,1].
+        \end{cases}
+    \end{equation}
+    Then define 
+    \begin{equation}
+        u_j(x) := Fx + \frac{1}{j} \phi_0(jx \cdot n - \lfloor jx \cdot n \rfloor)a.
+    \end{equation}
+    (cf. proposition \ref{prop:wlscImpliesConvex}). Now, $u_j$ has gradient 
+    \begin{equation}
+        \nabla u_j(x) = 
+        \begin{cases}
+            F - (1-\theta) an^\T = A & jx - \lfloor jx \cdot n \rfloor \in [0,\theta], \\
+            F + \theta an^\T = B     & jx - \lfloor jx \cdot n \rfloor \in (\theta,1].
+        \end{cases}
+    \end{equation}
+    So 
+    \begin{equation} \label{eq:averageOfLaminate}
+        \lim_{j \to \infty} \dashint_{Q} h(\nabla u_j(x)) \; \d x = \theta h(A) + (1-\theta) h(B).
+    \end{equation}
+    We also have $u_j \weakstar F$ in $W^{1,\infty}$, so by the Rellich-Kondrachov theorem, $u_j \to F$ uniformly.
+
+    Now, take a sequence $\rho_k \in C_c^\infty(Q;[0,1])$ with $\abs{Q \setminus \set{\rho_k = 1}} \to 0$ as $k \to \infty$. Define $v_{j,k} \in W^{1,\infty}(Q;\bbR^m)$ by 
+    \begin{equation}
+        v_{j,k}(x) := \rho_k(x)u_j(x) + (1-\rho_k(x)) Fx.
+    \end{equation}
+    Then $v_{j,k} = F$ on $\partial Q$, and
+    \begin{equation}
+        \nabla v_{j,k}(x) = \rho_k(x) \nabla u_j(x) + (1-\rho_k(x)) F + (u_j(x) - Fx) \nabla\rho_k(x).
+    \end{equation}
+    For each $k \in \bbN$, we may then estimate 
+    \begin{equation}
+        \limsup_{j \to \infty} \norm{\nabla v_{j,k}}_{L^\infty} \leq \limsup_{j \to \infty} \norm{\nabla u_j}_{L^\infty} + \abs{F} < \infty,
+    \end{equation}
+    noting that $\norm{u_j - F}_{L^\infty} \to 0$ as $j \to \infty$, and $\norm{\nabla u_j}_{L^\infty} \leq \max\set{\abs{A},\abs{B}}$ for all $j \in \bbN$. Choose, therefore, a sequence $j(k) \in \bbN$ with $\norm{\nabla v_{j(k),k}}_{L^\infty} < \infty$ independently of $k$. Since $h$ is locally bounded, there exists $C > 0$ such that 
+    \begin{equation}
+        \norm{h(\nabla u_{j(k)})}_{L^\infty} + \norm{h(\nabla v_{j(k),k})}_{L^\infty} \leq C \quad \text{for all } k \in \bbN.
+    \end{equation}
+    We then have the estimate 
+    \begin{equation} \begin{aligned}
+        \lim_{k \to \infty} \int_Q \abs{h(\nabla v_{j(k),k}) - h(\nabla u_{j(k)})} \; \d x
+        &\leq \lim_{k \to \infty} \int_{Q \setminus \set{\rho_k = 1}} \abs{h(\nabla v_{j(k),k})} + \abs{h(\nabla u_{j(k)})} \; \d x \\
+        &\leq C\abs{Q \setminus \set{\rho_k = 1}} \\
+        &= 0.
+    \end{aligned} \end{equation}
+    By the above calculation and (\ref{eq:averageOfLaminate}), it follows by quasiconvexity (noting $v_{j,k} - F \in W_0^{1,\infty}(Q;\bbR^m)$) that 
+    \begin{equation} \begin{aligned}
+        h(F) &\leq \lim_{k \to \infty} \dashint_Q h(F + (\nabla v_{j(k),k}(x) - F)) \; \d x \\
+             &= \lim_{k \to \infty} \dashint_Q h(\nabla u_{j(k)}(x)) \; \d x \\
+             &= \theta h(A) + (1-\theta) h(B),
+    \end{aligned} \end{equation}
+    as required.
+\end{proof}
+For $d=1$ or $m=1$, convexity, quasiconvexity, and rank-one convexity are all equivalent. For $d,m \geq 2$, however, quasiconvexity is strictly weaker than convexity. For example, we will see in the next section that the determinant and all smaller minors (besides $(1 \times 1)$-minors) are quasiconvex, but not convex. The following example is standard in the literature:
+\begin{example}[Alibert-Dacorogna-Marcellini]
+    For $d=m=2$ and $\gamma \in \bbR$, define $h_\gamma \colon \bbR^{2 \times 2} \to \bbR$ by 
+    \begin{equation}
+        h_\gamma(A) := \abs{A}^2 \parens{ \abs{A}^2 - 2\gamma \det{A} }.
+    \end{equation}
+    Then 
+    \begin{itemize}
+        \item $h_\gamma$ is convex if and only if $\abs{\gamma} \leq \frac{2\sqrt{2}}{3}$,
+        \item $h_\gamma$ is rank-one convex if and only if $\abs{\gamma} \leq \frac{2}{\sqrt{3}}$,
+        \item $h_\gamma$ is quasiconex if and only if $\abs{\gamma} \leq \gamma_{\rm QC}$ for some currently unknown $\gamma_\mathrm{QC} \in \left(1,\frac{2}{\sqrt{3}}\right]$.
+    \end{itemize}
+\end{example}
+
+We end this section with a couple of results about rank-one convexity:
+\begin{lemma}
+    Let $h \colon \bbR^{m \times d} \to \bbR$ be arnk-one convex, and suppose there exists $M > 0$ and $p \in [1,\infty)$ such that 
+    \begin{equation}
+        h(A) \leq M(1 + \abs{A}^p) \quad \text{for all } A \in \bbR^{m \times d}.
+    \end{equation}
+    Then $h$ has $p$-growth.
+\end{lemma}
+\begin{lemma}
+    Let $h \colon \bbR^{m \times d} \to \bbR$ be rank-one convex. Then it is locally Lipschitz continuous. Furthermore, if $h$ has $p$-growth with growth constant $M > 0$, then there exists $C = C_{d,m} > 0$ such that 
+    \begin{equation}
+        \abs{h(A) - h(B)} \leq CM(1 + \abs{A}^{p-1} + \abs{B}^{p-1})\abs{A-B} \quad \text{for all } A,B \in \bbR^{m \times d}.
+    \end{equation}
+    In particular, a rank-one convex function with linear growth is uniformly Lipschitz continuous.
+\end{lemma}
+
+\section{Null-Lagrangians}
+The \textit{null-Lagrangians} are the class of locally bounded functions $h \colon \bbR^{m \times d} \to \bbR$ such that the integral $\int_\Omega h(\nabla u(x)) \; \d x$ only depends on the boundary values of $u$.
+
+An \textit{ordered } $r$-\textit{multiindex} is an $r$-tuple $\alpha = (\alpha_1,\dots,\alpha_r)$ with $\alpha_1 < \cdots < \alpha_r$. Fix the rank $r \in \set{1,\dots,\min\set{d,m}}$, and let $\alpha$ and $\beta$ be ordered $r$-multiindices, with $\alpha_i \in \set{1,\dots,m}$, and $\beta_i \in \set{1,\dots,d}$ for all $i$. Write $A_\beta^\alpha$ for the $(r \times r)$-matrix with the $\alpha$ rows and $\beta$ columns. We say the function $M = M_\beta^\alpha \colon \bbR^{m \times d} \to \bbR$ given by 
+\begin{equation}
+    M(A) := \det{A_\beta^\alpha}
+\end{equation}
+is an $(r \times r)$-\textit{minor}. We say $r$ is its \textit{rank}. The following lemma says all minors are null-Lagrangians:
+\begin{lemma} \label{lem:minorsAreNullLagrangians}
+    Let $M \colon \bbR^{m \times d} \to \bbR$ be an $(r \times r)$-minor. For $p \in [r,\infty)$, suppose $u,v \in W^{1,p}(\Omega;\bbR^m)$ are such that $u = v$ on $\partial\Omega$ (in the sense that $v - u \in W_0^{1,p}(\Omega;\bbR^m)$). Then 
+    \begin{equation}
+        \int_\Omega M(\nabla u(x)) \; \d x = \int_\Omega M(\nabla v(x)) \; \d x.
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    Suppose first that $u,v$ are in $C^\infty(\overline{\Omega})$ with $\supp(u-v) \Subset \Omega$. Without loss of generality, we may take $M$ to be the minor of the first $r$ rows and columns (such an $M$ is called a \textit{principal minor}). Using notation from differential geometry (including the Einstein summation convention), we then have 
+    \begin{equation} \begin{aligned}
+        \d u^1 \wedge \cdots \d u^r \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d 
+        &= \pdv{u^1}{x^{j_1}} \cdots \pdv{u^r}{x^{j_r}} \, \d x^{j_1} \wedge \cdots \d x^{j_r} \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d \\
+        &= \sum_{\sigma \in S_r} (-1)^{\abs{\sigma}} \pdv{u^1}{x^{\sigma_1}} \cdots \pdv{u^r}{x^{\sigma_r}} \, \d x^1 \wedge \cdots \wedge \d x^d \\
+        &= M(\nabla u) \, \d x^1 \wedge \d x^d,
+    \end{aligned} \end{equation}
+    where $S_r$ is the group of permutations of $\set{1,\dots,r}$. Now note that 
+    \begin{equation}
+        \d u^1 \wedge \cdots \d u^r \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d 
+        = \d(u^1 \d u^2 \wedge \cdots \d u^r \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d ),
+    \end{equation}
+    so by Stokes' theorem, we have 
+    \begin{equation} \begin{aligned}
+        \int_\Omega M(\nabla u) \; \d x &= \int_\Omega \d u^1 \wedge \cdots \d u^r \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d \\
+        &= \int_{\partial \Omega} u^1 \d u^2 \wedge \cdots \d u^r \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d \\
+        &= \int_{\partial \Omega} v^1 \d v^2 \wedge \cdots \d v^r \wedge \d x^{r+1} \wedge \cdots \wedge \d x^d \\
+        &= \int_\Omega M(\nabla v) \; \d x,
+    \end{aligned} \end{equation}
+    finishing the proof in the smooth case.
+
+    In the non-smooth case, take $\epsilon > 0$. By Hadamard's inequality, $M(A) \leq \abs{A}^r$ for any $A \in \bbR^{m \times d}$, so Pratt's lemma (lemma \ref{lem:pratt}) immediately implies the function $u \mapsto \int_\Omega M(\nabla u) \; \d x$ is strongly continuous as a map $W^{1,p}(\Omega) \to \bbR$. Let $\delta > 0$ be such that $\norm{\widetilde{u} - \widetilde{v}}_{W^{1,p}} < \delta$ implies $\abs{\int_\Omega M(\nabla u) - M(\nabla v) \; \d x} < \frac{\epsilon}{2}$.
+    We may find $\widetilde{u} \in W^{1,p}(\Omega) \cap C^\infty(\overline{\Omega})$ such that $\norm{\widetilde{u} - u}_{W^{1,p}} < \frac{\delta}{2}$. Furthermore, since $v = u$ on $\partial\Omega$, there exists $\psi \in C_c^\infty(\Omega)$ such that $\norm{(v - u) - \psi}_{W^{1,p}} < \frac{\delta}{2}$. Define $\widetilde{v} := \widetilde{u} + \psi \in C^\infty(\overline{\Omega})$. Then 
+    \begin{equation}
+        \norm{\widetilde{v} - v}_{W^{1,p}} \leq \norm{(v - u) - \psi}_{W^{1,p}} + \norm{\widetilde{u} - u}_{W^{1,p}} < \delta.
+    \end{equation}
+    Note furthermore that $\widetilde{v} - \widetilde{u} = \psi$, so $\supp(\widetilde{v} - \widetilde{u}) \Subset \Omega$. It follows that 
+    \begin{equation} \begin{aligned}
+        \abs{\int_\Omega M(\nabla u) \; \d x - \int_\Omega M(\nabla v) \; \d x} 
+        &\leq \abs{\int_\Omega M(\nabla u) \; \d x - \int_\Omega M(\nabla \widetilde{u}) \; \d x} \\
+        &\quad + \abs{\int_\Omega M(\nabla \widetilde{u}) \; \d x - \int_\Omega M(\nabla \widetilde{v}) \; \d x} \\
+        &\quad + \abs{\int_\Omega M(\nabla \widetilde{v}) \; \d x - \int_\Omega M(\nabla v) \; \d x} \\
+        &< \frac{\epsilon}{2} + 0 + \frac{\epsilon}{2} \\\
+        &= \epsilon.
+    \end{aligned} \end{equation}
+    Since $\epsilon > 0$ was arbitrary, this finishes the proof.
+\end{proof}
+
+\begin{corollary}
+    All minors $M \colon \bbR^{m \times d} \to \bbR$ are \textit{quasiaffine}, which means $M$ and $-M$ are quasiconvex.
+\end{corollary}
+\begin{proof}
+    By Hadamard's inequality, $M$ has $r$-growth, where $r$ is the rank of $M$. Take a test function $\psi \in W_0^{1,r}(B(0,1);\bbR^m)$. Then, for any $A \in \bbR^{m \times d}$, the map $A + \psi$ is in $W^{1,r}(B(0,1);\bbR^m)$, and $\psi = A$ on $\partial B(0,1)$. By lemma \ref{lem:minorsAreNullLagrangians}, we have 
+    \begin{equation}
+        M(A) = \dashint_{B(0,1)} M(A) \; \d x = \dashint_{B(0,1)} M(A + \nabla \psi) \; \d x,
+    \end{equation}
+    so part (2) of lemma \ref{lem:propertiesOfQuasiconvexity} implies $M$ is quasiconvex. Putting a minus sign in front of everything tells us that $-M$ is also quasiconvex.
+\end{proof}
+
+Minors actually enjoy a certain weak continuity property:
+\begin{lemma} \label{lem:minorWeakCty}
+    Let $M \colon \bbR^{m \times d} \to \bbR$ be a rank $r$ minor, and for $p \in (r,\infty)$, let $u_j \in W^{1,p}(\Omega;\bbR^m)$ be a sequence with $u_j \weak u$ in $W^{1,p}$. Then $M(\nabla u_j) \weak M(\nabla u)$ in $L^{p/r}$. Similarly, if $u_j \in W^{1,\infty}(\Omega;\bbR^m)$ is a sequence with $u_j \weakstar u$ in $W^{1,\infty}$, then $M(\nabla u_j) \weakstar M(\nabla u)$ in $L^\infty$.
+\end{lemma}
+\begin{proof}
+    {\color{red} can u do it using differential formz}
+\end{proof}
+
+\section{Quasiconvexity and Young Measures}
+In this section, we will start to prove analogous results about convex functions for quasiconvex functions, using the machinery of Young measures. First, we have a Jensen-type inequality:
+\begin{lemma} \label{lem:quasiconvexJensen}
+    For $p \in (1,\infty)$, let $\nu \in \bfGY^p(B(0,1);\bbR^{m \times d})$ be a homogeneous gradient Young measure, and let $h \colon \bbR^{m \times d} \to \bbR$ be a quasiconvex function with $p$-growth. Then 
+    \begin{equation}
+        h([\nu]) \leq \int_{\bbR^{m \times d}} h \; \d\nu.
+    \end{equation}
+    The same result hold for $p=\infty$ without any growth assumption on $h$.
+\end{lemma}
+\begin{proof}
+    By lemma \ref{lem:gradientYM}, we can find a sequence $u_j \in W^{1,p}_{[\nu]}(B(0,1);\bbR^m)$ such that $\abs{\nabla u_j}^p$ is equiintegrable and $\nabla u_j \young \nu$. By quasiconvexity, we have 
+    \begin{equation}
+        h([\nu]) \leq \dashint_{B(0,1)} h(\nabla u_j) \; \d x.
+    \end{equation}
+    Now, the sequence $h(\nabla u_j)$ is uniformly integrable and equiintegrable by assumption, so we may take the limit on the right hand side to obtain our result.
+
+   For $p=\infty$, it is easy to check uniformly integrability and equiintegrability.
+\end{proof}
+\begin{corollary}
+    For $p \in (1,\infty]$, let $\nu \in \bfGY^p(\Omega;\bbR^{m \times d})$ be a homogeneous gradient Young measure, and let $h \colon \bbR^{m \times d} \to \bbR$ be quasiaffine with $p$-growth. Then 
+    \begin{equation}
+        h([\nu]) = \int_{\bbR^{m \times d}} h \; \d\nu.
+    \end{equation}
+\end{corollary}
+
+We now turn to considering the minimization problem (\ref{eq:integralMinimizationProblemWithoutFunctionDependence}) and, in particular, showing lower semicontinuity in the quasiconvex case. Assume $f$ has $p$-growth for some $p \in (1,\infty)$. Suppose $u_j \weak u$ in $W^{1,p}(\Omega;\bbR^m)$. Up to subsequence, we may assume $\nabla u_j$ generates $\nu \in \bfGY^p(\Omega;\bbR^{m \times d})$. If we assume the sequence $f(\cdot,\nabla u_j)$ is equiintegrable, then we may take the Young measure limit to find 
+\begin{equation}
+    \lim_{j \to \infty} \scrF[u_j] = \int_\Omega \int_{\bbR^{m \times d}} f(x,A) \; \d\nu_x(A) \, \d x.
+\end{equation}
+In order to show semicontinuity, it then suffices to show the inequality 
+\begin{equation}
+    f(x,\nabla u(x)) \leq \int_{\bbR^{m \times d}} f(x,A) \; \d\nu_x(A)
+\end{equation}
+for a.e. $x \in \Omega$. We have seen this in the homogeneous case when $f$ is quasiconvex, so our aim is to show a.e. $\nu_x$ is a homogeneous gradient Young measure in its own right. We do this using a blowup technique.
+\begin{lemma} \label{lem:homogenizingGradientYM}
+    For $p \in [1,\infty)$, let $\nu \in \bfGY^p(\Omega;\bbR^{m \times d})$ be a gradient Young measure. Then, for a.e. $x_0 \in \Omega$, the measure $\nu_{x_0}$ is a homogeneous gradient Young measure in $\bfGY^p(B(0,1);\bbR^{m \times d})$.
+\end{lemma}
+\begin{proof}
+    Fix a bounded sequence $u_j \in W^{1,p}(\Omega;\bbR^m)$ such that $\nabla u_j$ generates $\nu$. Choose countable dense families $h_k \in C_0(\bbR^{m \times d})$ and $\phi_k \in C_0(\Omega)$. Then the family $\phi_k \otimes h_k$ is dense in $C_0(\Omega \times \bbR^{m \times d})$. Let $x_0 \in \Omega$ be a Lebesgue point of all the $L^1$ functions $x \mapsto \angles{h_k,\nu_x}$. That is,
+    \begin{equation}
+        \lim_{r \downarrow 0} \int_{B(0,1)} \abs{\angles{h_k,\nu_{x_0 + ry}} - \angles{h_k,\nu_{x_0}}} \; \d y = 0.
+    \end{equation}
+    This holds for a.e. $x_0 \in \Omega$. For $y \in B(0,1)$, define 
+    \begin{equation}
+        v_j^{(r)}(y) := \frac{u_j(x_0 + ry) - [u_j]_{B(x_0,r)}}{r}.
+    \end{equation}
+    Then 
+    \begin{equation} \begin{aligned}
+        \int_{B(0,1)} \phi_k(y) h_k(\nabla v_j^{(r)}(y)) \; \d y &= \int_{B(0,1)} \phi_k(y) h_k(\nabla u_j(x_0 + ry)) \; \d y \\
+        &= \frac{1}{r^d} \int_{B(x_0,r)} \phi_k\parens{ \frac{z - x_0}{r} } h_k(\nabla u_j(z)) \; \d z.
+    \end{aligned} \end{equation}
+    Taking limits, we find 
+    \begin{equation} \begin{aligned}
+        \lim_{r \downarrow 0} \lim_{j \to \infty} \frac{1}{r^d} \int_{B(x_0,r)} \phi_k\parens{ \frac{z - x_0}{r} } h_k(\nabla u_j(z)) \; \d z
+        &= \lim_{r \downarrow 0} \frac{1}{r^d} \int_{B(x_0,r)} \phi_k\parens{ \frac{z-x_0}{r} } \angles{ h_k, \nu_z } \; \d z \\
+        &= \lim_{r \downarrow 0} \int_{B(0,1)} \phi_k(y) \angles{ h_k, \nu_{x_0 + ry} } \; \d y \\
+        &= \int_{B(0,1)} \phi_k(y) \angles{ h_k, \nu_{x_0} } \; \d y.
+    \end{aligned} \end{equation}
+    Furthermore, we have 
+    \begin{equation}
+        \int_{B(0,1)} \abs{\nabla v_j^{(r)}(y)}^p \; \d y = \int_{B(0,1)} \abs{ \nabla u_j(x_0 + ry) }^p \; \d y
+        = \frac{1}{r^d} \int_{B(x_0,r)} \abs{ \nabla u_j(z) }^p \; \d z.
+    \end{equation}
+    For fixed $r$, the latter integral is uniformly bounded in $j$. Now, up to subsequence, the measures $\abs{ \nabla u_j }^p \scrL^d \restrict \Omega$ converge weakly* to some finite measure $\lambda$. Assume $x_0$ also satisfies 
+    \begin{equation}
+        \lim_{r \downarrow 0} \frac{\lambda(\overline{B(x_0,r)})}{r^d} < \infty,
+    \end{equation}
+    which holds for a.e. $x_0 \in \Omega$ by the Besicovitch differentiation theorem. We then have 
+    \begin{equation}
+        \limsup_{r \downarrow 0} \lim_{j \to \infty} \int_{B(0,1)} \abs{\nabla v_j^{(r)}(y)}^p \; \d y < \infty.
+    \end{equation}
+    Since $[v_j^{(r)}]_{B(0,1)} = 0$, the Poincar\'e inequality yields a diagonal sequence $w_n := v_{j(n)}^{(r(n))}$ which is bounded in $W^{1,p}(B(0,1);\bbR^m)$ and such that 
+    \begin{equation}
+        \lim_{n \to \infty} \int_{B(0,1)} \phi_k(y) h_k(\nabla w_n(y)) \; \d y = \int_{B(0,1)} \phi_k(y) \angles{h_k,\nu_{x_0}} \; \d y.
+    \end{equation}
+    It follows that $\nabla w_n \young \nu_{x_0}$.
+\end{proof}
+Semicontinuity then follows:
+\begin{theorem}[Morrey, Acerbi-Fusco]
+    For $p \in (1,\infty)$, let $f \colon \Omega \times \bbR^{m \times d} \to [0,\infty)$ be a Carath\'eodory integrand with $p$-growth and such that $f(x,\cdot)$ is quasiconvex for a.e. $x \in \Omega$. Then the associated integral functional $\scrF$ is weakly lower semicontinuous on $W^{1,p}(\Omega;\bbR^m)$.
+\end{theorem}
+\begin{proof}
+    Let $u_j$ be a sequence in $W^{1,p}(\Omega;\bbR^m)$ converging weakly to $u$. Choose an arbitrary subsequence, and pass to a further subsequence with $\nabla u_j \young \nu \in \bfGY^p(\Omega;\bbR^{m \times d})$. Then $[\nu] = \nabla u$. Now, corollary \ref{cor:lowerSemicontinuityOfYoungMeasures}, lemma \ref{lem:quasiconvexJensen}, and lemma \ref{lem:homogenizingGradientYM} combine to imply 
+    \begin{equation} \begin{aligned}
+        \liminf_{j \to \infty} \int_\Omega f(x,\nabla u_j(x)) \; \d x 
+        &\geq \int_\Omega \int_{\bbR^{m \times d}} f(x,A) \; \d\nu_x(A) \, \d x \\
+        &\geq \int_\Omega f(x,\nabla u(x)) \; \d x,
+    \end{aligned} \end{equation}
+    which is precisely the estimate to be proved.
+\end{proof}
+The Direct Method then ensures that if $\scrF$ is an integral functional whose integrand has $p$-growth, $p$-coercivity, and quasiconvexity, then it has a minimizer over $W^{1,p}(\Omega;\bbR^m)$ with $u \vert_{\partial \Omega} = g$.
+
+Proposition \ref{prop:wlscImpliesConvex} has a big generalization for $d,m \neq 1$:
+\begin{proposition}
+    Let $f \colon \bbR^{m \times d} \to \bbR$ be continuous and with $p$-growth. If the associated functional
+    \begin{equation}
+        \scrF[u] := \int_\Omega f(\nabla u(x)) \; \d x, \quad u \in W^{1,p}(\Omega;\bbR^m)
+    \end{equation}
+    is weakly lower semicontinuous, then $f$ is quasiconvex.
+\end{proposition}
+\begin{proof}
+    {\color{red} do u wanna do this}
+\end{proof}
+
+
+\section{Integrands with $u$-dependence}
+
+
+\section{Regularity of Minimizers}
+
+
+\section{Rigidity for Gradients}
+
+Is every Young measure also a gradient Young measure? For inhomogeneous Young measures, the answer is false, since lemma \ref{lem:barycenterConvergence} implies the barycenter of a gradient Young measure is also a gradient. So a Young measure of the form $\delta[V]$ for some $V$ which is not a gradient cannot be a gradient Young measure.
+
+Now, we turn to homogeneous Young measures. Fix $A,B \in \bbR^{m \times d}$ and $\theta \in (0,1)$. We know by a previous example that the homogeneous Young measure 
+\begin{equation}
+    \nu = \theta \delta_A + (1-\theta) \delta_B
+\end{equation}
+is a gradient Young measure for $\rank(A - B) \leq 1$. We investigate the case $\rank(A - B) \geq 2$ using the following rigidity theorem:
+\begin{theorem}[Ball-James]
+    Let $\Omega \subseteq \bbR^d$ be open, bounded, and connected, and let $A, B \in \bbR^{m \times d}$.
+    \begin{enumerate}[label = {\rm (\roman*)}]
+        \item Suppose $u \in W^{1,\infty}(\Omega;\bbR^m)$ satisfies the \textit{exact two-gradient inclusion} $\nabla u \in \set{A,B}$ a.e. in $\Omega$.
+        \begin{enumerate}[label = {\rm (\alph*)}]
+            \item If $\rank(A-B) \geq 2$, then $\nabla u = A$ a.e., or $\nabla u = B$ a.e.
+            \item Suppose $\Omega$ is additionally convex. If $B - A = an^\T$ for some $a \in \bbR^m$ and $n \in S^{d-1}$, then there exists a Lipschitz function $h \colon \bbR \to \bbR$ with $h' \in \set{0,1}$ a.e., and $v_0 \in \bbR^m$ such that 
+            \begin{equation}
+                u(x) = v_0 + A x + h(x \cdot n) a.
+            \end{equation}
+        \end{enumerate}
+
+        \item Suppose now we have a sequence $u_j \in W^{1,\infty}(\Omega;\bbR^m)$ converging weakly* to some $u$ in $W^{1,\infty}(\Omega;\bbR^m)$, and satisfying the \textit{approximate two-gradient inclusion} $d(\nabla u_j, \set{A,B}) \to 0$ in measure. If $\rank(A-B) \geq 2$, then $\nabla u_j \to A$ in measure, or $\nabla u_j \to B$ in measure.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \textit{(ia)} Without loss of generality, $B = 0$, so we may write $\nabla u = A g$ for some $g \colon \Omega \to \bbR$. Assume further that $u \in C^\infty(\Omega;\bbR^m)$, so that $g \in C^\infty(\Omega)$. We will extend the result to $W^{1,\infty}$ functions by a mollification argument later. Now, since $\partial_i \partial_j u^k = \partial_j \partial_i u^k$ for all $i,j,k$, we have 
+    \begin{equation}
+        \tensor{A}{_j^k} \partial_i g = \tensor{A}{_i^k} \partial_j g.
+    \end{equation}
+    We claim that $\nabla g = 0$. Indeed, suppose otherwise, and let $x \in \Omega$ and $j = 1,\dots,d$ be such that $\partial_j g(x) \neq 0$. Then 
+    \begin{equation}
+        \tensor{A}{_i^k} = \frac{\tensor{A}{_j^k}}{\partial_j g(x)} \partial_i g(x) =: a^k \xi_i.
+    \end{equation}
+    But this means $A = a \xi$, showing that $A$ has rank at most 1. Contradiction. It follows by connectedness of $\Omega$ that $g$ is constant, finishing the proof of \textit{(ia)} in the smooth case.
+
+    In the nonsmooth case, pick an open set $\Omega' \Subset \Omega$. For some $h > 0$ sufficiently small, we may mollify $u$ at level $h$ to obtain a function $u_h \in C^\infty(\Omega';\bbR^m)$ with $\nabla u_h = (\nabla u)_h = A g_h$ for some $g_h \in C^\infty(\Omega')$. So by our previous work, either $g_h = 0$ a.e., or $g_h = 1$ a.e. Now, since $g_h \to g$ a.e. in $\Omega'$, we must have $g = 0$ a.e. in $\Omega'$, or $g = 1$ a.e. in $\Omega'$. Since $\Omega' \Subset \Omega$ was arbitrary, we have finished \textit{(ia)}.
+
+    \textit{(ib)} Assume without loss of generality that $A = 0$, so that $B = an^\T$. Choose a vector $v \in \bbR^d$ orthogonal to $n$.  Writing $\nabla u = B g$ as before, we have
+    \begin{equation} \begin{aligned}
+        \left. \odv{}{t} u(x + tv) \right\vert_{t=0} 
+        &= \nabla u(x) v \\
+        &= Bv g(x) \\
+        &= a v \cdot n g(x) \\
+        &= 0.
+    \end{aligned} \end{equation}
+    Thus $u$ is constant along any line orthogonal to $n$. In particular, $\nabla u$ and hence $g$ are also constant along any line orthogonal to $n$. Fix $x_0 \in \Omega$, and write $v_0 := u(x_0)$. Then, for any $x = x_0 + v + (x \cdot n) \in \Omega$ such that $v \in \bbR^d$ is orthogonal to $n$, we have 
+    \begin{equation} \begin{aligned}
+        u(x) - u(x_0)
+        &= \int_0^1 \odv{}{t} u(x_0 + t(v + (x \cdot n)n)) \; \d{t} \\
+        &= \int_0^1 \nabla u(x_0 + t(v + (x \cdot n)n))(v + (x \cdot n)n) \; \d{t} \\
+        &= \parens{ \int_0^1 g(x_0 + t(v + (x \cdot n)n)) (x \cdot n) \; \d{t} } a \\
+        &= h(x \cdot n) a.
+    \end{aligned} \end{equation}
+    By our previous observations, $h$ is independent of $v$. Furthermore, $h$ is Lipschitz (since it is defined by an integral), and $h'(x \cdot n) = g(x_0 + v + (x \cdot n)n) \in \set{0,1}$ a.e.
+
+    \textit{(ii)} Again, assume without loss of generality that $B = 0$. Consider the sets 
+    \begin{equation}
+        D_j := \set{ x \in \Omega : \abs{\nabla u(x) - A} \leq \frac{\abs{A}}{2} }.
+    \end{equation}
+    By assumption, $\nabla u_j - A \bbone_{D_j} \to 0$ in measure. Since the sequence $\bbone_{D_j}$ is bounded in $L^\infty(\Omega)$, we can pass to a subsequence with $\bbone_{D_j} \weakstar \chi$ in $L^\infty(\Omega)$. Now, since $\nabla u_j - A \bbone_{D_j}$ is also a bounded sequence in $L^\infty(\Omega)$, we have, for any $w \in L^1(\Omega)$,
+    \begin{equation} \begin{aligned}
+        \int_\Omega (\nabla u_j - A \bbone_{D_j}) w \; \d{x} 
+        &\leq \fhnorm{ \nabla u_j - A \bbone_{D_j} }_{L^\infty(\Omega)} \int_{\fhset{ \nabla u_j - A \bbone_{D_j} > \epsilon }} w \; \d{x} 
+               + \int_\Omega \epsilon w \; \d{x} \\
+        &\lesssim ( \fhabs{ \fhset{ \nabla u_j - A \bbone_{D_j} } } + \epsilon ) \norm{w}_{L^1(\Omega)} \\
+        &\to \epsilon \norm{w}_{L^1(\Omega)}.
+    \end{aligned} \end{equation}
+    Therefore $\nabla u_j - A \bbone_{D_j} \weakstar 0$ in $L^\infty(\Omega)$. We conclude that $\nabla u_j \weakstar A \chi$ in $L^\infty(\Omega)$. 
+    
+    We will now show that $\chi = \bbone_D$ for some set $D \subseteq \Omega$. Since $A$ has rank at least 2, we can find a rank 2 minor $M$ with $M(A) \neq 0$. By weak* continuity of minors (lemma \ref{lem:minorWeakCty}), we have $M(\nabla u_j) \weakstar M(A) \chi^2$. On the other hand, since $\nabla u_j - A \bbone_{D_j} \weakstar 0$, we also have $M(\nabla u_j) \weakstar M(A) \chi$. Therefore $\chi^2 = \chi$, and so we can write $\chi = \bbone_D$ for some set $D \subseteq \Omega$. So $\nabla u = A \bbone_D$. By part \textit{(ia)}, we must have $\nabla u = A$ a.e., or $\nabla u = B = 0$ a.e. 
+
+    It remains to prove $\nabla u_j \to \nabla u$ in measure. It suffices to prove this for the subsequence we have chosen, since we have assumed weak* convergence of the original sequence. Since $\bbone_{D_j} \weakstar \bbone_D$ in $L^\infty(\Omega)$, we clearly have $\fhnorm{\bbone_{D_j}}_{L^2(\Omega)} \to \fhnorm{\bbone_{D}}_{L^2(\Omega)}$. Similarly, $\bbone_{D_j} \weak \bbone_D$ in $L^2(\Omega)$. By the Radon-Riesz theorem, it follows that $\bbone_{D_j} \to \bbone_{D}$ in $L^2(\Omega)$ and hence in measure. So $\nabla u_j \to A \bbone_D = \nabla u$ in measure, as required.
+\end{proof}
+
+The Ball-James rigidity theorem allows us to answer the question from the beginning of the section. Namely, given two matrices $A,B \in \bbR^{m \times d}$ with $\rank(B - A) \geq 2$ and $\theta \in (0,1)$, is $\nu = \theta \delta_A + (1-\theta) \delta_B \in \bfY^\infty(\Omega;\bbR^{m \times d})$ a homogeneous gradient Young measure? The answer is no: suppose it were true, and let $u_j \in W^{1,\infty}(\Omega;\bbR^m)$ be a bounded sequence such that $\nabla u_j \weakstar \nabla u$ and $\nabla u_j \young \nu$ (up to subsequence). Then, since $\nu$ has support in $\set{A,B}$, lemma \ref{lem:ymConvergeInMeasure} implies $d(\nabla u_j, \set{A,B}) \to 0$ in measure. The Ball-James rigidity theorem implies $\nabla u = A$ a.e., or $\nabla u = B$ a.e. But the barycenter of $\nu$ is $\theta A + (1-\theta) B$, contradicting lemma \ref{lem:barycenterConvergence} which says $[\nu] = \nabla u$.

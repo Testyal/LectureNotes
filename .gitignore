@@ -1,0 +1,9 @@
+External
+*.aux
+*.log
+*.out
+*.gz
+*.toc
+.vscode
+*.icloud
+*.bin

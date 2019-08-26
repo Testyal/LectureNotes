@@ -1,0 +1,40 @@
+In our proof of weak lower semicontinuity for functionals with quasiconvex integrands in the last chapter, we relied on the $p$-growth bound $\abs{f(A)} \leq M(1 + \abs{A}^p)$. This is not a realistic physical assumption, since in elasticity theory, we should have $f(A) \to \infty$ as $\det{A} \to 0$. In this chapter, we will introduce a more restrictive notion of convexity which is more physically relevant.
+
+
+\section{Polyconvex Functions}
+
+A function $h \colon \bbR^{d \times d} \to \bbR \cup \set{\infty}$ is called \textit{polyconvex} if it can be written as a convex function of its minors. We will restrict attention to the notationally easier case $d = 3$, in which case $h$ is polyconvex if there exists a convex function $H \colon \bbR^{3 \times 3} \times \bbR^{3 \times 3} \times \bbR \to \bbR \cup \set{\infty}$ such that 
+\begin{equation}
+    h(A) = H(A,\cof{A},\det{A})
+\end{equation}
+for all $A \in \bbR^{3 \times 3}$. Certainly, convexity implies polyconvexity, but the determinant shows the converse is not true.
+\begin{proposition}
+    A polyconvex function is quasiconvex.
+\end{proposition}
+\begin{proof}
+    Fix $A \in \bbR^{3 \times 3}$ and $w \in W_A^{1,\infty}(B(0,1);\bbR^3)$. Then by Jensen's inequality,
+    \begin{equation} \begin{aligned}
+        \dashint_{B(0,1)} h(\nabla w) \; \d x 
+        &\geq H\parens{ \dashint_{B(0,1)} \nabla w \; \d x, \dashint_{B(0,1)} \cof{\nabla w} \; \d x, \dashint_{B(0,1)} \det{\nabla w} \; \d x } \\
+        &= H(A,\cof{A},\det{A}) \\
+        &= h(A),
+    \end{aligned} \end{equation}
+    where we use the fact that minors are null-Lagrangians.
+\end{proof}
+
+
+\section{Minimizers for Polyconvex Integral Functionals}
+
+\begin{theorem}
+    Let $\Omega \subseteq \bbR^3$ be a bounded Lipschitz domain. For $p \in (3,\infty)$, let $f \colon \Omega \times \bbR^{3 \times 3} \to \bbR \cup \set{\infty}$ be a Carath\'eodory integrand such that $f(x,\cdot)$ is polyconvex for a.e. $x \in \Omega$ and there exists $\mu > 0$ with $\mu\abs{A}^p \leq f(x,A)$ for a.e. $x \in \Omega$ and all $A \in \bbR^{3 \times 3}$. Let $q \in (1,\infty)$ be such that $\frac{1}{p} + \frac{1}{q} = 1$, and choose $b \in L^q(\Omega;\bbR^3)$ and $g \in W^{1-\frac{1}{p},p}(\partial\Omega;\bbR^3)$. Finally, assume there exists $u \in W^{1,p}_g(\Omega;\bbR^m)$ with $\det{\nabla u} > 0$ a.e. Then the variational problem
+    \begin{equation} 
+        \left\{ \begin{aligned}
+            \text{minimize } & \scrF[u] := \int_\Omega f(x,\nabla u(x)) - b(x) \cdot u(x) \; \d{x} \quad u \in W^{1,p}(\Omega;\bbR^3) \\
+            \text{subject to } & u = g \text{ on } \partial\Omega, \text{ and } \det{\nabla u} > 0 \text{ a.e.}
+        \end{aligned} \right.
+    \end{equation}
+    has a solution.
+\end{theorem}
+\begin{proof}
+
+\end{proof}

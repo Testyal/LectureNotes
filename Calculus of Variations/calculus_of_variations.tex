@@ -1,0 +1,196 @@
+\documentclass{book}
+
+\usepackage{amsmath, mathrsfs, amssymb, bbm, amsthm, enumitem, times, mathtools, mathptmx, tensor, xcolor, esint, hyperref, showlabels}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[margin=4cm]{geometry}
+
+\newcommand{\scrA}{\mathscr{A}}
+\newcommand{\scrB}{\mathscr{B}}
+\newcommand{\scrD}{\mathscr{D}}
+\newcommand{\scrE}{\mathscr{E}}
+\newcommand{\scrF}{\mathscr{F}}
+\newcommand{\scrH}{\mathscr{H}}
+\newcommand{\scrL}{\mathscr{L}}
+\newcommand{\scrM}{\mathscr{M}} 
+\newcommand{\scrN}{\mathscr{N}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbone}{\mathbbm{1}}
+\newcommand{\bfY}{\mathbf{Y}}
+\newcommand{\bfGY}{\mathbf{GY}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\D}{\mathrm{D}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\e}{\mathrm{e}}
+\renewcommand{\i}{\mathrm{i}}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+\newcommand{\abs}[1]{\left\lvert {#1} \right\rvert}
+\newcommand{\fhabs}[1]{\lvert {#1} \rvert}
+\newcommand{\norm}[1]{\left\lVert {#1} \right\rVert}
+\newcommand{\fhnorm}[1]{\lVert {#1} \rVert}
+\newcommand{\set}[1]{\left\{ {#1} \right\}}
+\newcommand{\fhset}[1]{\{ {#1} \}}
+\newcommand{\parens}[1]{\left( {#1} \right)}
+\newcommand{\angles}[1]{\left\langle {#1} \right\rangle}
+\newcommand{\fhangles}[1]{\langle {#1} \rangle}
+\newcommand{\aangles}[1]{\left\llangle {#1} \right\rrangle}
+\newcommand{\fhaangles}[1]{\llangle {#1} \rrangle}
+
+\newcommand{\pdv}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\odv}[3][]{\frac{\d^{#1}#2}{\d{#3}^{#1}}}
+ 
+\newcommand{\distributionEqual}{\overset{\scrD}{=}}
+\newcommand{\iidEqual}{\overset{\mathrm{i.i.d.}}{=}}
+\newcommand{\weak}{\rightharpoonup}
+\newcommand{\weakstar}{\overset{\ast}{\rightharpoonup}}
+\newcommand{\young}{\overset{\mathbf{Y}}{\rightarrow}}
+
+\newcommand{\restrict}{\begin{picture}(10,8)\put(2,0){\line(0,1){7}}\put(1.8,0){\line(1,0){7}}\end{picture}}
+
+\DeclareMathOperator{\dom}{dom}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\id}{\mathrm{id}}
+\DeclareMathOperator{\rank}{\mathrm{rank}}
+\DeclareMathOperator{\cof}{\mathrm{cof}}
+
+\makeatletter
+\DeclareFontFamily{OMX}{MnSymbolE}{}
+\DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
+\SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+\DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+    <-6>  MnSymbolE5
+   <6-7>  MnSymbolE6
+   <7-8>  MnSymbolE7
+   <8-9>  MnSymbolE8
+   <9-10> MnSymbolE9
+  <10-12> MnSymbolE10
+  <12->   MnSymbolE12
+}{}
+\DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
+    <-6>  MnSymbolE-Bold5
+   <6-7>  MnSymbolE-Bold6
+   <7-8>  MnSymbolE-Bold7
+   <8-9>  MnSymbolE-Bold8
+   <9-10> MnSymbolE-Bold9
+  <10-12> MnSymbolE-Bold10
+  <12->   MnSymbolE-Bold12
+}{}
+
+\let\llangle\@undefined
+\let\rrangle\@undefined
+\DeclareMathDelimiter{\llangle}{\mathopen}%
+                     {MnLargeSymbols}{'164}{MnLargeSymbols}{'164}
+\DeclareMathDelimiter{\rrangle}{\mathclose}%
+                     {MnLargeSymbols}{'171}{MnLargeSymbols}{'171}
+\makeatother
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\surroundwithmdframed[outerlinewidth=0.4pt,middlelinewidth=1pt,innerlinewidth=0.4pt,middlelinecolor=white,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{theorem}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{lemma}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{proposition}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{corollary}
+%\surroundwithmdframed[tikzsetting={draw=black,line width=1pt,dashed},bottomline=false,topline=false,rightline=false,innertopmargin=-5pt,outerlinecolor=white,middlelinecolor=white]{example}
+
+\numberwithin{equation}{chapter}
+
+\title{Calculus of Variations} 
+\author{Billy Sumners}
+
+\begin{document}
+\maketitle 
+
+\tableofcontents
+
+\chapter{Introduction}
+
+\chapter{Convexity}
+\input{s-Convexity.tex}
+
+\chapter{Variations}
+\input{s-Variations.tex}
+
+\chapter{Young Measures}
+\input{s-YoungMeasures.tex}
+
+\chapter{Quasiconvexity}
+\input{s-Quasiconvexity.tex}
+
+\chapter{Polyconvexity}
+\input{s-Polyconvexity.tex}
+
+\chapter{Relaxation}
+\input{s-Relaxation.tex}
+
+\appendix
+\chapter{Appendix}
+
+\begin{theorem}[Friedrichs-Poincar\'e]
+    Let $\Omega \subseteq \bbR^d$ be open and bounded. Fix $p \in [1,\infty]$, and suppose $q \in [1,\infty]$ satisfies the \textit{Friedrichs-Poincar\'e condition}
+    \begin{equation}
+        \begin{cases}
+            q \in [1,p^*]    & \text{if } p < d, \\
+            q \in [1,\infty) & \text{if } p = d, \\
+            q \in [1,\infty] & \text{if } p > d,
+        \end{cases}
+    \end{equation}
+    where $p^* = \frac{dp}{d - p}$ is the \textit{Sobolev conjugate} of $p$. Then there exists $C_P > 0$ such that
+    \begin{equation}
+        \norm{u}_{L^q} \leq C_P \norm{\nabla u}_{L^p}
+    \end{equation}
+    for all $u \in W_0^{1,p}(\Omega;\bbR^m)$.
+\end{theorem}
+
+\begin{theorem}[Rellich-Kondrachov] \label{thm:rellichKondrachov}
+    Let $\Omega \subseteq \bbR^d$ be open and bounded. Fix $p \in [1,\infty]$, and suppose $u_j \weak u$ in $W^{1,p}(\Omega)$.
+    \begin{enumerate}[label=(\roman*)]
+        \item If $p < d$, then $u_j \rightarrow u$ in $L^q$ for all $q < p^*$.
+        \item If $p = d$, then $u_j \rightarrow u$ in $L^q$ for all $q < \infty$.
+        \item If $p > d$, then $u_j \rightarrow u$ uniformly.
+    \end{enumerate}
+\end{theorem}
+
+\begin{lemma}[Mazur]
+    Let $X$ be a Banach space. Suppose $x_j$ is a sequence in $X$ converging weakly to $x \in X$. Then there exists a sequence $y_j \in X$ of convex combinations of the form 
+    \begin{equation}
+        y_j = \sum_{k=j}^{N(j)} \theta^{(j)}_k x_k; \hspace{20pt} \theta^{(j)}_k \in [0,1]; \hspace{20pt} \sum_{k=j}^{N(j)} \theta^{(j)}_k = 1,
+    \end{equation}
+    such that $y_j \rightarrow x$ strongly in $X$.
+\end{lemma}
+
+\begin{lemma}[Pratt] \label{lem:pratt}
+    Let $(X,\mu)$ be a measure space. Suppose $f_j,g_j \in L^1(X,\mu)$ are sequences converging pointwise a.e. to $f,g \in L^1(X,\mu)$ respectively, such that $\abs{f_j} \leq g_j$ for all $j$, and $\norm{g_j}_{L^1} \rightarrow \norm{g}$. Then 
+    \begin{equation}
+        \lim_{j \to \infty} \int_X f_j \; \d \mu = \int_X f \; \d \mu.
+    \end{equation}
+\end{lemma}
+ 
+\end{document}
+

@@ -1,0 +1,227 @@
+
+Suppose a functional $\scrF \colon W^{1,p}_g(\Omega;\bbR^m) \to \bbR$ has a minimizer $u_*$. Consider a path $t \mapsto u_t$ in $W_g^{1,p}$ with $u_0 = u_*$. If the map $t \mapsto \scrF[u_t]$ is differentiable at $t=0$, then its derivative must be zero by calculus. More generally, for $u \in W^{1,p}_g(\Omega;\bbR^m)$, define the \textit{first variation of} $\scrF$ \textit{at} $u$ to be the (partially defined) map $\delta\scrF[u] \colon C_c^\infty(\Omega;\bbR^m) \to \bbR$ given by 
+\begin{equation}
+    \delta\scrF[u][\psi] := \lim_{h \to 0} \frac{\scrF[u+h\psi] - \scrF[u]}{h} 
+                          = \left. \frac{\mathrm{d}}{\mathrm{d}t} \scrF[u+t\psi] \right\vert_{t=0}.
+\end{equation}
+if it exists. That is, $\delta\scrF$ is the G\^ateaux derivative of $\scrF$. A function $u_* \in W^{1,p}_g(\Omega;\bbR^m)$ is called a \textit{critical point of} $\scrF$ if $\delta\scrF[u_*] = 0$.
+
+\section{The Euler-Lagrange Equation}
+Given a map $f \colon \Omega \times \bbR^m \times \bbR^{m \times d} \to \bbR$, define the \textit{directional derivatives of} $f$ \textit{at the point} $(x,v,A) \in \Omega \times \bbR^m \times \bbR^{m \times d}$ to be the partially defined maps $\D_2f(x,v,A) \colon \bbR^m \to \bbR$ and $\D_3f(x,v,A) \colon \bbR^{m \times d} \to \bbR$ given by 
+\begin{align}
+    \D_2f(x,v,A) \cdot w &:= \lim_{h \to 0} \frac{f(x,v+hw,A) - f(x,v,A)}{h}, \\
+    \D_3f(x,v,A) : B     &:= \lim_{h \to 0} \frac{f(x,v,A+hB) - f(x,v,A)}{h},
+\end{align}
+whenever these limits exist. We also denote $\D_2$ by $\D_v$ and $\D_3$ by $\D_A$. The notations ``$\cdot$'' and ``$:$'' are merely suggestive, since $\D_v f(x,v,A)$ and $\D_A f(x,v,A)$ are not necessarily a vector or a matrix respectively. However, if $f$ is $C^1$ in the second argument, then $\D_v f(x,v,A)$ is given by the vector 
+\begin{equation}
+    \parens{ \frac{\partial f}{\partial v^i}(x,v,A) }^{i=1,\dots,m}.
+\end{equation}
+Similarly, if $f$ is $C^1$ in the third argument, then $\D_A f(x,v,A)$ is given by the matrix 
+\begin{equation}
+    \parens{ \frac{\partial f}{\partial \tensor{A}{_j^i}} }_{j=1,\dots,d}^{i=1,\dots,m}.
+\end{equation}
+
+\begin{theorem}
+    Let $\Omega \subseteq \bbR^d$ be open with Lipschitz boundary, and let $f \colon \Omega \times \bbR^m \times \bbR^{m \times d} \to \bbR$ be a Carath\'eodory integrand which is $C^1$ in $v$ and $A$, and which satisfies the growth bound 
+    \begin{equation} \label{eq:eulerLagrangeGrowthBound}
+        \abs{\D_v f(x,v,A)}, \abs{\D_A f(x,v,A)} \leq C(1 + \abs{v}^p + \abs{A}^p),
+    \end{equation}
+    for some $p \in [1,\infty)$ and $C > 0$, a.e. $x \in \Omega$, and all $(v,A) \in \bbR^m \times \bbR^{m \times d}$. Let $\scrF$ be the corresponding integral functional defined by
+    \begin{equation}
+        \begin{aligned}
+            \scrF[u] := \int_\Omega f(x,u(x),\nabla u(x)) \; \d x; \hspace{30pt} u \in W^{1,p}_g(\Omega;\bbR^m).
+        \end{aligned} 
+    \end{equation}
+    Then 
+    \begin{equation} \label{eq:firstVariationIntegralFormula}
+        \delta\scrF[u][\psi] = \int_\Omega \D_A f(x,u_*(x),\nabla u_*(x)) : \nabla \psi + \D_v f(x,u_*(x),\nabla u_*(x)) \cdot \psi \; \d x.
+    \end{equation}
+    Consequently, $u_* \in W^{1,p}_g(\Omega;\bbR^m)$ is a critical point of $\scrF$ if and only if $u_*$ is a weak solution of the boundary value problem 
+    \begin{equation} \label{eq:eulerLagrange}
+        \left\{
+        \begin{aligned}
+            -\div[\D_A f(x,u(x),\nabla u(x))] + \D_v f(x,u,\nabla u(x)) &= 0 \text{ in } \Omega,         \\
+                                                                      u &= g \text{ on } \partial\Omega.
+        \end{aligned} 
+        \right.
+    \end{equation}
+\end{theorem}
+Equation (\ref{eq:eulerLagrange}) is called the \textit{Euler-Lagrange equation for} $\scrF$.
+\begin{proof}
+    Fix $\psi \in C_c^\infty(\Omega;\bbR^m)$. Then 
+    \begin{equation} \begin{aligned}
+        \frac{\scrF[u_* + h\psi] - \scrF[u_*]}{h} &= \int_\Omega \frac{f(x,u_* + \psi,\nabla u_* + h\nabla\psi
+                                                                        - f(x,u_*,\nabla u_*)}{h} \; \d x               \\
+                                                  &= \frac{1}{h} \int_\Omega \int_0^1 \frac{\d}{\d t} f(x,u_* + th\psi,
+                                                                            \nabla u_* + th\nabla\psi \; \d t \, \d x   \\
+                                                  &= \int_\Omega \int_0^1 \D_v f(x,u_* + th\psi,
+                                                        \nabla u_* + th\nabla\psi ) \cdot \psi                          \\
+                                                  &\hspace{30pt} + \D_A f(x,u_* + th\psi, \nabla u_* 
+                                                        + th\nabla\psi ) : \nabla \psi \; \d t \, \d x.
+    \end{aligned} \end{equation}
+    The growth bound (\ref{eq:eulerLagrangeGrowthBound}) allows us to choose a dominating function for the the integral on the right. So taking the limit as $h \to 0$ in both the left and right hand side and applying the dominated convergence theorem, we find 
+    \begin{equation} 
+        \delta\scrF[u_*] = \int_\Omega \D_A f(x,u_*,\nabla u_*) \cdot \psi + \D_v f(x,u_*,\nabla u_*) : \nabla \psi \; \d x.
+    \end{equation}
+    This finishes the proof.
+\end{proof}
+\begin{remark}
+    Suppose (\ref{eq:eulerLagrangeGrowthBound}) is replaced by the slightly stronger growth bound
+    \begin{equation} \label{eq:eulerLagrangeStrongerGrowthBound}
+        \abs{\D_v f(x,v,A)}, \abs{\D_A f(x,v,A)} \leq C(1 + \abs{v}^{p-1} + \abs{A}^{p-1}).
+    \end{equation}
+    Then $\delta\scrF[u][v]$ can be defined for $v \in W^{1,p}_0(\Omega;\bbR^m)$. Indeed, the integral formula (\ref{eq:firstVariationIntegralFormula}) for the first variation satisfies 
+    \begin{equation} \begin{aligned}
+        \abs{\delta\scrF[u][\psi]} &\leq \int_\Omega \abs{ \D_A f(x,u,\nabla u) } \abs{\psi} + \abs{ \D_v f(x,u,\nabla u) }                                           \abs{\nabla \psi} \; \d x                                                           \\
+                                   &\leq \int_\Omega C(1 + \abs{u}^{p-1} + \abs{\nabla u}^{p-1})(\abs{\psi} 
+                                       + \abs{\nabla\psi}) \; \d x                                                            \\
+                                   &\leq C(1 + \norm{u}_{L^{p'(p-1)}}^{p-1} + \norm{\nabla u}_{L^{p'(p-1)}}^{p-1})
+                                         (\norm{\psi}_{L^p} + \norm{\nabla\psi}_{L^p})                                        \\
+                                   &\leq C(1 + \norm{u}_{L^p}^{p-1} + \norm{\nabla u}_{L^p}^{p-1})\norm{\psi}_{W^{1,p}}.
+    \end{aligned} \end{equation}
+    So $\delta\scrF[u]$ is bounded with respect to the $W^{1,p}$ norm, meaning we can use density of $C_c^\infty$ in $W^{1,p}_0$ to extend formula (\ref{eq:firstVariationIntegralFormula}).
+\end{remark}
+\begin{proposition} \label{prop:convexityImpliesSolutionsOfEulerLagrangeAreMinimizers}
+    Let $\Omega \subseteq \bbR^d$ be open with Lipschitz boundary, and let $f \colon \Omega \times \bbR^m \times \bbR^{m \times d} \to \bbR$ be a Carath\'eodory integrand satisfying the stronger growth bound (\ref{eq:eulerLagrangeStrongerGrowthBound}), and such that the map $(v,A) \mapsto f(x,v,A)$ is convex for a.e. $x \in \Omega$. If $u_* \in W^{1,p}_g(\Omega;\bbR^m)$ is a critical point of the corresponding integral functional $\scrF$ defined by (\ref{eq:integralFunctionalWithFunctionDependence}), then $u_*$ is a minimizer of $\scrF$ over $W^{1,p}_g(\Omega;\bbR^m)$.
+\end{proposition}
+\begin{proof}
+    Fix $v \in W^{1,p}_g(\Omega;\bbR^m)$. Define $h(t) := \scrF[u_* + t(v-u_*)]$. Then 
+    \begin{equation}
+        h'(0) = \delta\scrF[u_*][v-u_*] = 0.
+    \end{equation}
+    By convexity, $h(t) \geq h(0) + th'(0) = \scrF[u_*]$, and so $\scrF[v] = h(1) \geq \scrF[u_*]$.
+\end{proof}
+
+\begin{example}
+    The Euler-Lagrange equation for the Dirichlet functional
+    \begin{equation}
+        \scrF[u] = \int_{\Omega} \frac{1}{2}\abs{\nabla u}^2 \; \d x
+    \end{equation}
+    is given by the \textit{Laplace equation} $-\Delta u = 0$. Note that the integrand satisfies the growth bound (\ref{eq:eulerLagrangeStrongerGrowthBound}) for $p=2$ and is strictly convex, so proposition \ref{prop:convexityImpliesSolutionsOfEulerLagrangeAreMinimizers} implies harmonic functions (i.e. solutions $u \in W^{1,2}_g(\Omega)$ of the Laplace equation) are minimizers of $\scrF$, and proposition \ref{prop:strictConvexityImpliesUniqueness} implies this solution is the unique minimizer over $W^{1,p}_g$. In particular, solutions of the Laplace equation with given boundary values are unique.
+
+    The same is true for the Dirichlet functional with an additional term:
+    \begin{equation}
+        \scrF[u] = \int_\Omega \frac{1}{2}\abs{\nabla u}^2 - b \cdot u \; \d x.
+    \end{equation}
+    The Euler-Lagrange equation in this instance is the \textit{Poisson equation} $- \Delta u = b$.
+\end{example}
+
+An important special case are integrands of the form $f(x,v,A) = f(x,A) = \frac{1}{2}A:S(x)A$, where $S(x)$ is a symmetric $(2,2)$-tensor. That is, $S(x) \colon \bbR^{m \times d} \to \bbR^{m \times d}$ is a linear map, and the components of $SA$ are given by 
+\begin{equation}
+    \tensor{(S(x)A)}{_i^j} = \tensor{S}{_i^j_l^k}(x)\tensor{A}{_k^l}
+\end{equation}
+where the Einstein summation convention is in force. In particular,
+\begin{equation}
+    A:S(x)A = \sum_{i=1}^d\sum_{j=1}^m \tensor{A}{_i^j}\tensor{S}{_i^j_l^k}(x)\tensor{A}{_k^l}.
+\end{equation}
+In this situation, the Euler-Lagrange equation of the corresponding functional $\scrF$ is 
+\begin{equation}
+    -\div[S\nabla u] = 0.
+\end{equation}
+If $S(x)$ is positive definite for all $x$ (this occurs if, e.g., $f(x,\cdot)$ is convex), then the Euler-Lagrange equation above is an elliptic PDE.
+
+Beyond this point, we consider the situation $p=2$. A \textit{strong solution} of (\ref{eq:eulerLagrange}) is a function $u \in W^{2,2}(\Omega;\bbR^m)$ (or, more generally, in $(W^{1,2} \cap W^{2,2}_{\rm loc})(\Omega;\bbR^m))$ which satisfies the Euler-Lagrange equation pointwise a.e. If we also have that $u \in C^2(\Omega;\bbR^m) \cap C^0(\overline{\Omega};\bbR^m)$ is a strong solution, then it is also a \textit{classical solution} (i.e. all the derivatives of $u$ in the Euler-Lagrange equation can be interpreted to be usual derivatives). It would be nice to know that a sufficiently differentiable weak solution of the Euler-Lagrange equation is actually a strong solution. This is indeed the case:
+\begin{proposition}
+    Suppose $f \in C^2(\Omega \times \bbR^m \times \bbR^{m \times d};\bbR)$, and $u \in (W^{1,2} \cap W^{2,2}_{\rm loc})(\Omega;\bbR^m)$ is a weak solution of (\ref{eq:eulerLagrange}). Then $u$ is a strong solution. 
+\end{proposition}
+\begin{proof}
+    Starting from (\ref{eq:firstVariationIntegralFormula}) with $\delta\scrF[u] = 0$, we use the divergence theorem to find
+    \begin{equation}
+        \int_\Omega ( -\div[\D_A f(x,u_*(x),\nabla u_*(x))] + \D_v f(x,u_*(x),\nabla u_*(x)) )\cdot \psi \; \d x = 0
+    \end{equation}
+    for all $\psi \in C_c^\infty(\Omega;\bbR^m)$. The proof is finished by the following lemma.
+\end{proof}
+\begin{lemma}[Fundamental Lemma of the Calculus of Variations]
+    Let $\Omega \subseteq \bbR^d$ be open. Suppose $g \in L^1_{\rm loc}(\Omega)$ satisfies 
+    \begin{equation}
+        \int_\Omega g\psi \; \d x = 0 \hspace{20pt} \text{for all } \psi \in C_c^\infty(\Omega).
+    \end{equation}
+    Then $g = 0$ a.e.
+\end{lemma}
+\begin{proof}
+    Let $\epsilon > 0$. Extend $g$ by zero to $\bbR^d$. Fix a compact set $K \subseteq \bbR^d$, and choose $h \in C_c^\infty(\bbR^d)$ such that $\norm{ g - h }_{L^1(K)} < \frac{\epsilon}{2}$. Let $(\eta_\delta)_{\delta > 0}$ be a family of mollifiers, and choose $\delta > 0$ such that $\phi := \eta_\delta \ast \sgn{h}$ satisfies $\norm{ \phi - \sgn{h} }_{L^1(\bbR^d) } < \frac{\epsilon}{2(1+\norm{h}_{L^\infty(\bbR^d)})}$. Then 
+    \begin{equation} \begin{aligned}
+        \norm{g}_{L^1(K)} &\leq \norm{ g - h }_{L^1(K)} + \norm{h}_{L^1(K)}    \\
+                          &=    \norm{g-h}_{L^1(K)} + \int_K h \sgn{h} \; \d x \\
+                          &=    \norm{g-h}_{L^1(K)} + \int_K g\phi \; \d x + \int_K (h-g)\phi \; \d x + \int_K h(\sgn{h} - \phi) \;        \d x                                           \\
+                          &\leq \norm{g-h}_{L^1(K)} + 0  + \norm{g-h}_{L^1(K)} + \norm{h}_{L^\infty}\norm{\sgn{h}-\phi}_{L^1} \\
+                          &<    \epsilon,
+    \end{aligned} \end{equation}
+    where we use the fact that $\norm{\phi}_{L^\infty} \leq \norm{\eta_\delta}_{L^1} = 1$. Since $\epsilon > 0$ was arbitrary, we conclude $\norm{g}_{L^1(K)} = 0$, and so $g = 0$ a.e. on $K$. But $K$ was also arbitrary, so $g = 0$ a.e. on $\Omega$.
+\end{proof}
+
+\section{Regularity of Minimizers}
+We have seen that a critical point $u$ of an integral functional $\scrF$ which has $W^{2,2}_{\rm loc}$ regularity is a strong solution of the Euler-Lagrange equation for $\scrF$. A question to ask is for which integral functionals $\scrF$ does being a critical point guarantee such regularity? We will answer this question for a certain class of integral functionals. Let 
+\begin{equation}
+    \scrF[u] = \int_\Omega f(\nabla u) \; \d x \quad u \in W^{1,2}(\Omega;\bbR^m).
+\end{equation}
+We say $\scrF$ is a \textit{regular variational integral} if $f$ is $C^\infty$, and there exist $\mu,M > 0$ such that
+\begin{equation}
+    \mu \abs{B}^2 \leq \D^2 f(A)[B,B] \leq M \abs{B}^2 \quad \text{for all } A,B \in \bbR^{m \times d}.
+\end{equation}
+Immediately from the growth condition, we have 
+\begin{align}
+    \abs{\D^2 f(A)[B_1,B_2]} &\leq M \abs{B_1}\abs{B_2}, \\
+    \abs{\D f(A_1) - \D f(A_2)} &\leq M\abs{A_1 - A_2}, \\
+    \abs{\D f(A)} &\leq M(1 + \abs{A}),
+\end{align}
+for some possibly different constants $M$.
+
+Our goal of this section is to prove the following regularity theorem:
+\begin{theorem}
+    Let $\scrF$ be a regular variational integral with integrand $f$, and suppose $u_* \in W^{1,2}(\Omega;\bbR^m)$ is a cricical point of $\scrF$. Then $u_*$ is twice weakly differentiable, and moreover, for any open ball $B(x_0,3r) \subseteq \Omega$, the following \textit{Caccioppoli inequality} holds:
+    \begin{equation}
+        \int_{B(x_0,r)} \abs{\nabla^2 u_*}^2 \; \d x \leq \parens{\frac{2M}{\mu}}^2 \int_{B(x_0,3r)} \frac{\abs{\nabla u_* - [\nabla u_*]_{B(x_0,3r)}}^2}{r} \; \d x,
+    \end{equation}
+    where $[\nabla u_*]_{B(x_0,3r)} = \fint_{B(x_0,3r)} u \; \d x$ denotes the average of $\nabla u_*$ over $B(x_0,3r)$.
+
+    Consequently, $u_*$ has $W^{2,2}_{\rm loc}$ regularity, and therefore satisfies the Euler-Lagrange equation strongly.
+\end{theorem}
+The proof of this theorem will rely on using difference quotients to emulate the second derivative of $u_*$, and proving estimates to show these emulations converge to a true second derivative. Some revision on difference quotients is needed first. 
+
+Let $u \colon \Omega \to \bbR^m$ be a function. For $k \in \set{1,\dots,d}$, the $k$\textit{th difference quotient} with \textit{height} $h \in \bbR \setminus \set{0}$ is defined by 
+\begin{equation}
+    \D^h_k u(x) := \frac{u(x+he_k) - u(x)}{h}
+\end{equation}
+whenever this is well-defined. The matrix $\D^hu(x) \in \bbR^{m \times d}$ is given by $\tensor{(\D^hu(x))}{_i^j} = \D^h_i u^j(x)$.
+\begin{lemma}
+    Let $D \Subset \Omega \subseteq \bbR^d$ be open, let $p \in [1,\infty)$, and $u \in L^p(\Omega;\bbR^m)$.
+    \begin{enumerate}[label={\rm (\arabic*)}]
+        \item If $u \in W^{1,p}(\Omega;\bbR^m)$, then $\norm{\D^h_k u}_{L^p(D;\bbR^m)} \leq \norm{\partial_k u}_{L^p(\Omega;\bbR^m)}$ for all $k \in \set{1,\dots,d}$ and $0 < \abs{h} \leq d(D,\partial \Omega)$.
+        
+        \item Suppose $p > 1$, and there exists $0 < \delta < d(D,\partial \Omega)$ and $C > 0$ such that there is the bound $\norm{\D^h_k u}_{L^p(D;\bbR^m)} \leq C$ for all $0 < \abs{h} < \delta$. Then $\partial_k u$ exists on $D$, and $\norm{\partial_k u}_{L^p(\Omega;\bbR^m)} \leq C$. In particular, if this holds for all $k \in \set{1,\dots,d}$ and $D \Subset \Omega$, then $u \in W^{1,p}_{\rm loc}(\Omega;\bbR^m)$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \begin{enumerate}[label = (\arabic*)]
+        \item For $x \in D$ and $0 < \abs{h} < d(D,\partial \Omega)$, we have
+        \begin{equation} \begin{aligned}
+            \D^h_k u(x) &= \frac{u(x+he_k) - u(x)}{h} \\
+                        &= \frac{1}{h} \int_0^1 \frac{\d}{\d t} u(x+the_k) \; \d t \\
+                        &= \int_0^1 \partial_k u(x+the_k) \; \d x.
+        \end{aligned} \end{equation}
+        By Jensen's inequality for the probability space $([0,1],\scrL^1)$ and convexity of $\abs{\cdot}^p$, we have 
+        \begin{equation} \begin{aligned}
+            \fhnorm{\D^h_k u}_{L^p(D;\bbR^m)}^p &= \int_D \abs{ \int_0^1 \partial_k u(x+the_k) \; \d t}^p \; \d x \\
+                                              &\leq \int_D \int_0^1 \abs{\partial_k u(x+the_k)}^p \; \d t \, \d x \\
+                                              &\leq \norm{\partial_k u}_{L^p(\Omega;\bbR^m)}^p,
+        \end{aligned} \end{equation}
+        as required.
+
+        \item The set $\set{\D^h_k u : 0 < \abs{h} < \delta}$ is bounded in the reflexive space $L^p(D;\bbR^m)$, so the Banach-Alaoglu theorem provides the existence of a sequence $h_j \downarrow 0$ and a function $v_k \in L^p(D;\bbR^m)$ such that $\D^{h_j}_k u \weak v_k$. By lower semicontinuity of norms with respect to weak convergence, we have $\norm{v_k}_{L^p(D;\bbR^m)} \leq C$. Now, fix $\phi \in C_c^\infty(D;\bbR^m)$. Then 
+        \begin{equation} \begin{aligned}
+            \int_D \partial_k \phi \cdot u \; \d x &= \lim_{j \to \infty} \int_D \D^{-h_j}_k \phi \cdot u \; \d x \\
+                                                   &= - \lim_{j \to \infty} \int_D \phi \cdot \D^{h_j}_k u \; \d x \\
+                                                   &= - \int_D \phi \cdot v_k \; \d x.
+        \end{aligned} \end{equation}
+        So $v_k$ is the weak derivative $\partial_k u$.
+    \end{enumerate}
+\end{proof}
+
+{\color{red} complete this section}
+
+\section{Lagrange Multipliers}
+{\color{red} complete this section}
+
+\section{Invariances and Noether's Theorem}
+{\color{red} complete this section}

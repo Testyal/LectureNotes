@@ -1,0 +1,512 @@
+\documentclass{book}
+
+\usepackage{amsmath, mathrsfs, amssymb, bbm, amsthm, enumitem, times, mathtools, mathptmx, tensor, xcolor, esint, hyperref}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[margin=4cm]{geometry}
+
+\newcommand{\scrA}{\mathscr{A}}
+\newcommand{\scrB}{\mathscr{B}}
+\newcommand{\scrD}{\mathscr{D}}
+\newcommand{\scrE}{\mathscr{E}}
+\newcommand{\scrF}{\mathscr{F}}
+\newcommand{\scrH}{\mathscr{H}}
+\newcommand{\scrL}{\mathscr{L}}
+\newcommand{\scrM}{\mathscr{M}} 
+\newcommand{\scrN}{\mathscr{N}}
+\newcommand{\scrR}{\mathscr{R}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbone}{\mathbbm{1}}
+\newcommand{\bfY}{\mathbf{Y}}
+\newcommand{\bfGY}{\mathbf{GY}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\D}{\mathrm{D}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\e}{\mathrm{e}}
+\renewcommand{\i}{\mathrm{i}}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\newcommand{\GL}{\mathrm{GL}}
+
+\newcommand{\abs}[1]{\left\lvert {#1} \right\rvert}
+\newcommand{\norm}[1]{\left\lVert {#1} \right\rVert}
+\newcommand{\fhnorm}[1]{\lVert {#1} \rVert}
+\newcommand{\set}[1]{\left\{ {#1} \right\}}
+\newcommand{\parens}[1]{\left( {#1} \right)}
+\newcommand{\angles}[1]{\left\langle {#1} \right\rangle}
+\newcommand{\fhangles}[1]{\langle {#1} \rangle}
+\newcommand{\aangles}[1]{\left\llangle {#1} \right\rrangle}
+\newcommand{\fhaangles}[1]{\llangle {#1} \rrangle}
+
+\newcommand{\pdv}[3][]{\frac{\partial^#1 {#2}}{\partial{#3}^{#1}}}
+\newcommand{\odv}[2]{\frac{\d{#1}}{\d{#2}}}
+ 
+\newcommand{\distributionEqual}{\overset{\scrD}{=}}
+\newcommand{\iidEqual}{\overset{\mathrm{i.i.d.}}{=}}
+\newcommand{\weak}{\rightharpoonup}
+\newcommand{\weakstar}{\overset{\ast}{\rightharpoonup}}
+\newcommand{\young}{\overset{\mathbf{Y}}{\rightarrow}}
+
+\newcommand{\restrict}{\begin{picture}(10,8)\put(2,0){\line(0,1){7}}\put(1.8,0){\line(1,0){7}}\end{picture}}
+
+\DeclareMathOperator{\dom}{dom}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\id}{\mathrm{id}}
+\DeclareMathOperator{\rank}{\mathrm{rank}}
+\DeclareMathOperator{\End}{\mathrm{End}}
+\DeclareMathOperator{\Alt}{\mathrm{Alt}}
+\DeclareMathOperator{\Sym}{\mathrm{Sym}}
+\DeclareMathOperator{\grad}{\mathrm{grad}}
+\DeclareMathOperator{\Hess}{\mathrm{Hess}}
+\DeclareMathOperator{\Exp}{\mathrm{Exp}}
+
+\makeatletter
+\DeclareFontFamily{OMX}{MnSymbolE}{}
+\DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
+\SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+\DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+    <-6>  MnSymbolE5
+   <6-7>  MnSymbolE6
+   <7-8>  MnSymbolE7
+   <8-9>  MnSymbolE8
+   <9-10> MnSymbolE9
+  <10-12> MnSymbolE10
+  <12->   MnSymbolE12
+}{}
+\DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
+    <-6>  MnSymbolE-Bold5
+   <6-7>  MnSymbolE-Bold6
+   <7-8>  MnSymbolE-Bold7
+   <8-9>  MnSymbolE-Bold8
+   <9-10> MnSymbolE-Bold9
+  <10-12> MnSymbolE-Bold10
+  <12->   MnSymbolE-Bold12
+}{}
+
+\let\llangle\@undefined
+\let\rrangle\@undefined
+\DeclareMathDelimiter{\llangle}{\mathopen}%
+                     {MnLargeSymbols}{'164}{MnLargeSymbols}{'164}
+\DeclareMathDelimiter{\rrangle}{\mathclose}%
+                     {MnLargeSymbols}{'171}{MnLargeSymbols}{'171}
+\makeatother
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\DeclareRobustCommand{\coprod}{\mathop{\text{\fakecoprod}}}
+\newcommand{\fakecoprod}{%
+  \sbox0{$\prod$}%
+  \smash{\raisebox{\dimexpr.9625\depth-\dp0}{\scalebox{1}[-1]{$\prod$}}}%
+  \vphantom{$\prod$}%
+}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\surroundwithmdframed[outerlinewidth=0.4pt,middlelinewidth=1pt,innerlinewidth=0.4pt,middlelinecolor=white,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{theorem}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{lemma}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{proposition}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{corollary}
+%\surroundwithmdframed[tikzsetting={draw=black,line width=1pt,dashed},bottomline=false,topline=false,rightline=false,innertopmargin=-5pt,outerlinecolor=white,middlelinecolor=white]{example}
+
+\numberwithin{equation}{chapter}
+
+\title{Advanced PDEs} 
+\author{Billy Sumners}
+
+\begin{document}
+\maketitle 
+
+\tableofcontents
+
+\chapter{Sobolev Spaces}
+\section{Sobolev Spaces}
+
+Let $\Omega \subseteq \bbR^n$ be open, $u \in L^1_{\rm loc}(\Omega)$, and $\alpha \in \bbN_0^n$ a multiindex. A function $v \in L^1_{\rm loc}(\Omega)$ is a \textit{weak derivative} of $u$ corresponding to $\alpha$ if 
+\begin{equation}
+    \int_\Omega u \partial^\alpha \phi \; \d{x} = (-1)^{\abs{\alpha}} \int_\Omega v \phi \; \d{x}
+\end{equation}
+for all $\phi \in C_c^\infty(\Omega)$.
+\begin{lemma}
+    Suppose $v,w \in L^1_{\rm loc}(\Omega)$ are weak derivatives of $u \in L^1_{\rm loc}(\Omega)$ corresponding to $\alpha$. Then $v = w$ a.e.
+\end{lemma}
+\begin{proof}
+    Given $\phi \in C_c^\infty(\Omega)$, we have 
+    \begin{equation}
+        \int_\Omega (v-w)\phi \; \d{x} = (-1)^{\abs{\alpha}} \int_\Omega (u - u) \partial^\alpha \phi \; \d{x} = 0.
+    \end{equation}
+    The proof then follows from the following important lemma.
+\end{proof}
+
+\begin{lemma}[Fundamental Lemma of the Calculus of Variations]
+    Suppose $v \in L^1_{\rm loc}(\Omega)$ satisfies 
+    \begin{equation}
+        \int_\Omega v\phi \; \d{x} = 0
+    \end{equation}
+    for all $\phi \in C_c^\infty(\Omega)$. Then $v = 0$ a.e.
+\end{lemma}
+We will prove this later after introducing mollification. The idea is to approximate $\sgn{v}$ by a function in $C_c^\infty(\Omega)$.
+
+If $u \in L^1_{\rm loc}(\Omega)$ has a weak derivative corresponding to $\alpha$, we will write $\partial^\alpha u$ for this weak derivative, interpreting it as a (necessarily unique by the preceding lemma) element of $L^1_{\rm loc}(\Omega)$. If all weak derivatives of order 1 for $u$ exist, we say $u$ is \textit{weakly differentiable}, and we compile all its derivatives in the \textit{weak gradient} $\nabla u := (\partial_1 u,\dots,\partial_n u)$.
+
+Of course, integration by parts implies that if $u \in C^k(\Omega)$, then all its weak derivatives of order at most $k$ exist, and are equal to the corresponding classical derivatives. Furthermore, if $U \subseteq \Omega$ is open, then $C_c^\infty(U)$ embeds naturally in $C_c^\infty(\Omega)$ (extension by zero), so if $u \in L^1_{\rm loc}(\Omega)$ has a weak derivative corresponding to $\alpha$, then its restriction to $U$ also has a weak derivative corresponding to $\alpha$, given by the restriction of $\partial^\alpha u$. From these facts, the following two examples follow naturally.
+\begin{example}
+    On $\Omega = (-1,1) \subseteq \bbR$, define 
+    \begin{equation}
+        u(x) := \begin{cases}
+            0 & x < 0, \\
+            x & x \geq 0.
+        \end{cases}
+    \end{equation}
+    Then on the open set $(-1,0)$, $u$ has classical derivative $0$, and on $(0,1)$, $u$ has classical derivative $1$. So if $u$ were weakly differentiable, its weak derivative would be
+    \begin{equation}
+        v(x) := \begin{cases}
+            0 & x < 0, \\
+            1 & x \geq 0.
+        \end{cases}
+    \end{equation}
+    Let's check this. Fix $\phi \in C_c^\infty(\Omega)$. Then 
+    \begin{equation}
+        \int_{-1}^1 v\phi \; \d{x} = \int_0^1 \phi \; \d{x} = - \int_0^1 x\phi'(x) \; \d{x} = - \int_{-1}^1 u\phi' \; \d{x}.
+    \end{equation}
+    It follows that $u'$ exists and equals $v$.
+\end{example}
+\begin{example}
+    On the same $\Omega$, define
+    \begin{equation}
+        u(x) := \begin{cases}
+            0 & x < 0, \\
+            1 & x \geq 0.
+        \end{cases}
+    \end{equation}
+    As before, $u$ is classically differentiable on $(-1,0)$ and on $(0,1)$ with classical derivative $0$, so this would have to be the weak derivative of $u$ if it exists. However, we claim that $u$ is not weakly differentiable. To see this, fix $\phi \in C_c^\infty(\Omega)$ with $\phi(0) \neq 0$. Then 
+    \begin{equation}
+        \int_{-1}^1 u\phi' \; \d{x} = \int_0^1 \phi' \; \d{x} = - \phi(0) \neq 0 = - \int_{-1}^1 0\phi(x) \; \d{x},
+    \end{equation}
+    as required.
+\end{example}
+
+Let's now define the spaces we will be using for the rest of the course. Let $\Omega \subseteq \bbR^n$ be open, $p \in [1,\infty]$, and $k \in \bbN_0$. The \textit{Sobolev space} $W^{k,p}(\Omega)$ is defined to be the space of functions $u \in L^p(\Omega)$ such that for all multiindices $\alpha$ with $\abs{\alpha} \leq k$, the weak derivative $\partial^\alpha u$ exists and lies in $L^p(\Omega)$. The norm on this space is given by
+\begin{equation}
+    \norm{u}_{W^{k,p}(\Omega)} := \parens{ \sum_{\abs{\alpha} \leq k} \norm{\partial^\alpha u}_{L^p(\Omega)}^p }^{1/p} \quad p < \infty,
+\end{equation}
+and
+\begin{equation}
+    \norm{u}_{W^{k,\infty}(\Omega)} := \sum_{\abs{\alpha} \leq k} \norm{\partial^\alpha u}_{L^\infty(\Omega)}.
+\end{equation}
+Clearly, the Sobolev spaces are vector spaces. We will show their norms are actually norms by embedding them as particularly nice subspaces of a certain $L^p$ space. This embedding will automatically give us some other properties.
+
+Define $\Omega_k$ to be the disjoint union $\coprod_{\abs{\alpha} \leq k} \Omega = \prod_{\abs{\alpha} \leq k} \set{\alpha} \times \Omega$, and equip it with the Lebesgue measure. Define $i \colon W^{k,p}(\Omega) \to L^p(\Omega_k)$ by 
+\begin{equation}
+    i(u)(\alpha,x) := \partial^\alpha u(x).
+\end{equation}
+Then $i$ is a linear isometry as can be easily checked, from which it follows immediately that $\norm{\cdot}_{W^{k,p}(\Omega)}$ is a norm. For more intricate properties, we will prove the following:
+\begin{lemma}
+    Under the embedding above, $W^{k,p}(\Omega)$ is a closed subspace of $L^p(\Omega_k)$.
+\end{lemma}
+Indeed, this lemma tells us that $W^{k,p}(\Omega)$ is a Banach space for all $p \in [1,\infty]$, separable for $p \in [1,\infty)$, and reflexive for $p \in (1,\infty)$.
+\begin{proof}
+    Let $u_i$ be a sequence in $W^{k,p}(\Omega)$ such that $i(u_i)$ is Cauchy in $L^p(\Omega_k)$. Then, for each multiindex $\alpha$, $\partial^\alpha u_i$ converges to some $u^{(\alpha)}$ in $L^p(\Omega)$. We claim that $u^{(0)}$ is in $W^{k,p}(\Omega)$, and $\partial^\alpha u^{(0)} = u^{(\alpha)}$ for all multiindices $\alpha$. Indeed, given $\phi \in C_c^\infty(\Omega)$, we have 
+    \begin{equation} \begin{aligned}
+        \int_\Omega \phi u^{(\alpha)} \; \d{x} 
+        &= \lim_{i \to \infty} \int_\Omega \phi \partial^\alpha u_i \; \d{x} \\
+        &= \lim_{i \to \infty} (-1)^{\abs{\alpha}} \int_\Omega \partial^\alpha{\phi} u_i \; \d{x} \\
+        &= \int_\Omega \partial^\alpha{\phi} u^{(0)} \; \d{x},
+    \end{aligned} \end{equation}
+    where passing to limits is possible by H\"older's inequality. Since each $u^{(\alpha)}$ lies in $L^p(\Omega)$, we have that $u^{(0)}$ is in $W^{k,p}(\Omega)$. Finally, since $i(u_i) \to i(u^{(0)})$ in $L^p(\Omega_k)$, it follows that $u_i \to u^{(0)}$ in $W^{k,p}(\Omega)$.
+\end{proof}
+Since finite-dimensional norms are all equivalent, there are many equivalent norms to put on Sobolev spaces. For example,
+\begin{equation}
+    \norm{u} := \sum_{\abs{\alpha} \leq k} \norm{\partial^\alpha u}_{L^p(\Omega)}
+\end{equation}
+is a particularly nice one.
+
+The Sobolev space we will be using most often are $W^{k,2}(\Omega)$, also denoted $H^k(\Omega)$. These spaces gain an inner product, defined by 
+\begin{equation}
+    (u,v)_{H^k(\Omega)} := \int_\Omega uv \; \d{x}.
+\end{equation}
+
+
+\section{Mollification and Approximation}
+
+In this section, fix a nonnegative smooth test function $\eta \in C_c^\infty(B(0,1))$ such that $\norm{\eta}_{L^1} = 1$. Such an $\eta$ is called a \textit{mollifier}. For $h > 0$, we define its rescaling $\eta_h \in C_c^\infty(B(0,h))$ by
+\begin{equation}
+    \eta_h(x) := \frac{1}{h^n} \eta\parens{\frac{x}{h}}.
+\end{equation}
+Given $u \in L^1_{\rm loc}(\Omega)$, define its \textit{mollification} at scale $h > 0$ by
+\begin{equation}
+    u_h(x) := (\eta_h \ast u)(x) = \int_{B(x,h)} \eta_h(x - y) u(y) \; \d{y},
+\end{equation}
+whenever $x \in \Omega$ is such that $\overline{B(x,h)} \subseteq \Omega$. Strictly speaking, this condition is not absolutely necessary since we can extend any locally integrable function by zero to all of $\bbR^n$. It will be necessary shortly, however.
+\begin{lemma}
+    Let $u \in L^1_{\rm loc}(\bbR^n)$, and let $h > 0$. Then $u_h \in C^\infty(\bbR^n)$.
+\end{lemma}
+\begin{proof}
+    Fix a multiindex $\alpha$. Then
+    \begin{equation} \begin{aligned}
+        \pdv[\alpha]{}{x} \int_{\bbR^n} \eta_h(x - y) u(y) \; \d{y}
+        &= \int_{\bbR^n} \pdv[\alpha]{}{x} \eta_h(x - y) u(y) \; \d{y},
+    \end{aligned} \end{equation}
+    where we may move the derivative under the integral since the derivative 
+    \begin{equation}
+        \pdv[\alpha]{}{x} \eta_h(x - y) u(y)
+    \end{equation}
+    is bounded by the integrable function $\norm{\partial^\alpha \eta_h}_{L^\infty(\bbR^n)} \abs{u} \bbone_{B(x,h)}$ independent of $x \in \bbR^n$.
+\end{proof}
+\begin{lemma} \label{lem:mollifAndDiffCommute}
+    Fix a locally integrable function $u \in L^1_{\rm loc}(\Omega)$, and a multiindex $\alpha$ such that the weak derivative $\partial^\alpha u$ exists. Suppose $x \in \Omega$ and $h > 0$ is such that $\overline{B(x,h)} \subseteq \Omega$. Then the classical derivative $\partial^\alpha u_h$ exists, and $\partial^\alpha u_h(x) = (\partial^\alpha u)_h(x)$.
+\end{lemma}
+\begin{proof}
+    This is a simple calculation:
+    \begin{equation} \begin{aligned}
+        \pdv[\alpha]{}{x} \int_\Omega \eta_h(x-y) u(y) \; \d{y} 
+        &= \int_\Omega \pdv[\alpha]{}{x} \eta_h(x-y) u(y) \; \d{y} \\
+        &= \int_\Omega (-1)^{\abs{\alpha}} \pdv[\alpha]{}{x} \eta_h(x-y) u(y) \; \d{y} \\
+        &= \int_\Omega \eta_h(x-y) \partial^\alpha(y) \; \d{y}.
+    \end{aligned} \end{equation}
+    Again, we can move the derivative inside the integral by the proof of the previous lemma. In the last equality, we use the fact that $y \mapsto \eta_h(x-y)$ is smooth with compact support.
+\end{proof}
+
+We will now show how mollification can be used to approximate Sobolev functions by smooth functions.
+\begin{theorem}
+    {\rm (a)} Let $\Omega \subseteq \bbR^n$ be open, and let $u \in L^1_{\rm loc}(\Omega)$. Then $u_h \to u$ a.e. as $h \downarrow 0$. If $u$ is continuous, then $u_h \to u$ locally uniformly.
+
+    Choose a smaller open set $\Omega' \Subset \Omega$, let $p \in [1,\infty]$, and let $h > 0$ be sufficiently small such that 
+    \begin{equation}
+        \set{x \in \bbR^n : d(x,\Omega') < h} \subseteq \Omega.
+    \end{equation}\newline
+    {\rm (b)} If $u \in L^p(\Omega)$, then $\norm{u_h}_{L^p(\Omega')} \leq \norm{u}_{L^p(\Omega)}$. Furthermore, if $p \in [1,\infty)$, then $u_h \to u$ in $L^p(\Omega')$. \newline
+    {\rm (c)} If $u \in W^{k,p}(\Omega)$, then $\norm{u_h}_{W^{k,p}(\Omega')} \leq \norm{u}_{W^{k,p}(\Omega)}$. Furthermore, if $p \in [1,\infty)$, then $u_h \to u$ in $W^{k,p}(\Omega')$.
+\end{theorem}
+\begin{proof} \begin{enumerate}[label=(\alph*)]
+    \item By the Lebesgue differentiation theorem, we have 
+    \begin{equation}
+        \lim_{h \downarrow 0} \dashint_{B(x,h)} \abs{u(x) - u(y)} \; \d{y}
+    \end{equation}
+    for a.e. $x \in \Omega$. Choose such an $x$. Then 
+    \begin{equation} \begin{aligned}
+        \lim_{h \downarrow 0} \abs{ u(x) - \int_{B(x,h)} \eta_h(x-y) u(y) \; \d{y} } 
+        &\leq \lim_{h \downarrow 0} \int_{B(x,h)} \eta_h(x-y) \abs{ u(x) - u(y) } \; \d{y} \\
+        &\leq \lim_{h \downarrow 0} C \dashint_{B(x,h)} \abs{u(x) - u(y)} \; \d{y} \\
+        &= 0.
+    \end{aligned} \end{equation}
+    This shows $u_h \to u$ a.e. 
+
+    For local uniform convergence, note that $u$ is uniformly continuous on any ball in $\Omega$. Let $\epsilon > 0$, and choose $\delta > 0$ such that $h < \delta$ implies $\abs{u(x) - u(y)} < \epsilon$ for all $x,y \in \Omega$ with $\abs{x-y} < h$. The rest follows by following the above argument for convergence a.e.
+
+    \item Suppose first that $p = \infty$. Then, for all $x \in \Omega'$, we have 
+    \begin{equation}
+        \abs{u_h(x)}
+        \leq \int_{B(x,h)} \eta_h(x-y) \abs{u(y)} \; \d{y}
+        \leq \norm{u}_{L^\infty(\Omega)}.
+    \end{equation}
+    Suppose on the other hand that $p \in [1,\infty)$. We use H\"older's inequality with respect to the measure $\eta_h(x-y) \; \d{y}$ to find 
+    \begin{equation} \begin{aligned}
+        \abs{u_h(x)} 
+        &\leq \int_{B(x,h)} u(y) \eta_h(x-y) \; \d{y} \\
+        &\leq \parens{ \int_{B(x,h)} \abs{u(y)}^p \eta_h(x-y) \; \d{y} }^\frac1p \parens{ \int_{B(x,h)} \eta_h(x-y) \; \d{y} }^\frac1{p'} \\
+        &\leq \parens{ \int_{B(x,h)} \abs{u(y)}^p \eta_h(x-y) \; \d{y} }^\frac1p.
+    \end{aligned} \end{equation}
+    Taking to the power $p$ and integrating over $x \in \Omega'$, we have 
+    \begin{equation} \begin{aligned}
+        \int_{\Omega'} \abs{u_h(x)}^p \; \d{x}
+        &\leq \int_{\Omega'} \int_{B(x,h)} \abs{u(y)}^p \eta_h(x-y) \; \d{y} \; \d{x} \\
+        &= \int_{B(x,h)} \abs{u(y)}^p \int_{\Omega'} \eta_h(x-y) \; \d{x} \; \d{y} \\
+        &\leq \int_{\Omega} \abs{u(y)}^p \; \d{y}.
+    \end{aligned} \end{equation}
+    This shows the required inequality.
+
+    For the convergence, note that $C(\Omega)$ is dense in $L^p(\Omega)$, so let $\epsilon > 0$, and choose $v \in C(\Omega)$ such that $\norm{u - v}_{L^p(\Omega)} < \frac{\epsilon}{3}$. By part (a), we can choose $h > 0$ sufficiently small so that $\norm{v_h - v}_{L^p(\Omega')} < \frac{\epsilon}{3}$. Then
+    \begin{equation} \begin{aligned}
+        \norm{u_h - u}_{L^p(\Omega')}
+        &\leq \norm{u_h - v_h}_{L^p(\Omega')} + \norm{v_h - v}_{L^p(\Omega')} + \norm{v - u}_{L^p(\Omega')} \\
+        &\leq \norm{u - v}_{L^p(\Omega)} + \norm{v_h - v}_{L^p(\Omega')} + \norm{v - u}_{L^p(\Omega)} \\
+        &< \epsilon,
+    \end{aligned} \end{equation}
+    as required.
+
+    \item This follows immediately from part (b) and lemma \ref{lem:mollifAndDiffCommute}.
+\end{enumerate} \end{proof}
+
+Having approximated Sobolev functions locally by smooth functions, we would now like to do it globally.
+\begin{lemma}
+    For $k \in \bbN$ and $p \in [1,\infty]$, let $u \in W^{k,p}(\Omega)$ and $\psi \in C^\infty(\Omega)$. Then $\psi u \in W^{k,p}(\Omega)$.
+\end{lemma}
+\begin{proof}
+    We claim $\psi u$ has weak derivative
+    \begin{equation}
+        v_\alpha := \sum_{\beta \leq \alpha} {\alpha \choose \beta} \partial^{\alpha - \beta} \psi \partial^{\beta} u \in L^p(\Omega)
+    \end{equation}
+    corresponding to the multiindex $\alpha$ with $\abs{\alpha} \leq k$. By an induction argument, it suffices to prove this for $\abs{\alpha} = 1$. Fix $i \in \set{1,\dots,n}$, and a test function $\phi \in C_c^\infty(\Omega)$. Then 
+    \begin{equation} \begin{aligned}
+        \int_\Omega v_i \phi \; \d{x}
+        &= \int_\Omega ( u \partial_i \psi + \psi \partial_i u ) \phi \; \d{x} \\
+        &= \int_\Omega u (\phi \partial_i \psi - \partial_i(\psi \phi)) \; \d{x} \\
+        &= - \int_\Omega u \psi \partial_i \phi \; \d{x},
+    \end{aligned} \end{equation}
+    therefore proving the claim, and hence the lemma.
+\end{proof}
+\begin{theorem}
+    Let $\Omega \subseteq \bbR^n$ be open, $k \in \bbN_0$ and $p \in [1,\infty)$. Then, for all $u \in W^{k,p}(\Omega)$ and $\epsilon > 0$, there exists $v \in (C^\infty \cap W^{k,p})(\Omega)$ such that $\norm{u - v}_{W^{k,p}(\Omega)} < \epsilon$.
+\end{theorem}
+\begin{proof}
+    partition of unity wrt an increasing sequence $\emptyset = \Omega_0 \subseteq \Omega_1 \subseteq \cdots \subseteq \Omega_i \subseteq \cdots \subseteq \Omega$.
+\end{proof}
+
+
+
+\chapter{Embeddings of Sobolev Spaces}
+
+\section{Integrability of Sobolev Functions}
+
+\begin{theorem}[Sobolev Embedding]
+    For $p \in [1,n)$, there exists $C = C_{n,p} > 0$ such that
+    \begin{equation}
+        \norm{u}_{L^{p^*}(\bbR^n)} \leq C \norm{\nabla u}_{L^p(\bbR^n)}
+    \end{equation}
+    for all $u \in W^{1,p}_0(\bbR^n)$, where $p^* := \frac{np}{n-p}$ is the \textit{Sobolev conjugate} of $p$. In other words, $W^{1,p}_0(\bbR^n)$ embeds continuously in $L^{p^*}(\bbR^n)$.
+\end{theorem}
+A similar result holds for other $W^{k,p}_0(\bbR^n)$ by a little bootstrapping.
+
+Let's show that $p^*$ is the only possible index. Indeed, suppose the inequality $\norm{u}_{L^q(\bbR^n)} \leq C\norm{\nabla u}_{L^p(\bbR^n)}$ holds for some $C = C_{n,p} > 0$, $q \in [1,\infty]$, and all $u \in W^{1,p}(\bbR^n)$. Note first that $q \neq \infty$, since we can take $u(x) = \abs{x}^{-s} - 1$ on $B(0,1)$ for some $s \in (0,\frac{n-1}{p})$, $u(x) = 0$ elsewhere. Then $u$ is unbounded, yet lies in $W^{1,p}_0(\bbR^n)$. Thus we now suppose $q \in [1,\infty)$. For $\lambda > 0$, define $u_\lambda(x) := u(\lambda x)$. Then 
+\begin{equation}
+    \norm{u_\lambda}_{L^q(\bbR^n)} 
+    = \parens{ \int_{\bbR^n} \abs{u(\lambda x)}^q \; \d{x} }^\frac{1}{q}
+    = \lambda^{-\frac{n}{q}} \norm{u}_{L^q(\bbR^n)},
+\end{equation}
+and similarly,
+\begin{equation}
+    \norm{\nabla u_\lambda}_{L^p(\bbR^n)}
+    = \parens{ \int_{\bbR^n} \abs{\lambda \nabla u(\lambda x)}^p \; \d{x} }^\frac{1}{p}
+    = \lambda^{1 - \frac{n}{p}} \norm{\nabla u}_{L^p(\bbR^n)}.
+\end{equation}
+So in order for the estimate $\norm{u}_{L^q(\bbR^n)} \leq C \norm{\nabla u}_{L^p(\bbR^n)}$ to hold independent of $u$, we need $- \frac{n}{q} = 1 - \frac{n}{p}$. Indeed, the given estimate implies 
+\begin{equation}
+    \lambda^{-\frac{n}{q}} \norm{u}_{L^q(\bbR^n)} \leq C \lambda^{1 - \frac{n}{p}} \norm{\nabla u}_{L^p(\bbR^n)}
+\end{equation}
+for all $u \in W^{1,p}_0(\bbR^n)$ and $\lambda > 0$. So if $- \frac{n}{q} < 1 - \frac{n}{p}$, then we can take $\lambda \to 0$ to obtain a contradiction, and in the case $- \frac{n}{q} > 1 - \frac{n}{p}$, we take $\lambda \to \infty$. Solving $- \frac{n}{q} = 1 - \frac{n}{p}$ gives us $q = \frac{np}{n-p} = p^*$
+ 
+
+\section{H\"older Continuity of Sobolev Functions}
+
+Choose a set $A \subseteq \bbR^n$ (not necessarily open), and let $\alpha \in (0,1]$. A function $u \colon A \to \bbR$ is \textit{uniformly} $\alpha$-\textit{H\"older continuous} if there exists $C > 0$ such that
+\begin{equation}
+    \abs{u(x) - u(y)} \leq C \abs{x - y}^\alpha 
+\end{equation}
+for all $x,y \in A$. The $\alpha$-\textit{H\"older seminorm} is defined by 
+\begin{equation}
+    [u]_{C^{0,\alpha}(A)} := \sup_{x,y \in A} \frac{\abs{u(x) - u(y)}}{x - y}^\alpha.
+\end{equation}
+More generally, $u$ is \textit{locally} $\alpha$-\textit{H\"older continuous} if it is uniformly $\alpha$-H\"older continuous on any compact subset of $A$. Now take an open set $\Omega \subseteq \bbR^n$. We let $C^{k,\alpha}(\Omega)$ denote the set of all $u \in C^k(\Omega)$ whose derivatives up to order $k$ are all locally $\alpha$-H\"older continuous. If $\Omega$ has the property $(\overline{\Omega})^\circ = \Omega$, we define $C^{k,\alpha}(\overline{\Omega})$ to be the set of functions $u \in C^{k,\alpha}(\Omega)$ such that the $\alpha$-H\"older norm 
+\begin{equation}
+    \norm{u}_{C^0(\Omega)} + \sum_{\abs{\beta} \leq k} [\partial^\beta u]_{C^{0,\alpha}(\Omega)}
+\end{equation}
+is finite. The definition is ambigious when $\Omega = \bbR^n$, so we take $C^{k,\alpha}(\bbR^n)$ to be the $C^{k,\alpha}(\overline{\Omega})$ definition.
+
+\begin{lemma}[Morrey's Inequality]
+    For $p \in (n,\infty]$ and $r > 0$, there exists $C = C_{n,p} > 0$ such that 
+    \begin{equation}
+        \abs{u(x) - u(y)} \leq Cr^{1 - \frac{n}{p}} \norm{\nabla u}_{L^p(B(0,r))}
+    \end{equation}
+    for a.e. $x,y \in B(0,r)$ and all $u \in W^{1,p}(B(0,r))$.
+\end{lemma}
+The following theorem follows nicely:
+\begin{theorem}[Morrey Embedding]
+    For $p \in (n,\infty]$, there exists $C = C_{n,p} > 0$ such that for all $u \in W^{1,p}(\bbR^n)$, there exists a version $\widetilde{u}$ of $u$ which is uniformly $\alpha$-H\"older continuous, and 
+    \begin{equation}
+        \norm{\widetilde{u}}_{C^{0,1-\frac{n}{p}}(\bbR^n)} \leq C \norm{u}_{W^{1,p}(\bbR^n)}.
+    \end{equation}
+    In other words, $W^{1,p}(\bbR^n)$ embeds continuously in $C^{0,1-\frac{n}{p}}(\bbR^n)$.
+\end{theorem}
+\begin{proof}
+    Let $x,y \in \bbR^n$, and set $r := 2\abs{x - y}$. Then $u \in W^{1,p}(B(x,r))$, so Morrey's inequality implies there exists $C = C_{n,p} > 0$ such that 
+    \begin{equation}
+        \abs{u(x) - u(y)} \leq C_{n,p} \abs{x - y}^{1 - \frac{n}{p}} \norm{\nabla u}_{L^p(B(x,r))}.
+    \end{equation}
+\end{proof}
+
+The Sobolev and Morrey embedding theorems give us our first set of Poincar\'e-like inequalities:
+\begin{theorem}[Friedrichs-Poincar\'e]
+    For $p \in [1,\infty]$ and $\Omega \subseteq \bbR^n$ open and with finite measure, let $q$ lie in one of the following intervals
+    \begin{itemize}
+        \item $[1,p^*]$ if $p \in [1,n)$,
+        \item $[1,\infty)$ if $p = n$,
+        \item $[1,\infty]$ if $p \in (n,\infty]$.
+    \end{itemize}
+    Then there exists $C = C_{n,p,q} > 0$ such that
+    \begin{equation}
+        \norm{u}_{L^q(\Omega)} \leq C \norm{\nabla u}_{L^p(\Omega)}
+    \end{equation}
+    for all $u \in W_0^{1,p}(\Omega)$.
+\end{theorem}
+\begin{proof}
+    Suppose first that $p \in [1,n)$. By the Sobolev embedding theorem, there exists $C = C_{n,p} > 0$ such that 
+    \begin{equation}
+        \norm{u}_{L^{p^*}(\Omega)} 
+        = \norm{u}_{L^{p^*}(\bbR^n)} 
+        \leq C_{n,p}\norm{\nabla u}_{L^p(\bbR^n)}
+        = C_{n,p} \norm{\nabla u}_{L^p(\Omega)},
+    \end{equation}
+    for all $u \in W^{1,p}_0(\Omega)$, which embeds in $W^{1,p}_0(\bbR^n)$ by extension by zero. Since $\Omega$ has finite measure, we have $L^{p^*}(\Omega) \subseteq L^q(\Omega)$, and $\norm{u}_{L^q(\Omega)} \leq \norm{u}_{L^{p^*}(\Omega)}$ for all $u \in L^{p^*}(\Omega)$. The desired inequality follows.
+
+    Now suppose $p = n$. First, take $n > 1$. Choose $q \in [\frac{n}{n-1}, \infty)$, and set $p' = \frac{nq}{n+q}$. Then $p' \in [1,n)$, and $(p')^* = q$. By the previous estimates, we have
+    \begin{equation}
+        \norm{u}_{L^q(\Omega)}
+        \leq C_{n,q} \norm{\nabla u}_{L^{p'}(\Omega)}
+        \leq C_{n,q} \norm{\nabla u}_{L^n(\Omega)}.
+    \end{equation}
+    The case $n = 1$ is what.
+
+    Finally, suppose $p \in (n,\infty]$. Take $u \in W_0^{1,p}(\Omega)$, and let $\widetilde{u} \in C^{0,1-\frac{n}{p}}(\bbR^n)$ be its continuous version.Since $\Omega$ has finite measure, we can choose $r > 0$ such that $B(y,r) \setminus \Omega$ is nonempty. Choose $x$ in this set. Then by Morrey's inequality, noting $\widetilde{u} \in W^{1,p}(B(y,r))$, we have 
+    \begin{equation} \begin{aligned}
+        \abs{\widetilde{u}(y)}
+        &= \abs{\widetilde{u}(y) - \widetilde{u}(x)} \\
+        &\leq C_{n,p} r^{1 - \frac{n}{p}} \norm{\nabla \widetilde{u}}_{L^p(B(y,r))} \\
+        &= C_{n,p,\Omega} \norm{\nabla \widetilde{u}}_{L^p(\Omega)}.
+    \end{aligned} \end{equation}
+    The inequality follows.
+\end{proof}
+
+
+\section{Compact Embeddings}
+
+\begin{theorem}[Rellich-Kondrachov]
+    For $p \in [1,n)$ and $\Omega \subseteq \bbR^n$ open and bounded, let $q \in [1,p^*)$. Then $W_0^{1,p}(\bbR^n)$ embeds compactly in $L^q(\bbR^n)$.
+\end{theorem}
+The proof comes from this absolutely fat theorem: 
+\begin{theorem}[Arzel\`a-Ascoli]
+    Let $A \subseteq \bbR^n$ be some set, and let $u_i \in C(A)$ be a bounded and uniformly equicontinuous sequence. Then $u_i$ has a locally uniformly convergent subsequence.
+\end{theorem}
+
+
+\section{Extension and Approximation}
+
+
+
+\chapter{Weak Solutions to PDEs}
+
+
+
+\end{document}

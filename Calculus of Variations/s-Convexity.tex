@@ -1,0 +1,388 @@
+
+\section{The Direct Method}
+The following theorem will be the fundamental in our forthcoming theory. It reduces proving the existence of a minimizer of a functional to checking two properties, and even gives us the freedom to choose a nice topology.
+\begin{theorem}[Direct Method]
+    Let $X$ be a topological space, and let $\scrF \colon X \to \bbR \cup \set{\infty}$ be the \textit{objective functional}. Assume
+    \begin{itemize}
+        \item (Sequential coercivity) For all $\Lambda \in \bbR$, the set $\set{u \in X : \scrF[u] \leq \Lambda}$ is sequentially precompact in $X$.
+        \item (Sequential lower semicontinuity) For all sequences $u_j \in X$ with $u_j \rightarrow u$, we have $\scrF[u] \leq \liminf_{j\rightarrow \infty} \scrF[u_j]$.
+    \end{itemize}
+    Then the variational problem
+    \begin{equation}
+        \text{minimize } \scrF[u] \text{ over } u \in X
+    \end{equation}
+    has a solution.
+\end{theorem}
+\begin{proof}
+    Let $\alpha := \inf_{u \in X} \scrF[u]$. Choose a sequence $u_j \in X$ such that $\scrF[u_j] \rightarrow \alpha$. Then the sequence $\scrF[u_j]$ is bounded from above in $\bbR$, so by coercivity, we can pass to a subsequence such that $u_j$ converges to some $u \in X$. (\textit{NB} subsequences will not often be relabeled in these notes.) By lower semicontinuity, $\alpha \leq \scrF[u] \leq \liminf_{j \rightarrow \infty} \scrF[u_j] = \alpha$. So $u$ is our desired minimizer.
+\end{proof}
+\begin{example}
+    Define $h \colon \bbR \to \bbR$ by 
+    \begin{equation}
+        h(t) :=
+        \begin{cases}
+            1-t & t < 0,    \\
+            t   & t \geq 0.
+        \end{cases}
+    \end{equation}
+    Then $h$ is coercive: for $\Lambda \geq 1$,
+    \begin{equation}
+        \set{t \in \bbR : h(t) \leq \Lambda} = \set{t < 0 : 1-t \leq \Lambda} \cup \set{t \geq 0 : t \leq \lambda} 
+                                             = [1-\Lambda,\Lambda].
+    \end{equation}
+    It is easy to see check precompactness for the remaining $\Lambda \in \bbR$. Moreover, $h$ is lower semicontinuous: $h$ is continuous on $\bbR \setminus \set{0}$, and if $t_j$ is a sequence in $\bbR$ converging to $0$, then $h(0) = 0 \leq h(t_j)$ for all $j \in \bbN$. (Actually, it is clear that $0$ is the minimizer of $h$, but this example is more an illustration of the direct method.)
+\end{example}
+\begin{remark}
+    \begin{enumerate}[label=(\arabic*)]
+        \item The direct method is trivial but powerful - we will be using it constantly throughout the course and finding conditions for it to apply.
+        \item Coercivity and lower semicontinuity are not necessary for the existence of a minimizer - consider the example $h$ above, but with $h(1) = 50$.
+        \item When $\scrF$ is an integral functional, lower semicontinuity is related to convexity (and its relatives) of the integrand.
+        \item The direct method gives us freedom to choose an appropriate topology for the problem. A weaker topology will mean lower semicontinuity is easier to prove, but coercivity is harder to prove, and a stronger topology will do precisely the opposite.
+    \end{enumerate}
+\end{remark}
+Most commonly, we will be applying the direct method when $X$ is a reflexive Banach space with the weak topology, or an affine subspace of a reflexive Banach space with the weak topology.
+
+\section{Functionals with Convex Integrands}
+We will be considering the functional
+\begin{equation}
+    \scrF[u] = \int_{\Omega} f(x,\nabla u(x)) \; \d x
+\end{equation}
+over some appropriate Sobolev space and $\Omega$ we will discuss soon. First, a lemma:
+\begin{lemma}
+    Let $f \colon \Omega \times \bbR^N \to \bbR$ be a \textit{Carath\'eodory integrand}. That is,
+    \begin{enumerate}[label=\rm{(\roman*)}]
+        \item For all $A \in \bbR^N$, the map $f(\cdot,A) \colon \Omega \to \bbR$ is Lebesgue measurable.
+        \item For $\scrL^d$-a.e. $x \in \Omega$, the map $f(x,\cdot) \colon \bbR^N \to \bbR$ is continuous.
+    \end{enumerate}
+    Let $V \colon \Omega \to \bbR^N$ be Borel measurable. Then the map $f(\cdot,V(\cdot)) \colon \Omega \to \bbR$ is Lebesgue measurable.
+\end{lemma}
+Note that we can't deduce measurability by considering $x \mapsto (x,V(x)) \mapsto f(x,V(x))$ as a composition, since $f$ is not jointly measurable in its two arguments.
+\begin{proof}
+    Suppose first that $V$ is simple. That is, $V = \sum_{i=1}^m a_i \bbone_{A_i}$, where each $A_i \subseteq \Omega$ is a Borel set, the $A_i$ are disjoint, and $\bigcup_{i=1}^m A_i = \Omega$. Then 
+    \begin{equation}
+        f(x,V(x)) = \sum_{i=1}^m f(x,a_i)\bbone_{A_i}(x),
+    \end{equation}
+    so given a Borel set $B \subseteq \bbR$,
+    \begin{equation}
+        \set{x \in \Omega : f(x,V(x)) \in B} = \bigcup_{i=1}^m \set{x \in A_i : f(x,a_i) \in B}.
+    \end{equation}
+    Since $f(\cdot,a_i)$ is Lebesgue measurable for all $i$, we see that each set on the right hand side is Lebesgue measurable, so the set on the left hand side is Lebesgue measurable.
+
+    Next, suppose $V$ is arbitrary, and choose a sequence $V_i$ of simple functions such that $V_i \rightarrow V$. By continuity of $f(x,\cdot)$ for a.e. $x$, $f(\cdot,V(\cdot)) = \lim_{i \rightarrow \infty} f(\cdot, V_i(\cdot))$ is Lebesgue measurable. This property requires completeness of $(\Omega,\scrB^*(\Omega))$, where $\scrB^*(\Omega)$ denotes the Lebesgue $\sigma$-algebra.
+\end{proof}
+
+Fix $p \in [1,\infty]$. For the following theory, we define the functional $\scrF \colon \dom{\scrF} \subseteq W^{1,p}(\Omega;\bbR^m) \to \bbR \cup \set{\pm \infty}$ by 
+\begin{equation}
+    \scrF[u] := \int_{\Omega} f(x,\nabla u(x)) \; \d x.
+\end{equation}
+Here, $\Omega \subseteq \bbR^d$ is a bounded Lipschitz domain (i.e. $\Omega$ is open and $\partial\Omega$ is a Lipschitz manifold), and $f \colon \Omega \times \bbR^{m \times d} \to \bbR$ is a Carath\'eodory integrand. Furthermore, $W^{1,p}(\Omega;\bbR^n)$ is the Sobolev space consisting of functions $u \colon \Omega \to \bbR^n$, such that each component function $u^i$ is in $L^p(\Omega)$ and is weakly differentiable in every direction, and each weak derivative $\partial_j u^i$ is also in $L^p(\Omega)$. The $m \times d$ \textit{gradient matrix} $\nabla u$ has components $(\nabla u)^i_j = \partial_j u^i$.
+\begin{remark} 
+    The map $\scrF$ is not usually defined on the whole space $W^{1,p}(\Omega;\bbR^m)$ since the integral may not be well defined. To ensure it is well defined, we will have to impose some more conditions on the integrand $f$. Despite this, we will still typically write $\scrF \colon W^{1,p}(\Omega;\bbR^m) \to \bbR \cup \set{\pm \infty}$.
+\end{remark}
+
+{\color{red} THIS PROPOSITION NEEDS TO BE STATED IN MORE GENERALITY}
+\begin{proposition} \label{prop:p-coercivityImpliesWeakCoercivity}
+    Suppose $f \colon \Omega \times \bbR^{m \times d} \to \bbR$ is $p$-\textit{coercive} for some $p \in (1,\infty)$. That is, there exists $\mu > 0$ such that $\mu \abs{A}^p \leq f(x,A)$ for a.e. $x \in \Omega$ and $A \in \bbR^{m\times d}$. Then $\scrF$ is weakly coercive on the affine space $W_g^{1,p}(\Omega;\bbR^m)$, which is the space of all $u \in W^{1,p}(\Omega;\bbR^m)$ such that $u\vert_{\partial\Omega} = g$.
+\end{proposition}
+Here, $\cdot\vert_{\partial\Omega} \colon W^{1,p}(\Omega;\bbR^m) \to L^p(\partial\Omega;\bbR^m)$ is the usual trace operator. Its image is denoted by $W^{1-\frac{1}{p},p}(\partial\Omega;\bbR^m)$, and we must assume $g$ lives in this image.
+\begin{remark}
+    In the situation of proposition \ref{prop:p-coercivityImpliesWeakCoercivity}, $p$-coercivity implies the integrand $f$ is nonnegative, so our functional $\scrF$ is defined on the whole space $W^{1,p}(\Omega;\bbR^m)$.
+\end{remark}
+\begin{proof}
+    Let $u_j$ be a sequence in $W^{1,p}_g(\Omega;\bbR^m)$ such that $\scrF[u_j] \leq \Lambda$ for some $\Lambda \in \bbR$ and all $j$. We integrate the $p$-coercivity condition $\mu\abs{\nabla u(x)}^p \leq f(x,\nabla u(x))$ over $x \in \Omega$ to find 
+    \begin{equation}
+        \mu\norm{\nabla u_j}^p_{W^{1,p}(\Omega;\bbR^m)} \leq \scrF[u_j] \leq \Lambda
+    \end{equation}
+    for all $j$. Select some $u_0 \in W^{1,p}_g(\Omega;\bbR^m)$. Since $u_j - u_0$ is in $W^{1,p}_0(\Omega;\bbR^m)$, the Friedrichs-Poincar\'e inequality implies 
+    \begin{equation}
+        \mu\norm{u_j - u_0}_{W^{1,p}} \leq C\mu \norm{\nabla(u_j - u_0)}_{L^p} \leq C(\Lambda + \norm{\nabla u_0}_{L^p}).
+    \end{equation}
+    Since $p$ lies strictly between $1$ and $\infty$, $W^{1,p}_0(\Omega;\bbR^m)$ is relexive, and so the Banach-Alaoglu theorem implies the existence of a subsequence and $u \in W^{1,p}_0(\Omega;\bbR^m)$ such that $u_j - u_0 \weak u$. But then $u_j \weak u + u_0 \in W^{1,p}_g(\Omega;\bbR^m)$, which is precisely what we wanted to prove.
+\end{proof}
+\begin{theorem}[Tonelli 1920, Serrin 1961] \label{thm:convexityImpliesWeakLowerSemicontinuity}
+    Let $f \colon \Omega \times \bbR^{m \times d} \to [0,\infty)$ be a Carath\'e\-odory integrand such that $f(x,\cdot)$ is convex for a.e. $x \in \Omega$. Then $\scrF$ is weakly lower semicontinuous on $W^{1,p}(\Omega;\bbR^m)$ for any $p \in (1,\infty)$.
+\end{theorem}
+\begin{proof}
+    We first prove that $\scrF$ is strongly lower semicontinuous. Let $u_j$ be a sequence in $W^{1,p}(\Omega;\bbR^m)$ converging strongly to $u$. Select a subsequence with $\nabla u_j \rightarrow \nabla u$ a.e. Then, by continuity of $f(x,\cdot)$ for a.e. $x \in \Omega$ and Fatou's lemma,
+    \begin{equation}
+        \scrF[u] =    \int_{\Omega} f(x,\nabla u(x)) \; \d x 
+                 \leq \liminf_{j \rightarrow \infty} \int_\Omega f(x,\nabla u_j(x)) \; \d x 
+                 =    \liminf_{j \rightarrow \infty} \scrF[u_j].
+    \end{equation}
+    This, of course, implies strong lower semicontinuity for the full sequence, since otherwise we would have a contradiction.
+
+    Next, we strengthen(!) this to weak lower semicontinuity. Let $u_j$ be a sequence in $W^{1,p}(\Omega;\bbR^m)$ converging weakly to $u$. Write $\alpha := \liminf_{j \to \infty} \scrF[u_j]$. Select a subsequence with $\lim_{j \to \infty} \scrF[u_j] = \alpha$. By Mazur's lemma, we can select a sequence of convex combinations
+    \begin{equation}
+        y_j = \sum_{k=j}^{N(j)} \theta^{(j)}_k u_k; \hspace{20pt} \theta^{(j)}_k \in [0,1]; \hspace{20pt} \sum_{k=j}^{N(j)} \theta^{(j)}_k = 1,
+    \end{equation}
+    such that $y_j \rightarrow u$ strongly in $W^{1,p}$. Then by convexity,
+    \begin{equation}
+        \begin{aligned}
+            \scrF[u] &\leq \liminf_{j \to \infty} \int_\Omega f(x,\nabla y_j(x)) \; \d x                                                 \\
+                     &=    \liminf_{j \to \infty} \int_\Omega f\left(x, \sum_{k=j}^{N(j)} \theta^{(j)}_k \nabla u_k(x)\right) \; \d x    \\
+                     &\leq \liminf_{j \to \infty} \sum_{k=j}^{N(j)} \theta^{(j)}_k \int_\Omega f(x,\nabla u_k(x)) \; \d x                \\
+                     &=    \lim_{j \to \infty} \scrF[u_j]                                                                                \\
+                     &=    \alpha
+        \end{aligned}
+    \end{equation}
+    This completes the proof.
+\end{proof}
+Proposition \ref{prop:p-coercivityImpliesWeakCoercivity} and theorem \ref{thm:convexityImpliesWeakLowerSemicontinuity} combine to give us the following existence theorem:
+\begin{theorem}
+    Let $p \in (1,\infty)$, and suppose $f \colon \Omega \times \bbR^{m \times d} \to [0,\infty)$ is a $p$-coercive Carath\'eodory integrand which is convex in its second argument. Then the minimization problem 
+    \begin{equation} \label{eq:integralMinimizationProblemWithoutFunctionDependence}
+        \begin{dcases}
+            \text{minimize } \scrF[u] = \int_\Omega f(x,\nabla u(x)) \; \d x \text{ over } u \in W^{1,p}(\Omega;\bbR^m) \\
+            \textit{subject to } u\vert_{\partial\Omega} = g
+        \end{dcases}
+    \end{equation}
+    has a solution.
+\end{theorem}
+If we assume \textit{strict} convexity in the second argument, then (\ref{eq:integralMinimizationProblemWithoutFunctionDependence}) has a unique solution. We state this as a theorem:
+\begin{proposition} \label{prop:strictConvexityImpliesUniqueness}
+    Assume the integrand $f$ in the minimization problem (\ref{eq:integralMinimizationProblemWithoutFunctionDependence}) is strictly convex in its second argument. Then any solution (if one exists) of this problem must be unique.
+\end{proposition}
+\begin{proof}
+    Suppose $u,v \in W^{1,p}_g(\Omega;\bbR^m)$ are solutions to (\ref{eq:integralMinimizationProblemWithoutFunctionDependence}). Define $w := \frac{u+v}{2}$, which is in $W^{1,p}_g(\Omega;\bbR^m)$. Then by strict convexity,
+    \begin{equation}
+        \begin{aligned}
+            \scrF[w] &= \int_\Omega f\left(x, \frac{\nabla u(x) + \nabla v(x)}{2}\right) \; \d x                            \\
+                     &< \frac{1}{2} \int_\Omega f(x,\nabla u(x)) \; \d x + \frac{1}{2} \int_\Omega f(x,\nabla v(x)) \; \d x \\
+                     &= \frac{\scrF[u] + \scrF[v]}{2}.
+        \end{aligned}
+    \end{equation}
+    This is a contradiction, since $u$ and $v$ are minimizers.
+\end{proof}
+Finally, we show that in the scalar case ($m=1$) or on the line ($d=1$), weak lower semicontinuity of the integral functional $\scrF$ is actually equivalent to convexity of the integrand (with some additional assumptions).
+\begin{proposition} \label{prop:wlscImpliesConvex}
+    Let $p \in [1,\infty)$, and let $\scrF \colon W^{1,p}(\Omega;\bbR^m) \to \bbR$ be an integral functional with integrand $f \colon \bbR^{m \times d} \to \bbR$. If $\scrF$ is weakly lower semicontinuous, and either $m=1$ or $d=1$, then $f$ is convex.
+\end{proposition}
+\begin{proof}
+    PROOF IS INCOMPLETE, NEED ARGUMENTS FOR WEAK CONVERGENCE
+
+    We deal with the case $m=1$. Fix $a,b \in \bbR^d$, and $\theta \in (0,1)$. Define $v := \theta a + (1-\theta) b$ and $n := b - a$. We let 
+    \begin{equation}
+        \phi(t) :=
+        \begin{cases}
+            -(1-\theta)t & t \in [0,\theta), \\
+            \theta(t-1)  & t \in [\theta,1], 
+        \end{cases}
+    \end{equation}
+    and define $u_j \colon \Omega \to \bbR$ by 
+    \begin{equation} \label{eq:definitionOfSequenceForWeakLSCImpliesConvexity}
+        u_j(x) := v \cdot x + \frac{1}{j}\phi(jx \cdot n - \lfloor jx \cdot n \rfloor)
+    \end{equation}
+    Then 
+    \begin{equation}
+        \nabla u_j(x) = 
+        \begin{cases}
+            a & jx \cdot n - \lfloor jx \cdot n \rfloor \in [0,\theta), \\
+            b & jx \cdot n - \lfloor jx \cdot n \rfloor \in [\theta,1].
+        \end{cases}
+    \end{equation}
+    Now, $u_j \weak v \cdot x$ in $W^{1,p}$. By weak lower semicontinuity,
+    \begin{equation} \begin{aligned}
+        \abs{\Omega}f(\theta a + (1-\theta)b) &= \abs{\Omega}f(\nabla(v \cdot x))            \\
+                                              &= \scrF[v \cdot x]                            \\
+                                              &\leq \liminf_{j \to \infty} \scrF[u_j]        \\
+                                              &= \abs{\Omega}(\theta f(a) + (1-\theta) f(b)),
+    \end{aligned} \end{equation}
+    as required.
+\end{proof}
+It turns out the result is false if $d \neq 1$ or $m \neq 1$, but we won't prove this here.
+
+\section{Integrands with $u$-dependence}
+Consider a functional of the form
+\begin{equation} \label{eq:integralFunctionalWithFunctionDependence}
+    \scrF[u] := \int_\Omega f(x,u(x),\nabla u(x)) \; \d x; \hspace{20pt} u \in W^{1,p}_g(\Omega;\bbR^m).
+\end{equation}
+Although the Mazur lemma used in the Tonelli-Serrin theorem \ref{thm:convexityImpliesWeakLowerSemicontinuity} does not work for this more general situation, an analog of this theorem is available in this situation:
+\begin{theorem}
+    Let $\Omega \subseteq \bbR^d$ be a bounded Lipschitz domain, and let $f \colon \Omega \times \bbR^m \times \bbR^{m \times d} \to \bbR$ be a Carath\'eodory integrand such that $f(x,v,\cdot)$ is convex for a.e. $x \in \Omega$ and all $v \in \bbR^m$. Then the corresponding integral functional $\scrF$, defined by (\ref{eq:integralFunctionalWithFunctionDependence}), is weakly lower semicontinuous on $W^{1,p}_g(\Omega;\bbR^m)$ for $p \in (1,\infty)$.
+\end{theorem}
+We won't prove it. Here's an example:
+\begin{example}
+    Consider the minimization problem 
+    \begin{equation} \label{eq:linearizedElasticityMinimizationProblem}
+        \left\{
+        \begin{aligned}
+            \text{minimize } \scrF[u] &= \frac{1}{2}\int_\Omega 2\mu\abs{\scrE u}^2 + \parens{\kappa - \frac{2}{3}\mu}\abs{\tr{\scrE                              u}}^2 - b \cdot u \; \d x \\
+                                      &\hspace{20pt} \text{ over } u \in W^{1,2}(\Omega;\bbR^d) \\
+            \text{subject to } u\vert_{\partial\Omega} &= g.
+        \end{aligned}
+        \right.
+    \end{equation}
+    For some $b \in L^2(\Omega;\bbR^d)$. Here, $\scrE u = \frac{1}{2}(\nabla u + \nabla u^T)$ is the \textit{symmetrized gradient}. For a matrix $A \in \bbR^{d \times d}$, we also define its \textit{symmetrization} to be $\scrE A := \frac{1}{2}(A + A^{\rm T})$ We would like to show that this minimization problem has a solution via the Direct Method. First, note that the integrand 
+    \begin{equation}
+        f(x,v,A) = \mu \abs{\scrE A}^2 + \parens{ \kappa - \frac{2}{3} \mu }\abs{\tr{\scrE A}}^2 - b(x) \cdot v
+    \end{equation}
+    is convex in the $A$ argument, therefore $\scrF$ is weakly lower semicontinuous.
+
+    Secondly, we estimate
+    \begin{equation} \label{eq:coercivityEstimateForLinearizedElasticity}
+        \scrF[u] \geq \mu \norm{\scrE u}_{L^2}^2 - \norm{b}_{L^2} \norm{u}_{L^2}.
+    \end{equation}
+    In order to establish weak coercivity of $\scrF$, we need to obtain an inequality of the form $\scrF[u] \geq \widetilde{\mu}\norm{\nabla u}_{L^2}^2 - C$. To do this, we first estimate the norm of $\scrE u$ in terms of the norm of $\nabla u$. Fix $\phi \in C_c^\infty(\Omega;\bbR^d)$. We calculate 
+    \begin{equation} \begin{aligned}
+        2\scrE \phi : \scrE \phi - \nabla \phi : \nabla \phi &= \nabla \phi : \nabla \phi + \nabla \phi : \nabla \phi^\T - \nabla \phi : \nabla u \\
+                                                             &= \nabla \phi : \nabla \phi^\T.
+    \end{aligned} \end{equation}
+    Integrate this over $\Omega$ to find 
+    \begin{equation} \begin{aligned}
+        2 \norm{\scrE \phi}_{L^2}^2 - \norm{\nabla \phi}_{L^2}^2 &= \int_\Omega \nabla \phi : \nabla \phi^\T \; \d x \\
+                                                                 &= - \int_\Omega \phi \cdot \div(\nabla \phi^\T) \; \d x. \\
+    \end{aligned} \end{equation}
+    The components of $\div(\nabla \phi^\T)$ are given by 
+    \begin{equation}
+        (\div(\nabla \phi^\T))^j = \partial_i(\partial_j \phi^i) = \partial_j(\partial_i \phi^i) = \partial_j \div{\phi},
+    \end{equation}
+    with the Einstein summation convention in force as usual. Hence $\div(\nabla \phi^\T) = \nabla \div{\phi}$. Plugging this into our integral above, we find 
+    \begin{equation} 
+        - \int_\Omega \phi \cdot \div(\nabla \phi^\T) \; \d x = - \int_\Omega \phi \cdot \nabla \div{\phi} \; \d x
+                                                              = \int_\Omega (\div{\phi})^2 \; \d x 
+                                                              \geq 0.
+    \end{equation}
+    It follows that $2 \norm{\scrE \phi}_{L^2}^2 \geq \norm{\nabla \phi}_{L^2}^2$. The general case of $u \in W^{1,2}_g(\Omega;\bbR^d)$ follows from density of $C_c^\infty$ in $W^{1,2}_0$.
+
+    For the $\norm{b}_{L^2} \norm{u}_{L^2}$ part, first pick any $u_0 \in W_g^{1,2}(\Omega;\bbR^d)$. Then by the Friedrichs-Poincar\'e inequality, there exists $C_P > 0$ independent of $u$ such that 
+    \begin{equation} \begin{aligned}
+        \norm{u}_{L^2} &\leq \norm{u - u_0}_{L^2} + \norm{u_0}_{L^2} \\
+                       &\leq C_P \norm{\nabla u - \nabla u_0}_{L^2} + \norm{u_0}_{L^2} \\
+                       &\leq C_P \norm{\nabla u} + C \norm{u_0}_{W^{1,2}},
+    \end{aligned} \end{equation}
+    where the constant $C$ is independent of $u$ and $u_0$. So 
+    \begin{equation}
+        \norm{u}_{L^2}^2 \leq 2(C_P^2 \norm{\nabla u}_{L^2}^2 + C^2 \norm{u_0}_{W^{1,2}}^2).
+    \end{equation}
+    By Young's inequality with $\delta > 0$, we have 
+    \begin{equation} \begin{aligned}
+        \norm{b}_{L^2} \norm{u}_{L^2} &\leq \frac{\delta}{2} \norm{u}_{L^2}^2 + \frac{1}{2\delta} \norm{b}_{L^2}^2 \\
+                                      &\leq \frac{\delta}{2} 2(C_P^2 \norm{\nabla u}_{L^2}^2 + C^2 \norm{u_0}_{W^{1,2}}^2) + \frac{1}{2\delta} \norm{b}_{L^2}^2 \\
+                                      &= \delta C_P^2 \norm{\nabla u}_{L^2}^2 + C
+    \end{aligned} \end{equation}
+    Choose $\delta = \frac{\mu}{4C_P^2}$. Plugging the above into (\ref{eq:coercivityEstimateForLinearizedElasticity}), we find 
+    \begin{equation} \begin{aligned}
+        \scrF[u] &\geq \mu \norm{ \scrE u }_{L^2}^2 - \norm{b}_{L^2} \norm{u}_{L^2} \\
+                 &\geq \frac{\mu}{2} \norm{\nabla u}_{L^2}^2  - \frac{\mu}{4C_P^2} C_P^2 \norm{\nabla u}_{L^2}^2 + C \\ 
+                 &= \frac{\mu}{4} \norm{\nabla u}_{L^2}^2 + C,
+    \end{aligned} \end{equation}
+    as required. It follows that $\scrF$ is weakly coercive, and therefore the minimization problem (\ref{eq:linearizedElasticityMinimizationProblem}) has a solution in $W_0^{1,2}(\Omega;\bbR^d)$.
+\end{example}
+
+\section{The Lavrentiev Gap Phenomenon}
+Suppose $X$ is a Banach space, and $\scrF$ is a functional on $X$. If $Y$ is a dense subspace of $X$, is it necessarily true that 
+\begin{equation} \label{eq:equalityOfInfimaInDenseSubspaces}
+    \inf_{x \in Y} \scrF[x] = \inf_{x \in X} \scrF[x]?
+\end{equation}
+In the following, we will see that this isn't the case. For now, we provide a situation in which this is true.
+\begin{theorem}
+    Let $f \colon \Omega \times \bbR^m \times \bbR^{m \times d} \to \bbR$ be a Carath\'eodory integrand satisfying, for some $p \in [1,\infty)$, the $p$-growth condition
+    \begin{equation}
+        \abs{f(x,v,A)} \leq M(1 + \abs{v}^p + \abs{A}^p) \hspace{20pt} \text{for a.e. } x \in \Omega, \text{ and all } (v,A) \in \bbR^m \times \bbR^{m \times d}.
+    \end{equation}
+    Then the corresponding integral functional $\scrF$, defined by (\ref{eq:integralFunctionalWithFunctionDependence}), is strongly continuous on $W^{1,p}(\Omega;\bbR^m)$. Consequently, (\ref{eq:equalityOfInfimaInDenseSubspaces}) holds for $X = W^{1,p}(\Omega;\bbR^m)$ and $Y$ a dense subspace.
+\end{theorem}
+\begin{proof}
+    Let $u_j \in W^{1,p}(\Omega;\bbR^m)$ be a sequence converging to $u$ in $W^{1,p}$. Choose an arbitrary subsequence of $u_j$, and pass to a further subsequence with $u_j \rightarrow u$ and $\nabla u_j \rightarrow \nabla u$ pointwise a.e. We have
+    \begin{equation} \begin{aligned}
+        \abs{ f(x,u_j(x),\nabla u_j(x)) } &\leq M(1 + \abs{u_j(x)}^p + \abs{\nabla u_j(x)}^p)  \\
+                                          &\rightarrow M(1 + \abs{u(x)}^p + \abs{\nabla u(x)}^p) \hspace{10pt} \text{pointwise a.e.}
+    \end{aligned} \end{equation}
+    Furthermore, 
+    \begin{equation} \begin{aligned}
+        \int_\Omega M(1 + \abs{u_j(x)}^p + \abs{\nabla u_j(x)}^p) \; \d x &= M(\abs{\Omega} + \norm{u_j}_{W^{1,p}}^p + \norm{\nabla u_j}_{W^{1,p}}^p) \\
+                                                                          &\rightarrow M(\abs{\Omega} + \norm{u}_{W^{1,p}}^p + \norm{\nabla u}_{W^{1,p}}^p) \\
+                                                                          &= \int_\Omega M(1 + \abs{u(x)}^p + \abs{\nabla u(x)}^p) \; \d x.
+    \end{aligned} \end{equation}
+    By Pratt's lemma \ref{lem:pratt},
+    \begin{equation} \label{eq:strongContinuityOfIntegralFunctionals}
+        \scrF[u_j] = \int_\Omega f(x,u_j,\nabla u_j) \; \d x \rightarrow \int_\Omega f(x,u,\nabla u) \; \d x = \scrF[u].
+    \end{equation}
+    Since every subsequence of the original sequence $u_j$ has a further subsequence satisfying (\ref{eq:strongContinuityOfIntegralFunctionals}), we conclude this must hold for the original sequence.
+\end{proof}
+Next, we exhibit an example of a functional for which (\ref{eq:equalityOfInfimaInDenseSubspaces}) does not hold. Such a gap between infima is called the \textit{Lavrentiev Gap Phenomenon}.
+\begin{example}[Mani\`a]
+    Define 
+    \begin{equation}
+        \scrF[u] = \int_0^1 (u(t)^3 - t)^2 \dot{u}(t) \; \d t \hspace{15pt} u \in W_g^{1,\infty}((0,1)),
+    \end{equation}
+    where $g(0) = 0$ and $g(1) = 1$. We will show that 
+    \begin{equation}
+        \inf_{u \in W^{1,1}_g} \scrF[u] < \inf_{u \in W^{1,\infty}_g} \scrF[u].
+    \end{equation}
+    {\color{red} COMPLETE THIS EXAMPLE WHEN YOU CAN BE BOTHERED}
+\end{example}
+The following example provides a functional which also exhibits the Lavrentiev gap phenomenon, even though it is weakly coercive 
+\begin{example}[Ball-Minze]
+    {\color{red} ALSO DO THIS}
+\end{example}
+
+\section{Integral Side Constraints}
+We begin this section by extending the Direct Method to the situation in which there is an additional constraint.
+\begin{theorem}[Direct Method with Side Constraint]
+    Let $X$ be a topological space. Let $\scrF \colon X \to \bbR \cup \set{\infty}$ be a functional which is coercive and lower semicontinuous, and let $\scrH \colon X \to \bbR \cup \set{\infty}$ be a continuous functional. Suppose there exists $u_0 \in X$ with $\scrH[u_0] = 0$. Then the variational problem 
+    \begin{equation} \label{eq:constrainedMinimizationProblem}
+        \left\{
+        \begin{aligned}
+            \text{minimize }   &\scrF[u] \text{ over } u \in X; \\
+            \text{subject to } &\scrH[u] = 0
+        \end{aligned}
+        \right.
+    \end{equation}
+    has a solution.
+\end{theorem}
+\begin{proof}
+    By assumption, $\scrH^{-1}[0]$ is nonempty. If $\scrF[u] = \infty$ for all $u \in \scrH^{-1}[0]$, the proof is trivial. Otherwise, choose a sequence $u_j \in \scrH^{-1}[0]$ with $\scrF[u_j] \rightarrow \alpha := \inf_{u \in \scrH^{-1}[0]} \scrF[u]$. Then $\scrF[u_j]$ is bounded from above, so by coercivity of $\scrF$, we can choose a subsequence of $u_j$ with $u_j \rightarrow u$ in $X$. By continuity of $\scrH$, we have $\scrH[u] = 0$. Moreover, by lower semicontinuity of $\scrF$, we have $\alpha \leq \scrF[u] \leq \liminf_{j \to \infty} \scrF[u_j] \leq \alpha$. Thus $\scrF[u] = \alpha$, and so $u$ is a minimizer of $\scrF$ over $\scrH^{-1}[0]$, i.e. a solution of (\ref{eq:constrainedMinimizationProblem}).
+\end{proof} 
+
+\begin{lemma}
+    {\color{red} LEMMA IS QUESTIONABLE IN THE CASE $p > d$ TRY FIXING IT}
+    Let $h \colon \Omega \times \bbR^m \to \bbR$ be a Carath\'eodory integrand. Fix $p \in [1,\infty]$, and suppose $h$ satisfies 
+    \begin{enumerate}[label={\rm (\roman*)}]
+        \item If $p < d$, then $h$ has $q$-growth for some $q < p^*$. That is, $\abs{ h(x,v) } \leq M(1 + \abs{v}^q)$ for some $M > 0$, a.e. $x \in \Omega$, and all $v \in \bbR^m$.
+        \item If $p = d$, then $h$ has $q$-growth for some $q < \infty$.
+    \end{enumerate}
+    Then the corresponding integral functional 
+    \begin{equation}
+        \scrH[u] := \int_\Omega h(x,u(x)) \; \d x
+    \end{equation}
+    is weakly continuous on $W^{1,p}(\Omega;\bbR^m)$.
+\end{lemma}
+\begin{proof}
+    Suppose $u_j \weak u$ in $W^{1,p}(\Omega;\bbR^m)$. Pick an arbitrary subsequence of $u_j$. For $p \leq d$, use Rellich-Kondrachov (theorem \ref{thm:rellichKondrachov}) to pass to a subsequence of $u_j$ with $u_j \rightarrow u$ in $L^q$. Pass to a further subsequence with $u_j \rightarrow u$ a.e. We have 
+    \begin{equation}
+        \abs{h(x,u_j(x))} \leq M(1 + \abs{u_j(x)}^q) \rightarrow M(1+\abs{u(x)}^q) \hspace{15pt} \text{pointwise a.e.}
+    \end{equation}
+    and
+    \begin{equation} \begin{aligned}
+        \int_\Omega M(1 + \abs{u_j(x)}^q) \; \d x &= M(\abs{\Omega} + \norm{u_j}_{W^{1,q}}^q) \\
+                                                  &\rightarrow M(\abs{\Omega} + \norm{u}_{W^{1,q}}^q) \\
+                                                  &= \int_\Omega M(1 + \abs{u}^q) \; \d x.
+    \end{aligned} \end{equation}
+    By Pratt's lemma \ref{lem:pratt}, 
+    \begin{equation}
+        \scrH[u_j] = \int_\Omega h(x,u_j(x)) \; \d x \rightarrow \int_\Omega h(x,u(x)) \; \d x = \scrH[u],
+    \end{equation}
+    which completes the proof for $p \leq d$, since this convergence holds for a subsequence of every subsequence of the original sequence $u_j$.
+
+    For $p > d$, we can pick a subsequence with $u_j \rightarrow u$ uniformly. Since $h(x,\cdot)$ is continuous for a.e. $x \in \Omega$,
+\end{proof}
+We then get an existence theorem for constrained minimization problems:
+\begin{theorem}
+    Let $f \colon \Omega \times \bbR^m \times \bbR^{m \times d} \to \bbR$ and $h \colon \Omega \times \bbR^m \to \bbR$ be Carath\'eodory integrands such that 
+    \begin{enumerate}[label={\rm (\roman*)}]
+        \item $f$ is $p$-coercive for some $p \in (1,\infty)$.
+        \item $f(x,v,\cdot)$ is convex for a.e. $x \in \Omega$ and all $v \in \bbR^m$.
+        \item If $p < d$, $h$ has $q$-growth for some $q < p^*$, and if $p = d$, $h$ has $q$-growth for some $q < \infty$.
+    \end{enumerate}
+    Then there is a solution of the variational problem 
+    \begin{equation}
+        \left\{ 
+        \begin{aligned}
+            \text{minimize } \scrF[u] &= \int_\Omega f(x,u(x),\nabla u(x)) \; \d x \text{ over } u \in W^{1,p}(\Omega;\bbR^m), \\
+            \text{subject to } u\vert_{\partial \Omega} &= g \\
+            \text{and } \scrH[u] &= \int_\Omega h(x,u(x)) \; \d x = 0.
+        \end{aligned}
+        \right.
+    \end{equation}
+\end{theorem}

@@ -1,0 +1,868 @@
+\documentclass{book}
+
+\usepackage{amsmath, mathrsfs, amssymb, bbm, amsthm, enumitem, times, mathtools, mathptmx, tensor, xcolor, esint, hyperref}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[margin=4cm]{geometry}
+
+\newcommand{\scrA}{\mathscr{A}}
+\newcommand{\scrB}{\mathscr{B}}
+\newcommand{\scrD}{\mathscr{D}}
+\newcommand{\scrE}{\mathscr{E}}
+\newcommand{\scrF}{\mathscr{F}}
+\newcommand{\scrH}{\mathscr{H}}
+\newcommand{\scrL}{\mathscr{L}}
+\newcommand{\scrM}{\mathscr{M}} 
+\newcommand{\scrN}{\mathscr{N}}
+\newcommand{\scrR}{\mathscr{R}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbH}{\mathbb{H}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbone}{\mathbbm{1}}
+\newcommand{\bfY}{\mathbf{Y}}
+\newcommand{\bfGY}{\mathbf{GY}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\D}{\mathrm{D}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\e}{\mathrm{e}}
+\renewcommand{\i}{\mathrm{i}}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\newcommand{\GL}{\mathrm{GL}}
+
+\newcommand{\abs}[1]{\left\lvert {#1} \right\rvert}
+\newcommand{\norm}[1]{\left\lVert {#1} \right\rVert}
+\newcommand{\fhnorm}[1]{\lVert {#1} \rVert}
+\newcommand{\set}[1]{\left\{ {#1} \right\}}
+\newcommand{\parens}[1]{\left( {#1} \right)}
+\newcommand{\angles}[1]{\left\langle {#1} \right\rangle}
+\newcommand{\fhangles}[1]{\langle {#1} \rangle}
+\newcommand{\aangles}[1]{\left\llangle {#1} \right\rrangle}
+\newcommand{\fhaangles}[1]{\llangle {#1} \rrangle}
+
+\newcommand{\pdv}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\odv}[3][]{\frac{\d^{#1}#2}{\d{#3}^{#1}}}
+ 
+\newcommand{\distributionEqual}{\overset{\scrD}{=}}
+\newcommand{\iidEqual}{\overset{\mathrm{i.i.d.}}{=}}
+\newcommand{\weak}{\rightharpoonup}
+\newcommand{\weakstar}{\overset{\ast}{\rightharpoonup}}
+\newcommand{\young}{\overset{\mathbf{Y}}{\rightarrow}}
+
+\newcommand{\restrict}{\begin{picture}(10,8)\put(2,0){\line(0,1){7}}\put(1.8,0){\line(1,0){7}}\end{picture}}
+
+\DeclareMathOperator{\dom}{dom}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\id}{\mathrm{id}}
+\DeclareMathOperator{\rank}{\mathrm{rank}}
+\DeclareMathOperator{\End}{\mathrm{End}}
+\DeclareMathOperator{\Alt}{\mathrm{Alt}}
+\DeclareMathOperator{\Sym}{\mathrm{Sym}}
+\DeclareMathOperator{\grad}{\mathrm{grad}}
+\DeclareMathOperator{\Hess}{\mathrm{Hess}}
+\DeclareMathOperator{\Exp}{\mathrm{Exp}}
+\DeclareMathOperator{\ric}{\mathrm{ric}}
+\DeclareMathOperator{\Ric}{\mathrm{Ric}}
+\DeclareMathOperator{\diam}{\mathrm{diam}}
+
+\makeatletter
+\DeclareFontFamily{OMX}{MnSymbolE}{}
+\DeclareSymbolFont{MnLargeSymbols}{OMX}{MnSymbolE}{m}{n}
+\SetSymbolFont{MnLargeSymbols}{bold}{OMX}{MnSymbolE}{b}{n}
+\DeclareFontShape{OMX}{MnSymbolE}{m}{n}{
+    <-6>  MnSymbolE5
+   <6-7>  MnSymbolE6
+   <7-8>  MnSymbolE7
+   <8-9>  MnSymbolE8
+   <9-10> MnSymbolE9
+  <10-12> MnSymbolE10
+  <12->   MnSymbolE12
+}{}
+\DeclareFontShape{OMX}{MnSymbolE}{b}{n}{
+    <-6>  MnSymbolE-Bold5
+   <6-7>  MnSymbolE-Bold6
+   <7-8>  MnSymbolE-Bold7
+   <8-9>  MnSymbolE-Bold8
+   <9-10> MnSymbolE-Bold9
+  <10-12> MnSymbolE-Bold10
+  <12->   MnSymbolE-Bold12
+}{}
+
+\let\llangle\@undefined
+\let\rrangle\@undefined
+\DeclareMathDelimiter{\llangle}{\mathopen}%
+                     {MnLargeSymbols}{'164}{MnLargeSymbols}{'164}
+\DeclareMathDelimiter{\rrangle}{\mathclose}%
+                     {MnLargeSymbols}{'171}{MnLargeSymbols}{'171}
+\makeatother
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\DeclareRobustCommand{\coprod}{\mathop{\text{\fakecoprod}}}
+\newcommand{\fakecoprod}{%
+  \sbox0{$\prod$}%
+  \smash{\raisebox{\dimexpr.9625\depth-\dp0}{\scalebox{1}[-1]{$\prod$}}}%
+  \vphantom{$\prod$}%
+}
+
+\makeatletter
+\newcommand*\owedge{\mathpalette{\footnotesize\@owedge}\relax}
+\newcommand*\@owedge[1]{%
+  \mathbin{%
+    \ooalign{%
+      $#1\m@th\bigcirc$\cr
+      \hidewidth$#1\m@th\wedge$\hidewidth\cr
+    }%
+  }%
+}
+\makeatother
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\surroundwithmdframed[outerlinewidth=0.4pt,middlelinewidth=1pt,innerlinewidth=0.4pt,middlelinecolor=white,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{theorem}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{lemma}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{proposition}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{corollary}
+%\surroundwithmdframed[tikzsetting={draw=black,line width=1pt,dashed},bottomline=false,topline=false,rightline=false,innertopmargin=-5pt,outerlinecolor=white,middlelinecolor=white]{example}
+
+\numberwithin{equation}{section}
+
+\title{Differential Geometry} 
+\author{Billy Sumners}
+
+\begin{document}
+\maketitle 
+
+\tableofcontents
+
+\chapter{Connections}
+\section{Connections on a Vector Bundle}
+
+Let $\pi \colon E \to M$ be a vector bundle. A \textit{connection} on $E$ is a linear map $\nabla \colon \Gamma(E) \to \Gamma(T^*M \otimes E)$ satisfying the \textit{Leibniz rule}
+\begin{equation}
+    \nabla(fs) = \d f \otimes s + f \nabla s \quad \text{for all } f \in C^\infty(M), s \in \Gamma(E).
+\end{equation}
+Given a vector field $X \in \Gamma(TM)$, we write $\nabla_X s$ for the contraction of the section $X \otimes \nabla s \in \Gamma(TM \otimes T^*M \otimes E)$ over the first two indices. We call $\nabla_X s$ the \textit{covariant derivative} of $s$ in the direction $X$, and $\nabla s$ the \textit{total covariant derivative} of $s$.
+
+Much like standard differentiation, the covariant derivative is a local operator:
+\begin{lemma}
+    Fix $p \in M$, and let $U \subseteq M$ be an open neighborhood of $M$. Then $\nabla s \vert_p$ depends only on the values of $s$ on $U$.
+\end{lemma}
+\begin{proof}
+    Let $\psi \in C^\infty_c(M)$ be a bump function with $\psi = 1$ on $U$. Then 
+    \begin{equation}
+        \nabla(\psi s) \vert_p = \d\psi_p \otimes s_p + \psi(p) \nabla s \vert_p = \nabla s \vert_p.
+    \end{equation}
+    Since $\psi$ was arbitrary, the proof is concluded.
+\end{proof}
+Thanks to this lemma, given any open set $U \subseteq M$, $\nabla$ restricts to an operator $\nabla^U \colon \Gamma(U;E) \to \Gamma(U;T^*M \otimes E)$ given by $\nabla^U s \vert p = \nabla(\psi s) \vert p$, where $\psi \in C_c^\infty(M)$ has support in $U$ and is identially 1 on a neighborhood of $p$. Note that $\nabla^U$ satisfies the Leibniz rule, so is a connection on the restricted vector bundle $\pi_U \colon E_U \to U$. We will usually write $\nabla s$ in place of $\nabla^U s$.
+
+Given a local frame field $s_1,\dots,s_k \in \Gamma(U;E)$ of $E$, we may write $\nabla s_i = \tensor{\omega}{_i^j} \otimes s_j$ for some collection $\tensor{\omega}{_i^j} \in \Omega^1(U)$ of 1-forms, called the \textit{connection 1-forms} for $\nabla$ over $U$ with respect to $s_i$. Now choose another local frame field $\widetilde{s}_1,\dots,\widetilde{s}_k$ of $E$. Without loss of generality, the $\widetilde{s}_i$ are also defined over $U$. Write $\widetilde{s}_i = \tensor{p}{_i^j} s_j$ for some collection $\tensor{p}{_i^j} \in C^\infty(U)$, and let $P := (\tensor{p}{_i^j}) \colon U \to \GL(\bbR^k)$ be the corresponding matrix function. Also write $\tensor{\widetilde{\omega}}{_i^j}$ for the connection 1-forms of $\nabla$ with respect to $\widetilde{s}_i$. We then have
+\begin{equation}
+    \nabla\widetilde{s}_i = \tensor{\widetilde{\omega}}{_i^k} \otimes \widetilde{s}_k = \tensor{p}{_k^j} \tensor{\widetilde{\omega}}{_i^k} s_j,
+\end{equation}
+and we also have 
+\begin{equation}
+    \nabla\widetilde{s}_i = \nabla(\tensor{p}{_i^j}s_j) = \d\tensor{p}{_i^j} \otimes s_j + \tensor{p}{_i^k} \tensor{\omega}{_k^j} \otimes s_j.
+\end{equation}
+We therefore have the relation
+\begin{equation} \label{eq:connectionFormsChangeFrame}
+    \tensor{p}{_k^j} \tensor{\widetilde{\omega}}{_i^k} = \d\tensor{p}{_i^j} + \tensor{\omega}{_k^j} \tensor{p}{_i^k}.
+\end{equation}
+Now, upon making the identification of linear maps $T_p U \to T_{P(p)} \GL(\bbR^k)$ with sections of $T_p^*U \otimes T_{P(p)}\GL(\bbR^k)$, the differential $\d P$ is of the form
+\begin{equation}
+    \d P = \d\tensor{p}{_i^j} \otimes \pdv{}{\tensor{x}{_i^j}},
+\end{equation}
+where $\tensor{x}{_i^j}$ are the standard coordinates on $\GL(\bbR^k)$. So, upon making the natural identification $T_p\GL(\bbR^k) \cong \bbR^{k \times k}$, we see $\d P$ is given by the matrix $(\d\tensor{p}{_i^j})$ of 1-forms. If we write $\omega$ for the matrix $(\tensor{\omega}{_i^j})$ of 1-forms, then (\ref{eq:connectionFormsChangeFrame}) can be written as 
+\begin{equation}
+    \widetilde{\omega} = P^{-1} \d P + P^{-1} \omega P.
+\end{equation}
+This equation will come in useful later.
+
+A connection $\nabla$ on $E$ can be extended to a connection on $E^*$ by requiring $\d(\theta(s)) = \nabla\theta(s) + \theta(\nabla s)$ for any $\theta \in \Gamma(E^*)$ and $s \in \Gamma(E)$. In particular, if $s_i$ is a local frame for $E$ and $\theta^i$ its dual frame for $E^*$, then we have 
+\begin{equation} \begin{aligned}
+    0 = \d\tensor{\delta}{_j^i} &= \d(\theta^i(s_j)) \\
+    &= \nabla\theta^i(s_j) + \theta^i(\nabla s_j) \\
+    &= \nabla\theta^i(s_j) + \tensor{\omega}{_j^k} \theta^i(s_k) \\
+    &= \nabla\theta^i(s_j) + \tensor{\omega}{_j^i},
+\end{aligned} \end{equation}
+so $\nabla\theta^i = - \tensor{\omega}{_j^i} \otimes \theta^j$.
+Furthermore, it can be extended to any tensor product of $E$ and $E^*$ by requiring the Leibniz rule hold. For example, $\nabla(s \otimes t) = \nabla s \otimes t + s \otimes \nabla t$ for any $s,t \in \Gamma(E)$.
+
+Let $\nabla$ and $\widetilde{\nabla}$ be two connections on $E$. Choose a function $f \in C^\infty(M)$ and a section $s \in \Gamma(E)$. We then have
+\begin{equation}
+    (\widetilde{\nabla} - \nabla)(fs) = (\d f \otimes s + f\widetilde{\nabla}s) - (\d f \otimes s + f\nabla s) = f(\widetilde{\nabla} - \nabla)s.
+\end{equation}
+This means $\widetilde{\nabla} - \nabla$ is a section of the vector bundle $T^*M \otimes \End(E)$. Indeed, given $p \in M$ and $v \in E_p$, choose a local frame field $s_i$ for $E$ in a neighborhood of $p$, and extend by zero (using bump functions as before) to all of $M$. Choose a section $s = a^i s_i$ such that $s_p = v$. Define $(\widetilde{\nabla} - \nabla)_p \colon E_p \to T_p^*M \otimes E_p$ by 
+\begin{equation}
+    (\widetilde{\nabla} - \nabla)_p(v) := (\widetilde{\nabla} - \nabla)(s)\vert_p.
+\end{equation}
+This is well-defined, since if $\widetilde{s} = b^i s_i$ is any other section with $\widetilde{s}_p = v$, then we have 
+\begin{equation}
+    (\widetilde{\nabla} - \nabla)(s)\vert_p - (\widetilde{\nabla} - \nabla)(\widetilde{s})\vert_p 
+    = (a^i(p) - b^i(p))(\widetilde{\nabla} - \nabla)(s_i)\vert_p
+    = 0.
+\end{equation}
+It follows that $(\widetilde{\nabla} - \nabla)_p$ is an element of $T^*_pM \otimes \End(E_p)$, as required. Actually, we may be more concrete: write $\omega$ for the matrix of connection 1-forms of $\nabla$ with respect to $s_i$, and $\widetilde{\omega}$ for the corresponding matrix of connection 1-forms of $\widetilde{\nabla}$. Write $\theta^i$ for the frame of $E^*$ dual to $s_i$. For $s = a^i s_i$, we then have 
+\begin{equation}
+    (\widetilde{\nabla} - \nabla)s 
+    = a^i(\tensor{\widetilde{\omega}}{_i^j} - \tensor{\omega}{_i^j}) \otimes s_j 
+    = (\tensor{\widetilde{\omega}}{_i^j} - \tensor{\omega}{_i^j})) \theta^i(s) s_j.
+\end{equation}
+That is,
+\begin{equation}
+    \widetilde{\nabla} - \nabla = (\tensor{\widetilde{\omega}}{_i^j} - \tensor{\omega}{_i^j}) \otimes \theta^i \otimes s_j.
+\end{equation}
+We have therefore shown that the space of connections on a vector bundle $E$ is an affine space over $\Gamma(T^*M \otimes \End(E))$.
+
+Choose local coordinates $x^\alpha$ for $M$. We may then write $\tensor{\omega}{_i^j} = \Gamma_{\alpha i}^j \d x^\alpha$ for some smooth functions $\Gamma_{\alpha i}^j$, called \textit{Christoffel symbols}. The covariant derivative of a section $s = a^i s_i$ in the direction $X$ is then given by 
+\begin{equation} \label{eq:coordinateCovDer}
+    \nabla_X s = \parens{ X^\alpha \pdv{a^i}{x^\alpha} + a^j X^\alpha \Gamma_{\alpha j}^i } s_i =: X^\alpha \tensor{a}{^i_{;\alpha}} s_i.
+\end{equation}
+
+Let $u \colon N \to M$ be a smooth map. Given a connection $\nabla$ on a vector bundle $E \to M$, we define the \textit{pullback connection} $u^*\nabla$ on the pullback bundle $u^*E \to N$ locally: given a local frame $s_i$ of $E$ with connection 1-forms $\tensor{\omega}{_i^j}$, note that $s_i \circ u$ is a local frame of $u^*E$. We define $u^*\nabla$ by 
+\begin{equation}
+    u^*\nabla (s_i \circ u) := u^*\tensor{\omega}{_i^j} \otimes (s_j \circ u).
+\end{equation}
+A special case is when $N = [0,1]$, and we have a smooth curve $\gamma \colon [0,1] \to M$. In this case, we usually write $D_t := \gamma^* \nabla_{\odv{}{t}}$. For a section $s(t) = a^i(t) s_i(\gamma(t))$ along $\gamma$, we calculate
+\begin{equation} \begin{aligned}
+    D_t s &= \parens{ \odv{a^i}{t} + a^j \gamma^*\tensor{\omega}{_j^i}\parens{\odv{}{t}} } s_i \\
+          &= \parens{ \odv{a^i}{t} + a^j \Gamma_{\alpha j}^i \odv{\gamma^\alpha}{t} } s_i.
+\end{aligned} \end{equation}
+So $s$ is parallel along $\gamma$ in the domain of the $s_i$ if and only if it satisfies the system
+\begin{equation}
+    \odv{a^i}{t} + a^j \Gamma_{\alpha j}^i \odv{\gamma^\alpha}{t} = 0
+\end{equation}
+for all $t$. Given initial values $a^i(0)$, some ODE theory and a patchwork job along all the domains of local frames guarantees the existence and uniqueness of a parallel section $s$ along $\gamma$ with initial value $s(0)$. We call $s$ the \textit{parallel transport} of $s(0)$ along $\gamma$.
+In a sense, parallel transport is a way of connecting vectors in $E_{\gamma(0)}$ and $E_{\gamma(1)}$. Hence the name ``connection''.
+
+We will now define the curvature of $\nabla$. First, we extend $\nabla$ by defining the \textit{covariant exterior derivative} $\d^\nabla \colon \Gamma(\Lambda^k T^*M \otimes E) \to \Gamma(\Lambda^{k+1} T^*M \otimes E)$ to be 
+\begin{equation}
+    \d^\nabla(\eta \otimes s) := \d\eta \otimes s + (-1)^k \eta \wedge \nabla s,
+\end{equation}
+and extending by linearity. We note that $\d^\nabla$ satisfies the specialized Leibniz rule 
+\begin{equation}
+    \d^\nabla(f s) = \d f \wedge s + f \d^\nabla s
+\end{equation}
+for any $f \in C^\infty(M)$ and $s \in \Gamma(\Lambda^k T^*M \otimes E)$. Now, although the standard exterior derivative satisfies $\d^2 = 0$, this is not true for the covariant exterior derivative. We define the \textit{Riemann curvature tensor} of $\nabla$ to be $R^\nabla := (\d^\nabla)^2 \colon \Gamma(E) \to \Gamma(\Lambda^2 T^*M \otimes E)$. Concretely, given a local frame $s_i$ of $E$, with connection 1-forms $\omega$, we calculate 
+\begin{equation} \begin{aligned}
+    R^\nabla s_i &= \d^\nabla(\nabla s_i) \\ 
+                 &= \d^\nabla(\tensor{\omega}{_i^j} s_j) \\
+                 &= ( \d\tensor{\omega}{_i^j} - \tensor{\omega}{_i^k} \wedge \tensor{\omega}{_k^j}) \otimes s_j.
+\end{aligned} \end{equation}
+The matrix $\Omega := \d\omega + \omega \wedge \omega$ of 2-forms is called the matrix of \textit{curvature 2-forms} for $\nabla$ with respect to $s_i$. Choosing local coordinates $x^\alpha$ for $M$, we will write $\tensor{\Omega}{_i^j} = \frac{1}{2} \tensor{R}{_\alpha_\beta_i^j} \d x^\alpha \wedge \d x^\beta$. It turns out that $R^\nabla$ is also a tensor: fix $f \in C^\infty(M)$ and $s \in \Gamma(E)$. We then calculate
+\begin{equation} \begin{aligned}
+    R^\nabla(fs) &= \d^\nabla( \d f \otimes s + f \nabla s ) \\ 
+                 &= \d^2 f \otimes s - \d f \wedge \nabla s + \d f \wedge \nabla s + f R^\nabla s \\
+                 &= f R^\nabla s.
+\end{aligned} \end{equation}
+So $R^\nabla$ is a section of the bundle $\Lambda^2 T^*M \otimes \End(E)$, and we can locally write it as $R^\nabla = \tensor{\Omega}{_i^j} \otimes \theta^i \otimes s_j$. It turns out that 2 derivatives is the most we can take:
+\begin{equation} \begin{aligned}
+    \d^\nabla R^\nabla 
+    &= \d\tensor{\Omega}{_i^j} \otimes \theta^i \otimes s_j + \tensor{\Omega}{_i^j} \wedge (\nabla \theta^i \otimes s_j + \theta^i \otimes \nabla s_j) \\
+    &= \d\tensor{\Omega}{_i^j} \otimes \theta^i \otimes s_j + \tensor{\Omega}{_i^j} \wedge (-\tensor{\omega}{_k^i} \otimes \theta^k \otimes s_j + \tensor{\omega}{_j^k} \otimes \theta^i \otimes s_k ) \\
+    &= ( \d\tensor{\Omega}{_i^j} - \tensor{\Omega}{_k^j} \wedge \tensor{\omega}{_i^k} + \tensor{\Omega}{_i^k} \wedge \tensor{\omega}{_k^j} ) \otimes \theta^i \otimes s_j.
+\end{aligned} \end{equation}
+Now, since $\tensor{\Omega}{_i^j} = \d\tensor{\omega}{_i^j} + \tensor{\omega}{_k^j} \wedge \tensor{\omega}{_i^k}$, we have 
+\begin{equation} \begin{aligned}
+    \d\tensor{\Omega}{_i^j} &=  \d\tensor{\omega}{_k^j} \wedge \tensor{\omega}{_i^k} - \tensor{\omega}{_k^j} \wedge \d\tensor{\omega}{_i^k} \\
+                            &= (\tensor{\Omega}{_k^j} - \tensor{\omega}{_l^j} \wedge \tensor{\omega}{_k^l}) \wedge \tensor{\omega}{_i^k} 
+                                - \tensor{\omega}{_k^j} \wedge (\tensor{\Omega}{_i^k} - \tensor{\omega}{_l^k} \wedge \tensor{\omega}{_i^l}) \\
+                            &= \tensor{\Omega}{_k^j} \wedge \tensor{\omega}{_i^k} - \tensor{\omega}{_k^j} \wedge \tensor{\Omega}{_i^k}.
+\end{aligned} \end{equation}
+Plugging this into the above equation, we see $\d^\nabla R^\nabla = 0$. This is called the \textit{second Bianchi identity}.
+
+
+\section{The Levi-Civita Connection}
+
+Given a vector bundle $\pi \colon E \to M$, a \textit{bundle metric} is a section $g$ of the bundle $E^* \otimes E^*$ such that at each point $p \in M$, $g_p$ is an inner product on $E_p$. A connection $\nabla$ on $E$ is \textit{compatible with} $g$ if $\nabla g = 0$. In other words,
+\begin{equation}
+    \d(g(s,t)) = g(\nabla s,t) + g(s,\nabla t)
+\end{equation}
+for all sections $s,t \in \Gamma(E)$. Choosing a local frame $s_1,\dots,s_k$ for $E$ and writing $\nabla s_i = \tensor{\omega}{_i^j} \otimes s_j$, we see 
+\begin{equation}
+    \d g_{ij} = g(\nabla s_i,s_j) + g(s_i, \nabla s_j) = \tensor{\omega}{_i^k} g_{kj} + \tensor{\omega}{_j^k} g_{ik} = \omega_{ij} + \omega_{ji}.
+\end{equation}
+In particular, if the $s_i$ are orthonormal, then the matrix $\omega$ is skew-symmetric. Of course, this is sufficient to show $\nabla$ is compatible with $g$, since if $\theta^i$ is the orthonormal coframe for $E^*$ dual to $s_i$, then 
+\begin{equation} \begin{aligned}
+    \nabla g &= \nabla(\delta_{ij} \theta^i \otimes \theta^j) \\
+             &= \delta_{ij} \nabla \theta^i \otimes \theta^j + \delta_{ij} \theta^i \otimes \nabla \theta^j \\
+             &= \delta_{ij} \tensor{\omega}{_k^i} \otimes \theta^k \otimes \theta^j + \delta_{ij} \tensor{\omega}{_k^j} \otimes \theta^i \otimes \theta^k \\
+             &= \omega_{kj} \theta^k \otimes \theta^j + \omega_{ki} \otimes \theta^i \otimes \theta^k \\
+             &= 0.
+\end{aligned} \end{equation}
+In fact, this also implies the curvature matrix $\Omega$ is skew symmetric, since 
+\begin{equation} \begin{aligned}
+    \Omega_{ij} &= \delta_{jk} \tensor{\Omega}{_i^k} \\
+                &= \delta_{jk} ( \d\tensor{\omega}{_i^k} + \tensor{\omega}{_l^k} \wedge \tensor{\omega}{_i^l} ) \\
+                &= \d\omega_{ij} + \delta^{lr} \omega_{lj} \wedge \omega_{ir} \\
+                &= - \d\omega_{ji} - \delta^{lr} \omega_{ri} \wedge \omega_{jl} \\
+                &= - \delta_{ik} (\d\tensor{\omega}{_j^k} + \tensor{\omega}{_l^k} \wedge \tensor{\omega}{_j^l}) \\
+                &= - \Omega_{ji}.
+\end{aligned} \end{equation}
+With $\Omega_{ij} = \frac{1}{2} R_{\alpha\beta ij} \d x^\alpha \wedge \d x^\beta$ as before, we then have the following two symmetries of the curvature tensor:
+\begin{align}
+    R_{\alpha\beta ij} + R_{\beta\alpha ij} &= 0, \\
+    R_{\alpha\beta ij} + R_{\alpha\beta ji} &= 0.
+\end{align}
+Later, we will see some more symmetries of $R^\nabla$.
+
+We now restrict attention to the cotangent bundle $T^*M$. Given a connection $\nabla$ on $T^*M$ (or, equivalently, on $TM$), define the \textit{torsion} of $\nabla$ to be the map 
+\begin{equation}
+    \tau := d - 2 \Alt_2 \circ \nabla \colon \Omega^1(M) \to \Omega^2(M).
+\end{equation}
+Given $f \in C^\infty(M)$ and $\theta \in \Omega^1(M)$, we have 
+\begin{equation} \begin{aligned}
+    \tau(f\theta) &= \d(f\theta) - 2\Alt_2(\nabla(f\theta)) \\
+                  &= \d f \wedge \theta + f \d\theta - 2\Alt_2(\d f \otimes \theta + f \nabla \theta) \\
+                  &= f (\d\theta - 2\Alt_2(\nabla\theta)) \\
+                  &= f\tau(\theta).
+\end{aligned} \end{equation}
+It follows that $\tau$ is a section of $\Lambda^2 T^*M \otimes (T^*M)^* \cong \Lambda^2 T^*M \otimes TM$. Explicitly, if $e_i$ is a frame for $TM$ and $\theta^i$ its dual coframe, then, upon writing $\nabla e_i = \tensor{\omega}{_i^j} \otimes e_j$, we have
+\begin{equation}
+    \tau(\theta^i) = \d\theta^i + \tensor{\omega}{_j^i} \wedge \theta^j,
+\end{equation}
+so $\tau = ( \d\theta^i + \tensor{\omega}{_j^i} \wedge \theta^j ) \otimes e_i$. Choosing local coordinates $x^i$, we have
+\begin{equation}
+    \tau = \parens{ \tensor{\omega}{_j^i} \wedge \d x^j } \otimes \pdv{}{x^i} = \parens{ \Gamma^i_{kj} \d x^k \wedge \d x^j } \otimes \pdv{}{x^i}.
+\end{equation}
+So if $\nabla$ is torsion-free, then $\Gamma^i_{kj} = \Gamma^i_{jk}$ for all $i,j,k$. Also, given vector fields $X,Y \in \Gamma(TM)$, we have 
+\begin{equation} \begin{aligned}
+    \tau(X,Y) &= ( \d\theta^i(X,Y) + \tensor{\omega}{_j^i}(X)\theta^j(Y) - \tensor{\omega}{_j^i}(Y)\theta^j(X) ) \otimes e_i \\
+              &= ( XY^i - YX^i - \theta^i([X,Y]) + \tensor{\omega}{_j^i}(X) Y^j - \tensor{\omega}{_j^i}(Y) X^j ) \otimes e_i \\
+              &= \nabla_X Y - \nabla_Y X - [X,Y].
+\end{aligned} \end{equation}
+Finally, if $\nabla$ is torsion-free, we differentiate both sides of $\d\theta^i + \tensor{\omega}{_j^i} \wedge \theta^j = 0$ to find
+\begin{equation} \begin{aligned}
+    0 &= \d\tensor{\omega}{_j^i} \wedge \theta^j - \tensor{\omega}{_j^i} \wedge \d\theta^j \\
+      &= \d\tensor{\omega}{_j^i} \wedge \theta^j + \tensor{\omega}{_j^i} \wedge \tensor{\omega}{_k^j} \wedge \theta^k \\
+      &= \tensor{\Omega}{_j^i} \wedge \theta^j.
+\end{aligned} \end{equation}
+Write $\tensor{\Omega}{_j^i} = \frac{1}{2} \tensor{R}{_\alpha_\beta_j^i} \theta^\alpha \wedge \theta^\beta$. Plugging this into the above equation, we find 
+\begin{equation}
+    0 = \tensor{\Omega}{_j^i} \wedge \theta^j = \frac{1}{2} \tensor{R}{_\alpha_\beta_j^i} \theta^\alpha \wedge \theta^\beta \wedge \theta^j.
+\end{equation}
+We therefore obtain the \textit{first Bianchi identity}:
+\begin{equation}
+    \tensor{R}{_\alpha_\beta_j^i} + \tensor{R}{_j_\alpha_\beta^i} + \tensor{R}{_\beta_j_\alpha^i} = 0.
+\end{equation}
+
+\begin{theorem}[Fundamental Theorem of Riemannian Geometry]
+    Let $(M,g)$ be a Riemmanian manifold (i.e. $M$ is a manifold and $g$ a bundle metric on $TM$). Then there exists a unique connection on $TM$ which is torsion-free and compatible with $g$, called the \textit{Levi-Civita connection}.
+\end{theorem}
+\begin{proof}
+    Let $e_i$ be a local frame for $TM$ and $\theta^i$ its dual coframe. Suppose $\nabla$ is a Levi-Civita connection, and write $\nabla e_i = \tensor{\omega}{_i^j} \otimes e_j$, $\tensor{\omega}{_i^j} = c_{ki}^j \theta^k$. We will derive conditions on the coefficients $c_{ki}^j$ which determine $\nabla$ uniquely. We also write $\d\theta^i = b_{jk}^i \theta^j \otimes \theta^k$ for some $b_{jk}^i$ satisfying $b_{jk}^i + b_{kj}^i = 0$. Since $\nabla$ is torsion-free, we have 
+    \begin{equation} \begin{aligned}
+        b_{jk}^i \theta^j \otimes \theta^k &= \d\theta^i \\
+                                           &= \theta^j \wedge \tensor{\omega}{_j^i} \\
+                                           &= c_{kj}^i \theta^j \wedge \theta^k \\
+                                           &= c_{kj}^i (\theta^j \otimes \theta^k - \theta^k \otimes \theta^j) \\
+                                           &= (c_{kj}^i - c_{jk}^i) \theta^j \otimes \theta^k.
+    \end{aligned} \end{equation}
+    We therefore have the relation $b_{jk}^i = c_{kj}^i - c_{jk}^i$. We will need the following two additional equations obtained by permuting indices:
+    \begin{equation} \begin{aligned}
+        b_{ki}^j &= c_{ik}^j - c_{ki}^j, \\
+        b_{ij}^k &= c_{ji}^k - c_{ij}^k.
+    \end{aligned} \end{equation}
+    By skew-symmetry of $\omega$, we have $c_{kj}^i = - c_{ki}^j$ for all $i,j,k$. We then compute
+    \begin{equation} \begin{aligned}
+        c_{kj}^i &= b_{jk}^i + c_{jk}^i \\
+                 &= b_{jk}^i - c_{ji}^k \\
+                 &= b_{jk}^i - b_{ij}^k - c_{ij}^k \\ 
+                 &= b_{jk}^i - b_{ij}^k + c_{ik}^j \\
+                 &= b_{jk}^i - b_{ij}^k + b_{ki}^j + c_{ki}^j \\
+                 &= b_{jk}^i - b_{ij}^k + b_{ki}^j - c_{kj}^i. \\
+    \end{aligned} \end{equation}
+    So $c_{kj}^i = \frac{1}{2} (b_{jk}^i - b_{ij}^k + b_{ki}^j)$.
+\end{proof}
+There are a number of other ways to compute the Levi-Civita connection, one of the most common being the \textit{Koszul formula} given by 
+\begin{equation}
+    2g(\nabla_X Y,Z) = X(g(Y,Z)) + Y(g(X,Z)) - Z(g(X,Y)) + g([X,Y],Z) - g([X,Z],Y) - g([Y,Z],X),
+\end{equation}
+or the formula for the Christoffel symbols in local coordinates:
+\begin{equation}
+    \Gamma_{jk}^i = \frac{1}{2} g^{li} \parens{ \pdv{g_{lk}}{x^j} + \pdv{g_{lj}}{x^k} - \pdv{g_{jk}}{x^l} }.
+\end{equation}
+
+The Levi-Civita connection on a Riemannian manifold produces some useful operations on smooth functions. Given $f \in C^\infty(M)$, define its \textit{gradient} to be
+\begin{equation}
+    \grad{f} := (\d f)^\# \in \Gamma(TM).
+\end{equation}
+So if $e_i$ is a local frame for $TM$, then $\grad{f} = g^{ij} f_i e_j$, where $f_i = e_i(f)$. In particular, for local coordinates $x^i$, we have 
+\begin{equation}
+    \grad{f} = g^{ij} \pdv{f}{x^i} \pdv{f}{x^j}.
+\end{equation}
+The \textit{Hessian} of $f$ is defined by
+\begin{equation}
+    \Hess{f} := \nabla(\d f) \in \Gamma(T^*M \otimes T^*M).
+\end{equation}
+Explicitly,
+\begin{equation}
+    \Hess{f} = \nabla(f_i \theta^i) = (\d{f_j} - f_i \tensor{\omega}{_j^i}) \otimes \theta^j,
+\end{equation}
+where $\theta^i$ is the coframe for $T^*M$ dual to $e_i$. Given two vector fields $X,Y \in \Gamma(TM)$, we may compute 
+\begin{equation} \begin{aligned}
+    \Hess{f}(X,Y) &= ( \d{f_j}(X) - f_i \tensor{\omega}{_j^i}(X) ) Y^j \\
+                  &= X(Yf) - (\nabla_X Y)f.
+\end{aligned} \end{equation}
+Note that since $\nabla$ is torsion-free, we have $\Alt_2(\nabla\d{f}) = 0$, so $\Hess{f} = \Sym_2(\nabla\d{f}) + \Alt_2(\nabla\d{f}) = \Sym_2(\nabla\d{f})$. That is, $\Hess{f}$ is a symmetric section of $T^*M \otimes T^*M$. Finally, the \textit{Laplacian} of $f$ is defined by 
+\begin{equation}
+    \Delta f := g^{ij} \Hess{f}(e_i,e_j).
+\end{equation}
+In coordinates, we can calculate this to be 
+\begin{equation}
+    \Delta f = \frac{1}{\sqrt{\det{g}}} \pdv{}{x^i} \parens{ g^{ij} \sqrt{\det{g}} \pdv{f}{x^j} }.
+\end{equation}
+
+
+\chapter{Riemannian Submanifolds}
+\section{Decomposition of the Levi-Civita Connection}
+
+Let $M$ be an $n$-manifold, $(N,g)$ an $(n+p)$-dimensional Riemannian manifold, and $u \colon M \to N$ an immersion. Equip $M$ with the pullback metric $u^*g$, traditionally called the \textit{first fundamental form}. Since the bundle map $\d u \colon TM \to u^* TN$ is injective by assumption, we may take the orthonormal decomposition $u^* TN \cong TM \oplus NM$, and we call $NM$ the \textit{normal bundle}. Explicitly, $Y_p \in T_{u(p)}N$ is in $N_p M$ if and only if $g_{u(p)}(Y_p,\d{u}_p(X_p)) = 0$ for all $X_p \in T_p M$. Similarly, we decompose $u^* T^*N \cong T^*M \oplus N^*M$, and call $N^*M$ the \textit{conormal bundle}. From now on, we will suppress the $\d{u}$, identifying $\d{u}_p(X_p)$ and $X_p$. Similarly, we will suppress ``$\circ u$'' whenever it appears. This means if $X \in \Gamma(TN)$ is a vector field on $N$ and $p \in M$ is a point, then $X_p$ means $X_{u(p)}$.
+
+We will denote indices by $A,B,C,\dots \in \set{1,\dots,n+p}$, $i,j,k,\dots \in \set{1,\dots,n}$, and $\alpha,\beta,\gamma,\dots \in \set{n+1,\dots,n+p}$. Suppose $e_A$ is a local $g$-orthonormal frame for $N$ with dual coframe $\theta^A$, and write $\nabla^N e_A = \tensor{\omega}{_A^B} \otimes e_B$, where $\nabla^N$ is the Levi-Civita connection on $N$. Assume $e_A$ is an \textit{adapted frame}, which means $e_i$ (more precisely, $(\d{u})^{-1}(e_i \circ u)$) is a $u^*g$-orthonormal frame for $TM$, and $e_\alpha$ (more precisely, $e_\alpha \circ u$) is a $g \circ u$-orthonormal frame for $NM$. Now, the pullback $u^*\theta^\alpha$ is evidently zero. Also, since $\nabla^N$ is torsion-free, we have 
+\begin{equation}
+    \d\theta^i + \tensor{\omega}{_j^i} \wedge \theta^j + \tensor{\omega}{_\beta^i} \wedge \theta^\beta = 0.
+\end{equation}
+We pull this back to find
+\begin{equation}
+    \d{u^*\theta^i} + u^* \tensor{\omega}{_j^i} \wedge u^* \theta^j = 0.
+\end{equation}
+Since the matrix $\omega$ is skew-symmetric, the matrix $u^* \omega$ of pulled-back forms must also be skew-symmetric, implying (along with the above torsion-free property) that $u^*\tensor{\omega}{_i^j}$ is the matrix of connection 1-forms for the Levi-Civita connection $\nabla^M$ on $M$ with respect to the frame $e_i$, or equivalently, with respect to the coframe $u^*\theta^i$. Of course, $u^* \tensor{\omega}{_A^B}$ is the matrix of connection 1-forms for the pullback connection $u^* \nabla^N$. We now decompose 
+\begin{equation} \begin{aligned}
+    u^* \nabla^N e_i &= (u^* \nabla^N e_i)^\top + (u^* \nabla^N e_i)^\bot  \\
+                     &= \tensor{u^* \omega}{_i^j} \otimes e_j + \tensor{u^* \omega}{_i^\beta} \otimes e_\beta \\
+                     &= \nabla^M e_i + A e_i,
+\end{aligned} \end{equation}
+where $A \colon \Gamma(TM) \to \Gamma(T^*M \otimes NM)$ is given by $Ae_i := (u^* \nabla^N e_i)^\bot$. Immediately from the definition, we see that $A$ is $C^\infty(M)$-linear, and therefore a section of $T^*M \otimes NM \otimes T^*M$. Define the \textit{second fundamental form} ${\rm II} \colon \Gamma(TM) \times \Gamma(TM) \to \Gamma(NM)$ by
+\begin{equation}
+    {\rm II}(X,Y) := AX(Y) = (u^* \nabla^N_Y X)^\bot.
+\end{equation}
+More precisely, this should be $(u^* \nabla^N_Y \d{u}(X))^\bot$. The second fundamental form is symmetric. Indeed, given the torsion-free condition $\d\theta^\alpha + \tensor{\omega}{_j^\alpha} \wedge \theta^j + \tensor{\omega}{_\beta^\alpha} \wedge \theta^\beta = 0$, we may pullback to find $u^* \tensor{\omega}{_j^\alpha} \wedge u^*\theta^j = 0$. It follows that $u^* \tensor{\omega}{_j^\alpha} = h_{ji}^\alpha u^* \theta^i$ for some smooth functions satisfying $h_{ji}^\alpha = h_{ij}^\alpha$. With this, we have
+\begin{equation} \begin{aligned}
+    {\rm II}(e_i,e_j) &= \tensor{u^* \omega}{_i^\beta}(e_j) e_\beta \\
+                      &= h_{ij}^\beta e_\beta \\
+                      &= h_{ji}^\beta e_\beta \\
+                      &= {\rm II}(e_j,e_i).
+\end{aligned} \end{equation}
+
+Having decomposed $u^* \nabla^N$ on $\Gamma(TM)$, we now decompose it on $\Gamma(NM)$. We have 
+\begin{equation} \begin{aligned}
+    u^* \nabla^N e_\alpha &= (u^* \nabla^N e_\alpha)^\top + (u^* \nabla^N e_\alpha)^\bot \\
+                          &= \tensor{u^* \omega}{_\alpha^j} \otimes e_j + \tensor{u^* \omega}{_\alpha^\beta} \otimes e_\beta \\
+                          &= Se_\alpha + \nabla^\bot e_\alpha,
+\end{aligned} \end{equation}
+where $S \colon \Gamma(NM) \to \Gamma(T^*M \otimes TM)$ is the \textit{shape operator} or \textit{Weingarten map}, and $\nabla^\bot \colon \Gamma(NM) \to \Gamma(T^*M \otimes NM)$ is the induced connection on $NM$. Similarly to $A$, the shape operator is $C^\infty(M)$-linear, and hence a section of $TM \otimes T^*M \otimes N^*M$. The shape operator and second fundamental form are related:
+\begin{equation}
+    g(SX(Z),Y) = - g(X,{\rm II}(Y,Z)) \quad \text{for all } X \in \Gamma(NM) \text{ and } Y,Z \in \Gamma(TM).
+\end{equation}
+To see this, we calculate 
+\begin{equation} \begin{aligned}
+    g(Se_\alpha(Z),e_i) &= g(u^* \tensor{\omega}{_\alpha^j}(Z) e_j,e_i) \\
+                        &= u^* \omega_{\alpha i}(Z) \\
+                        &= - u^* \omega_{i\alpha}(Z) \\
+                        &= - g(e_\alpha, u^* \tensor{\omega}{_i^\beta}(Z) e_\beta) \\
+                        &= - g(e_\alpha, {\rm II}(e_i,Z)).
+\end{aligned} \end{equation}
+Linearity implies the result holds for general vector fields.
+
+
+\section{Decomposition of the Curvature}
+
+We write $\Omega^N = \d\omega + \omega \wedge \omega$ for the matrix of curvature 2-forms of $\nabla^N$ with respect to the frame $e_A$. Pulling back to $M$, we have 
+\begin{equation} \begin{aligned}
+    u^*\tensor{(\Omega^N)}{_i^j} &= (\d(u^*\tensor{\omega}{_i^j}) + u^*\tensor{\omega}{_k^j} \wedge u^* \tensor{\omega}{_i^k})
+                                    + u^*\tensor{\omega}{_\alpha^j} \wedge u^* \tensor{\omega}{_i^\alpha} \\
+                                 &= u^* \tensor{(\Omega^M)}{_i^j} + u^*\tensor{\omega}{_\alpha^j} \wedge u^* \tensor{\omega}{_i^\alpha} \\
+                                 &= u^* \tensor{(\Omega^M)}{_i^j} - \delta_{\alpha\beta} h_{kj}^\alpha h_{li}^\beta \theta^k \wedge \theta^l.
+\end{aligned} \end{equation}
+These is called the \textit{Gauss equations}. We call $u^*\tensor{(\Omega^N)}{_i^j}$ the \textit{ambient curvature} of $M$, $\tensor{(\Omega^M)}{_i^j}$ the \textit{intrinsic curvature} of $M$, and $u^*\tensor{\omega}{_\alpha^j} \wedge u^* \tensor{\omega}{_i^\alpha}$ the \textit{extrinsic curvature} of $M$. In the special case where $n = 2$ and $N = \bbR^3$, i.e. $M$ is a surface embedded in three-dimensional Euclidean space, the ambient curvature is zero, and skew-symmetry of implies the only nonzero elements of $\Omega^M$ are $\Omega^M_{12} = -\Omega^M_{21}$. By the Gauss equation,
+\begin{equation}
+    \Omega^M_{12} = - ( h_{22} h_{11} - (h_{12})^2 ) \theta^1 \wedge \theta^2 = - \det{\rm II} \, \theta^1 \wedge \theta^2.
+\end{equation}
+We call $K := \det{\rm II}$ the \textit{Gaussian curvature} of $M$. More generally, consider the immersion $M^n \hookrightarrow \bbR^{n + 1}$ of a hypersurface in Euclidean space. The Gauss equations read 
+\begin{equation}
+    \Omega^M_{ij} = h_{kj} h_{li} \theta^k \wedge \theta^l.
+\end{equation}
+Diagonalizing the matrix $(h_{ij})$, we obtain an orthonormal coframe $\theta^i$ such that $h_{ij} = \kappa_i \delta_{ij}$ for some smooth functions $\kappa_i$, called the \textit{principal curvatures} of $M$. We therefore have 
+\begin{equation}
+    \Omega^M_{ij} = \kappa_j \kappa_i \theta^j \wedge \theta^i.
+\end{equation}
+Define the \textit{curvature operator} $\scrR \colon \Omega^2(M) \to \Omega^2(M)$ by $\scrR(\theta^i \wedge \theta^j) = -\Omega^M_{ij}$. The above equation shows that $\theta_i \wedge \theta_j$ are eigenvectors of $\scrR$. In general, eigenvectors of the curvature operator can have high rank, where the \textit{rank} of $\theta \in \Omega^2(M)$ is the least $r \geq 0$ such that $\theta = \sum_{k=1}^r \alpha_k \theta_{i_k} \wedge \theta_{j_k}$. Our calculations show that if the eigenvectors of the curvature operator have rank strictly greater than 1, then $M$ cannot be isometrically immersed as a hypersurface in Euclidean space.
+
+Next, we consider the curvature $\Omega^\bot$ of the normal bundle (namely, of the connection $\nabla^\bot$). As before, we decompose
+\begin{equation} \begin{aligned}
+    u^* \tensor{(\Omega^N)}{_\alpha^\beta} &= \tensor{(\Omega^\bot)}{_\alpha^\beta} + u^*\tensor{\omega}{_i^\beta} \wedge u^* \tensor{\omega}{_\alpha^i} \\ 
+    &= \tensor{(\Omega^\bot)}{_\alpha^\beta} - \delta^{ij} h_{ki}^\beta h_{lj}^\alpha \theta^k \wedge \theta^l.
+\end{aligned} \end{equation}
+These is called the \textit{Ricci equations}.
+
+Finally, the \textit{Codazzi-Mainardi equations} are effectively a tautology:
+\begin{equation}
+    u^*\tensor{\Omega}{_i^\alpha} = \d(u^*\tensor{\omega}{_i^\alpha}) + u^*\tensor{\omega}{_j^\alpha} \wedge u^*\tensor{\omega}{_i^j} + u^*\tensor{\omega}{_\beta^\alpha} \wedge u^*\tensor{\omega}{_i^\beta}.
+\end{equation}
+
+
+
+\chapter{Curvature}
+
+We will use this chapter to study the curvature operator $\scrR \colon \Omega^2(M) \to \Omega^2(M)$ further. One thing to note is that $\scrR$ is symmetric with respect to the induced metric on $\Lambda^2 T^*M$. Indeed, given an orthonormal coframe $\theta^i$ for $M$, we have 
+\begin{equation} \begin{aligned}
+    g(\scrR(\theta^i \wedge \theta^j),\theta^k \wedge \theta^l) 
+    &= g(- \frac{1}{2} R_{rsij} \theta^r \wedge \theta^s, \theta^k \wedge \theta^l) \\
+    &= - R_{klij} \\
+    &= - R_{ijkl} \\
+    &= g(\scrR(\theta^k \wedge \theta^l),\theta^i \wedge \theta^j).
+\end{aligned} \end{equation}
+where the interchange symmetry $R_{klij} = R_{ijkl}$ comes from the following calculation:
+\begin{equation} \begin{aligned} 
+    R_{klij}
+    &= - R_{iklj} - R_{likj} \\
+    &= + R_{ikjl} + R_{lijk} \\
+    &= - R_{jikl} - R_{kjil} - R_{jlik} - R_{ijlk} \\ 
+    &= R_{jilk} + R_{kjli} + R_{jlki} + R_{ijkl} \\
+    &= 2R_{ijkl} - R_{lkji} \\
+    &= 2R_{ijkl} - R_{klij}.
+\end{aligned} \end{equation}
+Adding $R_{klij}$ to both sides and dividing by 2 gives the desired symmetry. From this, we see that $\scrR$ is a section of the peculiar bundle $\Sym^2(\Lambda^2 T^*M)$. The idea is to decompose this space into ``irreducible'' parts.
+
+Let $V$ be a vector space, and choose operators $S,T \in \Sym^2(V)$. Define the \textit{Kulkarni-Nomizu product} $S \owedge T \colon \Lambda^2 V \to \Lambda^2 V$ of $S$ and $T$ by
+\begin{equation}
+    (S \owedge T)(v \wedge w) := Sv \wedge Tw - Sw \wedge Tv.
+\end{equation}
+Then $S \owedge T$ lies in $\Sym^2(\Lambda^2 V)$. In the other direction, define the \textit{Ricci contraction} $\ric \colon \Sym^2(\Lambda^2 V) \to \Sym^2(V)$ to be a certain trace given by 
+\begin{equation}
+   \ric{\scrR}(v,w) = \sum_{i=1}^n g(\scrR(v \wedge e_i), w \wedge e_i),
+\end{equation}
+where $e_i$ is an orthonormal basis for $V$. In components,
+\begin{equation} \begin{aligned}
+    R_{ij}
+    &= \ric{\scrR}(e_i,e_j) \\
+    &= \sum_{k=1}^n g(\scrR(e_i \wedge e_k), e_j \wedge e_k) \\
+    &= - \sum_{k=1}^n g\parens{ \frac{1}{2} \tensor{R}{^r^s_i_k} e_r \wedge e_s, e_j \wedge e_k } \\
+    &= - \sum_{k=1}^n \tensor{R}{_{jkik}} \\
+    &= - \tensor{R}{_{jki}^k} \\
+    &= \tensor{R}{_{kji}^k}.
+\end{aligned} \end{equation}
+We define the \textit{scalar curvature} $S$ of $\scrR$ to be the trace of $\ric{\scrR}$. Thus
+\begin{equation}
+    S = \delta^{ij} R_{ij} = \delta^{ij} \tensor{R}{_{kji}^k}.
+\end{equation}
+
+
+
+
+
+
+\chapter{Geodesics}
+\section{The Exponential Map}
+
+Let $M$ be a manifold, and let $\nabla$ be a connection on $TM$. Fix a smooth path $\gamma \colon [0,1] \to M$, and let $D_t = \gamma^* \nabla_{\odv{}{t}}$. We say $\gamma$ is a \textit{geodesic} with respect to $\nabla$ if $D_t \gamma' = 0$. That is, if $\gamma'$ is parallel along $\gamma$. In local coordinates, $D_t \gamma'$ is written 
+\begin{equation}
+    \parens{ \frac{\d^2\gamma^i}{\d{t}^2} + \odv{\gamma^k}{t} \odv{\gamma^j}{t} \Gamma_{kj}^i } \pdv{}{x^i}.
+\end{equation}
+Therefore $\gamma$ is (locally) a geodesic if and only if it satisfies the \textit{geodesic equation}
+\begin{equation}
+    \frac{\d^2\gamma^i}{\d{t}^2} + \odv{\gamma^k}{t} \odv{\gamma^j}{t} \Gamma_{kj}^i = 0
+\end{equation}
+Given initial conditions $\gamma(0) = p \in M$ and $\gamma'(0) = v \in T_pM$, ODE theory guarantees the existence of a maximal interval $I_{p,v} \subseteq \bbR$ and a unique maximal solution $\gamma_{p,v} \colon I_{p,v} \to M$ depending smoothly on the initial conditions. We say $M$ is \textit{geodesically complete} if $I_{p,v} = \bbR$ for all $(p,v) \in TM$.
+
+Given a smooth path $\gamma \colon I \to M$ and $\lambda \in \bbR \setminus \set{0}$, define $\gamma_\lambda \colon \lambda^{-1} I \to M$ by $\gamma_\lambda(t) = \gamma(\lambda t)$. Then $\gamma_\lambda'(t) = \lambda \gamma'(t)$, and so 
+\begin{equation}
+    \frac{\d^2{\gamma_\lambda^i}}{\d{t}^2} + \odv{\gamma_\lambda^k}{t} \odv{\gamma_\lambda^j}{t} \Gamma_{kj}^i
+    = \lambda^2 \parens{ \frac{\d^2{\gamma^i}{\d{t}^2}} + \odv{\gamma^k}{t} \odv{\gamma^j}{t} }.
+\end{equation}
+Therefore, if $\gamma$ is the geodesic with initial conditions $\gamma(0) = p$, $\gamma'(0) = v$, and maximal interval $I_{p,v} \subseteq \bbR$, then $\gamma_\lambda$ is a geodesic with initial conditions $\gamma_\lambda(0) = p$, $\gamma'(0) = \lambda v$, and maximal interval $\lambda^{-1} I_{p,v}$. In particular, $\gamma_{p,\lambda v}(t) = \gamma_{p,v}(\lambda t)$. Thus, for $\lambda > 0$ sufficiently small, the maximal interval $I_{p,\lambda v} = \lambda^{-1} I_{p,v}$ contains $1$. It follows that there exists an open set $U_p \subseteq T_pM$ (which we may choose to be star-shaped) containing $0$ such that $\gamma_{p,v}(1)$ exists for all $v \in U_p$. Define the \textit{exponential map} $\exp_p^\nabla \colon U_p \to M$ by $\exp_p^\nabla(v) := \gamma_{p,v}(1)$. We also define $U := \coprod_{p \in M} U_p \subseteq TM$, which is a neighborhood of (the image of) the zero section. Define $\Exp^\nabla \colon U \to M \times M$ by $\Exp^\nabla(p,v) := (p,\exp_p^\nabla(v))$. Since $\gamma_{p,v}$ depends smoothly on initial conditions, the maps $\exp_p^\nabla$ and $\Exp^\nabla$ are smooth. 
+
+Let's calculate the differentials of the exponential maps. We identify $T_0 T_pM$ and $T_pM$ in the natrual way. Given $w \in T_pM$, define the curve $\xi(t) = tw \in T_pM$. Then $\xi(0) = 0$ and $\xi'(t) = w$, so we then calculate 
+\begin{equation} \begin{aligned}
+    \d\exp^\nabla_p(0)(w) &= \odv{}{t} \exp_p^\nabla(\xi(t)) \vert_{t=0} \\
+                          &= \odv{}{t} \gamma_{p,tw}(1) \vert_{t=0} \\
+                          &= \odv{}{t} \gamma_{p,w}(t) \vert_{t=0} \\
+                          &= w.
+\end{aligned} \end{equation}
+It follows that $\d\exp^\nabla_p(0) = \id_{T_pM}$. In particular, $\d\Exp^\nabla(p,0)(0,w) = (0,w)$. On the other hand, choose a curve $\xi(t)$ in $M$ with $\xi(0) = p$ and $\xi'(0) = v$. Then 
+\begin{equation} \begin{aligned}
+    \d\Exp^\nabla(p,0)(v,0) &= \odv{}{t} \Exp^\nabla(\xi(t),0) \vert_{t=0} \\
+                            &= \odv{}{t} (\xi(t),\xi(t)) \vert_{t=0} \\
+                            &= (v,v).
+\end{aligned} \end{equation}
+It follows that $\d\Exp^\nabla(p,0)$ is given by the matrix 
+\begin{equation}
+    \begin{pmatrix}
+        \id_{T_pM} & 0 \\
+        \id_{T_pM} & \id_{T_pM}
+    \end{pmatrix}
+\end{equation}
+Since this is invertible, the Inverse Function Theorem ensures there is a (potentially smaller) neighborhood $U$ of the zero section on which $\Exp^\nabla$ is a diffeomorphism onto its image. In particular, $\exp^\nabla_p$ is a diffeomorphism from $U_p$ onto its image.
+
+
+\section{Variations of Length and Energy}
+
+Fix a Riemannian manifold $(M,g)$, and let $\nabla$ be the Levi-Civita connection. A \textit{path} in $M$ is a smooth map $\gamma \colon I \to M$, and its image is a \textit{curve}. A path is \textit{regular} if it is an immersion, and the image of a regular path is a \textit{smooth} curve. The \textit{length} of a path $\gamma \colon [0,1] \to M$ (and its corresponding curve) is defined by 
+\begin{equation}
+    \ell(\gamma) := \int_0^1 \abs{\gamma'(t)} \; \d{t},
+\end{equation}
+and its \textit{energy} is 
+\begin{equation}
+    E(\gamma) := \frac{1}{2} \int_0^1 \abs{\gamma'(t)}^2 \; \d{t}.
+\end{equation}
+
+A \textit{variation} of a path $\gamma \colon [0,1] \to M$ is a smooth map $F \colon [0,1] \times (-\epsilon,\epsilon) \to M$ such that $F(\cdot,0) = \gamma$. We will usually write $\gamma_s = F(\cdot,s)$. The interval $[0,1]$ has coordinate $t$ and $(-\epsilon,\epsilon)$ has coordinate $s$. We define $V := \d{F}\parens{\pdv{}{s}} \in \Gamma(F^*(TM))$ to be the \textit{variation vector field}, and $T := \d{F}\parens{\pdv{}{t}} \in \Gamma(F^*(TM))$ to be the \textit{tangent vector field}. We also write $D_s := F^* \nabla_{\pdv{}{s}}$ and $D_t := F^* \nabla_{\pdv{}{t}}$. Since $\nabla$ is compatible with $g$, the pullback connection $F^* \nabla$ is compatible with $g \circ F$. We then calculate 
+\begin{equation} \begin{aligned} \label{eq:firstVariationStep1}
+    \pdv{}{s} E(\gamma_s) &= \frac{1}{2} \int_0^1 \pdv{}{s} \abs{\gamma_s'}^2 \; \d{t} \\
+                          &= \frac{1}{2} \int_0^1 \d(g(T,T))\parens{\pdv{}{s}} \; \d{t} \\
+                          &= \int_0^1 g(D_s T,T) \; \d{t}.
+\end{aligned} \end{equation}
+
+To proceed, we will use the fact that $D_s T = D_t V$. To see this, pick local coordinates $x^i$ on $M$. Let $\omega$ be the corresponding matrix of Levi-Civita connection 1-forms. By the torsion-free property of $\nabla$, we have $\tensor{\omega}{_j^i} \wedge \d{x}^j = 0$. Pulling this back by $F$ and applying it to $\pdv{}{s}$ and $\pdv{}{t}$, we have
+\begin{equation}
+    F^*\tensor{\omega}{_j^i}\parens{\pdv{}{s}} \d{x^j}(T) = F^*\tensor{\omega}{_j^i}\parens{\pdv{}{t}} \d{x^j}(V).
+\end{equation}
+By definition,
+\begin{equation}
+    D_t V = \parens{ \pdv{}{t} \d{x^i}(V) + F^*\tensor{\omega}{_j^i}\parens{\pdv{}{t}} \d{x^j}(V) } \pdv{}{x^i}.
+\end{equation}
+It then suffices to notice that 
+\begin{equation}
+    \d{F}\parens{\left[ \pdv{}{s},\pdv{}{t} \right]} = \parens{\pdv{}{s}\d{x^i}(T) - \pdv{}{t}\d{x^i}(V)} \pdv{}{x^i}. 
+\end{equation}    
+But since $[ \pdv{}{s},\pdv{}{t} ] = 0$, we are done. With this ``symmetry lemma'' in hand, we return to equation (\ref{eq:firstVariationStep1}) and calculate 
+\begin{equation} \begin{aligned}
+    \int_0^1 g(D_s T,T) \; \d{t} &= \int_0^1 g(D_t V,T) \; \d{t} \\
+                                 &= \int_0^1 \pdv{}{t} g(V,T) - g(V,D_t T) \; \d{t} \\
+                                 &= g(V,T) \vert_{t=0}^1 - \int_0^1 g(V,D_t T) \; \d{t}.
+\end{aligned} \end{equation}
+Noting that this expression depends only on $V$ and $\gamma$, and not the particular variation $F$ used to generate $V$, we define the \textit{first variation of energy} to be 
+\begin{equation}
+    \delta E(\gamma)(V) := \left. \odv{}{s} E(\gamma_s) \right\vert_{s = 0}.
+\end{equation}
+
+We can do a similar calculation for the length functional $\ell$. In this case, suppose $F \colon [0,1] \times (-\epsilon,\epsilon) \to M$ is a variation of $\gamma$ such that $\gamma_s$ is a regular path for each $s \in (-\epsilon,\epsilon)$. Then 
+\begin{equation} \begin{aligned}
+    \odv{}{s} \ell(\gamma_s) &= \int_0^1 \odv{}{s} g(T,T)^{1/2} \; \d{t} \\
+                             &= \int_0^1 g\parens{ D_s T, \frac{T}{\abs{T}} } \; \d{t} \\
+                             &= \int_0^1 g\parens{ D_t V, \frac{T}{\abs{T}} } \; \d{t} \\
+                             &= \left. g\parens{ V,\frac{T}{\abs{T}} } \right\vert_{t=0}^1 - \int_0^1 g\parens{ V, D_t \frac{T}{\abs{T}} } \; \d{t}.
+\end{aligned} \end{equation}
+Note that geodesics have constant speed. Indeed, if $\gamma \colon [0,1] \to M$ is a geodesic, then 
+\begin{equation}
+    \odv{}{t} \abs{\gamma'}^2 = 2g(D_t \gamma',\gamma') = 0.
+\end{equation}
+From this, we see that critical points for $E$ are precisely the critical points of $\ell$ parameterized at constant speed.
+
+We can now prove the following lemma, whose overall message is ``there exist nice coordinates on a Riemannian manifold''.
+\begin{lemma}[Gauss]
+    Choose $p \in M$, and let $\exp_p \colon U_p \to M$ be the exponential map with respect to the Levi-Civita connection. Suppose $v,w \in U_p$ are orthogonal. Then $\d\exp_p(v)(v)$ and $\d\exp_p(v)(w)$ are orthogonal.
+\end{lemma}
+\begin{proof}
+    Define $\gamma \colon [0,1] \to T_p M$ by $\gamma(t) = (1+t)v$. Then $\gamma(0) = \gamma'(0) = v$, so 
+    \begin{equation} \begin{aligned}
+        \d\exp_p(v)(v) &= \left. \odv{}{t} \exp_p(\gamma(t)) \right\vert_{t=0} \\
+                       &= \left. \odv{}{t} \gamma_{p,(1+t)v}(1) \right\vert_{t=0} \\
+                       &= \left. \odv{}{t} \gamma_{p,v}(1+t) \right\vert_{t=0} \\
+                       &= \gamma_{p,v}'(1).
+    \end{aligned} \end{equation}
+    On the other hand, define $\sigma \colon (-\epsilon,\epsilon) \to T_p M$ by $\sigma(s) := (\cos{s})v + (\sin{s})w$. Then $\sigma(0) = v$ and $\sigma'(0) = w$, so 
+    \begin{equation} 
+        \d\exp_p(v)(w) = \left. \odv{}{s} \exp_p(\sigma(s)) \right\vert_{s=0} 
+                       = \left. \odv{}{s} \gamma_{p,(\cos{s})v + (\sin{s})w}(1) \right\vert_{s=0}.
+    \end{equation}
+    Consider the variation $F \colon [0,1] \times (-\epsilon,\epsilon) \to M$ of $\gamma_{p,v}$ defined by $F(t,s) = \gamma_{p,(\cos{s})v + (\sin{s})w}(t)$. Since $\gamma_{p,v}$ is a geodesic, the first variation formula tells us
+    \begin{equation}
+        g(V(0,0),\gamma'_{p,v}(0)) = g(V(0,1),\gamma'_{p,v}(1)),
+    \end{equation}
+    where $V$ is the variation vector field of $F$. By our above calculation, we see $V(0,1) = \d\exp_p(v)(w)$. On the other hand, we have $\gamma'_{p,v}(1) = \d\exp_p(v)(v)$ by the previous calculation, and $V(0,0) = 0$ clearly. It follows that $g(\d\exp_p(v)(w),\d\exp_p(v)(v)) = 0$, as required.
+\end{proof}
+
+Fix $p \in M$. Let $\epsilon_p > 0$ be such that $\exp_p$ is a diffeomorphism from the open ball $B(0,\epsilon_p)$ to its image, denoted $B(p,\epsilon_p)$. ...
+
+We also have that geodesics are locally minimizing in the following sense: pick $q \in B(p,\epsilon_p)$, and let $v \in B(0,\epsilon_p)$ be such that $q = \exp_p(v)$. The length of the geodesic $\gamma_{p,v}$ joining $p$ and $q$ is given by 
+\begin{equation}
+    \ell(\gamma_{p,v}) = \int_0^1 \abs{\gamma_{p,v}'} \; \d{t} 
+                       = \int_0^1 \abs{v} \; \d{t} 
+                       = \abs{v},
+\end{equation} 
+using the fact that geodesics have constant speed, and $\gamma_{p,v}'(0) = v$. Is threre a curve joining $p$ and $q$ of length less than $\abs{v}$? Such a curve must leave $B(p,\epsilon_p)$ since if it minimizes length, then it is parameterized by a geodesic. But of course, by uniqueness, the only geodesic joining $p$ and $q$ in $B(p,\epsilon_p)$ is $\gamma_{p,v}$. Now, let $\gamma \colon [0,1] \to M$ be a path joining $p$ and $q$ which leaves $B(p,\epsilon_p)$. Then we can find $t^* \in (0,1)$ such that $\gamma(t) \in B(p,\epsilon_p)$ for all $t \in [0,t^*)$, but $\gamma(t^*) \notin B(p,\epsilon_p)$. Write $\gamma(t) = \exp_p(r(t)\omega(t))$ for all $t \in [0,t^*)$, where $r(t) \in [0,\epsilon_p)$ and $\omega(t) \in \partial B(0,1) \subseteq T_p M$. By the Gauss lemma,
+\begin{equation} \begin{aligned}
+    \ell(\gamma) &= \int_0^1 \abs{\gamma'} \; \d{t} \\
+                 &> \int_0^{t^*} \abs{\gamma'} \; \d{t} \\
+                 &\geq \int_0^{t^*} r' \; \d{t} \\
+                 &= r(t^*) \\
+                 &= \epsilon_p \\
+                 &> \abs{v} \\
+                 &= \ell(\gamma_{p,v}),
+\end{aligned} \end{equation}
+therefore showing that any curve which leaves $B(p,\epsilon_p)$ cannot minimize the length between $p$ and $q$.
+
+
+\section{Metric Space Structure}
+
+Given a Riemannian manifold $(M,g)$, we define a metric on $M$ via 
+\begin{equation}
+    d(p,q) := \inf\set{ \ell(\gamma) : \gamma \text{ is a curve joining } p \text{ and } q }.
+\end{equation}
+The only metric space axiom we need to check is $d(p,q) = 0$ implies $p = q$. To see this, suppose $d(p,q) = 0$, and let $\epsilon_p > 0$ be such that $\exp_p \colon B(0,\epsilon_p) \to B(p,\epsilon_p)$ is a diffeomorphism. Since $d(p,q) = 0$, we can find a curve $\gamma$ of length less than $\epsilon_p$ joining $p$ and $q$. By our observations in the previous section, this means $\gamma$ lies in $B(p,\epsilon_p)$, and so we can write $q = \exp_p(v)$ for some $v \in B(0,\epsilon_p)$. Again by the previous section, the unique curve of shortest length joining $p$ and $q$ in $B(p,\epsilon_p)$ is given by $\gamma_{p,v}$. Of course, since $d(p,q) = 0$, this means $\abs{v} = \ell(\gamma_{p,v}) = 0$, and so $q = \exp_p(v) = p$.
+
+This metric turns out to generate the topology on $M$, so a Riemannian manifold is metrizable. The following theorem concerns the global topology of a Riemannian manifold:
+\begin{theorem}[Hopf-Rinow]
+    Let $(M,g)$ be a Riemannian manifold, and $d$ the above metric on $M$. Then $d$ is a complete metric if and only if $M$ is geodesically complete. Furthermore, if $M$ is geodesically complete, then for all $p,q \in M$, there exists a geodesic joining $p$ and $q$.
+\end{theorem}
+Completeness is important - even $\bbR^2 \setminus \set{0}$ doesn't have a geodesic joining $(-1,1)$ and $(1,-1)$.
+
+
+\section{Second Variation Formula}
+
+Recall our earlier calculation of the first variation $\delta E(\gamma)$ of a path $\gamma \colon [0,1] \to M$. In particular, we calculated 
+\begin{equation}
+    \odv{}{s} E(\gamma_s) = \int_0^1 g(D_t V, T) \; \d{t}.
+\end{equation}
+We differentiate this further to find 
+\begin{equation} \begin{aligned}
+    \odv[2]{}{s} E(\gamma_s)
+    &= \int_0^1 g(D_s D_t V, T) + g(D_t V, D_s T) \; \d{t} \\
+    &= \int_0^1 g(R(V,T) V - D_t D_s V, T) + g(D_t V, D_s T) \; \d{t} \\
+    &= \int_0^1 g(R(V,T)V, T) \; \d{t} - \left. g(D_s V, T) \right\vert_{t=0}^1 + \int_0^1 g(D_s V, D_t T) \; \d{t} + \int_0^1 g(D_t V, D_t V) \; \d{t} \\
+    &= - \int_0^1 g(R(V,T)T + D_t D_t V, V) \; \d{t} + \int_0^1 g(D_s V, D_t T) \; \d{t} + \left. \left( - g(D_s V,T) + g(D_t V, V)  \right) \right\vert_{t=0}^1.
+\end{aligned} \end{equation}
+Here, $R$ is the curvature of $M$. To justify the above expression involving the curvature, given a frame $e_i$ for $M$, we have the expression 
+\begin{equation} \begin{aligned}
+    D_s D_t (e_i \circ F) - D_t D_s (e_i \circ F)
+    &= R^{F^* \nabla}\parens{ \pdv{}{s}, \pdv{}{t} }(e_i \circ F) \\
+    &= \tensor{\Omega}{_i^j}(V,T) (e_j \circ F) \\
+    &= R(V,T) (e_i \circ F).
+\end{aligned} \end{equation}
+Since $R$ is tensorial, it follows that $R(V,T)V = D_s D_t V - D_t D_s V$. Suppose now that two things are true: $\gamma$ is a geodesic, in which case $D_t T(t,0) = 0$ for all $t \in [0,1]$, and $\gamma_s$ is a so-called \textit{proper variation} of $\gamma$, meaning endpoints are preserved. Then $V(0,s) = V(1,s) = D_s V(0,s) = D_s V(1,s) = 0$ for all $s \in (-\epsilon,\epsilon)$. We then evaluate the above expression at $s = 0$ to find the \textit{second variation formula}
+\begin{equation}
+    \delta^2 E(\gamma_s)(V) 
+    = \left. \odv[2]{}{s} E(\gamma_s) \right\vert_{s=0} 
+    = - \int_0^1 g(R(V,T)T + D_t D_t V, V) \; \d{t}
+\end{equation}
+A vector field $J$ along a geodesic $\gamma$ is called a \textit{Jacobi field} if it satisfies 
+\begin{equation}
+    R(J,\gamma')\gamma' + D_t D_t J = 0.
+\end{equation}
+
+Let's now calculate some Jacobi fields in a certain special case. Take $e_n = \gamma' / \abs{\gamma'}$, and extend this to a parallel orthonormal frame $e_i$ along $\gamma$. Write 
+\begin{equation} \begin{aligned}
+    R(e_i,\gamma') \gamma'
+    = \abs{\gamma'}^2 R(e_i, e_n) e_n 
+    = \abs{\gamma'}^2 \tensor{R}{_{inn}^j} e_j.
+\end{aligned} \end{equation}
+Then for a vector field $J = J^i e_i$ along $\gamma$, the Jacobi field equation reads 
+\begin{equation}
+    \odv[2]{J^i}{t} + J^j \tensor{R}{_{jnn}^i} \abs{\gamma'}^2 = 0.
+\end{equation} 
+Suppose $M$ has constant sectional curvature, meaning we may write $\tensor{R}{_{jnn}^i} = c \tensor{\delta}{_j^i}$ for some $c \in \bbR$ and all $i,j = 1,\dots,n-1$. Then the Jacobi field equation reads 
+\begin{equation} \begin{aligned}
+    \odv[2]{J^i}{t} + J^i \abs{\gamma'}^2 &= 0, \quad \text{for } i = 1,\dots,n-1, \\
+    \odv[2]{J^n}{t} &= 0.
+\end{aligned} \end{equation}
+We can solve this explicitly as follows: we immediately have $J^n(t) = a^n t + b^n$. For $i = 1,\dots,n-1$, we have solutions for three cases of $c$. Namely,
+\begin{equation} \begin{aligned}
+    J^i(t) &= a^i \sin(\sqrt{c}t) + b^i \cos(\sqrt{c}t) \quad \text{for } c > 0, \\
+    J^i(t) &= a^i t + b^i \quad \text{for } c = 0, \\
+    J^i(t) &= a^i \sinh(\sqrt{-c}t) + b^i \cosh(\sqrt{-c}t) \quad \text{for } c < 0.
+\end{aligned} \end{equation}
+
+\begin{lemma}
+    Let $\gamma_s$ be a one-parameter family of geodesics with associated variation vector field $V$. Then $V(t,0)$ is a Jacobi field.
+\end{lemma}
+\begin{proof}
+    Since each $\gamma$ is a geodesic, we have $D_t T = 0$, and therefore $D_s D_t T = 0$. It follows that
+    \begin{equation}
+        0 = D_s D_t T = R(V,T)T + D_t D_s T = R(V,T)T + D_t D_t V.
+    \end{equation}
+    Restrict to $s = 0$ to conclude.
+\end{proof}
+In fact, the opposite is true. Namely, every Jacobi field is the variation vector field of a one-parameter family of geodesics.
+
+The theory of ODEs guarantees the existence of a unique Jacobi field $J$ along a geodesic $\gamma$ with initial conditions $J(0) = v$ and $D_t J(0) = w$ for $v,w \in T_{\gamma(0)}M$. With this in mind, we have the following proposition:
+\begin{proposition}
+    Given $(p,v) \in TM$ such that $\exp_p(v)$ is defined, define the geodesic $\gamma(t) := \exp_p(tv)$ for $t \in [0,1]$. That is, $\gamma = \gamma_{p,v}$. Fix another $w \in T_p M$, and let $J$ be the unique Jacobi field along $\gamma$ with $J(0) = 0$, $D_t J(0) = w$. Then $J(1) = \d\exp_p(v)(w)$.
+\end{proposition}
+\begin{proof}
+    Define the following one-parameter family of geodesics:
+    \begin{equation}
+        \gamma_s(t) := \exp_p(t(v + sw)).
+    \end{equation}
+    The associated variation vector field $V$ satisfies 
+    \begin{equation}
+        V(t,s) = \d\exp_p(t(v+sw))(w).
+    \end{equation}
+    Thus $V(0,0) = 0$ and 
+    \begin{equation}
+        D_t V(0,0) = D_s T(0,0) = D_s \d\exp_p(0)(v+sw) \vert_{s = 0} = w.
+    \end{equation}
+    By the previous lemma, we know that $V(t,0)$ is a Jacobi field along $\gamma$. It follows by uniqueness that $V(t,0) = J(t)$, and so $J(1) = V(1,0) = \d\exp_p(v)(w)$.
+\end{proof}
+Two points $p,q \in M$ on a geodesic $\gamma$ are \textit{conjugate} if there exists a nontrivial Jacobi field along $\gamma$ vanishing at both $p$ and $q$.
+\begin{corollary} \label{cor:conjugacyAndInjectivity}
+    If $p$ and $\exp_p(v)$ are not conjugate along $\exp_p(tv)$, then $\d\exp_p(v)$ is injective.
+\end{corollary}
+One can show that if a geodesic extends past its first conjugate point, then it cannot be a minimizing geodesic.
+
+We can use Jacobi fields to relate the curvature of a manifold with its topology. Our first step will be the following observation: let $J$ be a Jacobi field along a geodesic $\gamma$. Then 
+\begin{equation} \begin{aligned} \label{eq:accelOfJacField}
+    \odv[2]{}{t} \abs{J}^2 
+    &= \odv{}{t} 2 g(D_t J, J) \\
+    &= 2 g(D_t D_t J, J) + 2 \abs{D_t J}^2 \\ 
+    &= 2 \abs{D_t J}^2 - 2 g(R(J,\gamma')\gamma', J).
+\end{aligned} \end{equation}
+Note that $g(R(J,\gamma')\gamma', J)$ is the sectional curvature of the (parameterized family of) two-planes spanned by $J$ and $\gamma'$. Using this, we deduce the following:
+\begin{lemma}
+    Let $\gamma$ be a geodesic such that the sectional curvature of $M$ along $\gamma$ is nonpositive. Then $\gamma$ carries no conjugate points. Thus if $M$ is complete with everywhere nonpositive sectional curvature, then $\d\exp_p(v)$ is invertible for all $(p,v) \in TM$.
+\end{lemma}
+\begin{proof}
+    Let $J$ be a Jacobi field along $\gamma$ vanishing at $0$. Then by (\ref{eq:accelOfJacField}), we must have $J = 0$ everywhere, or $\abs{J(t)} > 0$ for all sufficiently large $t$. For the second statement, recall by the Hopf-Rinow theorem that completeness of $M$ implies $\exp_p(v)$ exists for all $(p,v) \in TM$. Corollary \ref{cor:conjugacyAndInjectivity} then implies the statement.
+\end{proof}
+
+\begin{theorem}[Cartan-Hadamard]
+    Let $M$ be a complete and connected Riemannian manifold with nonpositive sectional curvature everywhere. Then, for all $p \in M$, the exponential map $\exp_p$ is a covering map. In particular, the universal covering space of $M$ is diffeomorphic to $\bbR^n$.
+\end{theorem}
+
+\begin{theorem}[Bonnet-Myers]
+    Let $M$ be a complete and connected Riemannian manifold with $\Ric(v,v) \geq (n-1)/R^2$ for all $v \in TM$. Then $\diam(M) \leq \pi R$.
+    In particular, $M$ is compact, and its fundamental group is finite.
+\end{theorem}
+
+\begin{theorem}[Synge]
+    Let $M$ be a compact, even dimensional, and oriented Riemannian manifold with strictly positive sectional curvature. Then $M$ is simply connected.
+\end{theorem}
+
+\begin{theorem}[Killing-Hopf]
+    Let $M$ be a complete Riemannian manifold with constant sectional curvature $c$, equal to $-1,0,1$ by scaling without loss of generality. Then its universal cover is isometric to
+    \begin{enumerate}[label={\rm (\roman*)}]
+        \item $S^n$ if $c = 1$,
+        \item $\bbR^n$ if $c = 0$,
+        \item $\bbH^n$ if $c = -1$.
+    \end{enumerate}
+\end{theorem}
+
+
+
+
+
+\end{document}

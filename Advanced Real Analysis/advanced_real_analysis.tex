@@ -1,0 +1,1183 @@
+\documentclass{book}
+
+\usepackage{amsmath, mathrsfs, amssymb, bbm, amsthm, enumitem, times, mathtools, amstext, mathptmx, xcolor, hyperref, showlabels}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[margin=4cm]{geometry}
+
+\newcommand{\scrA}{\mathscr{A}}
+\newcommand{\scrB}{\mathscr{B}}
+\newcommand{\scrD}{\mathscr{D}}
+\newcommand{\scrE}{\mathscr{E}}
+\newcommand{\scrF}{\mathscr{F}}
+\newcommand{\scrL}{\mathscr{L}} 
+\newcommand{\scrN}{\mathscr{N}}
+\newcommand{\scrQ}{\mathscr{Q}}
+\newcommand{\scrS}{\mathscr{S}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbone}{\mathbbm{1}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\D}{\mathrm{D}}
+\newcommand{\e}{\mathrm{e}}
+\renewcommand{\i}{\mathrm{i}}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\newcommand{\id}{\mathrm{id}}
+
+\newcommand{\abs}[1]{\left\lvert {#1} \right\rvert}
+\newcommand{\fhabs}[1]{\lvert {#1} \rvert}
+\newcommand{\norm}[1]{\left\Vert {#1} \right\Vert}
+\newcommand{\fhnorm}[1]{\lVert {#1} \rVert}
+\newcommand{\set}[1]{\left\{ {#1} \right\}}
+\newcommand{\fhset}[1]{\{ {#1} \}}
+\newcommand{\angles}[1]{\left\langle {#1} \right\rangle}
+\newcommand{\fhangles}[1]{\langle {#1} \rangle}
+\newcommand{\parens}[1]{\left( {#1} \right)}
+\newcommand{\bracks}[1]{\left[ {#1} \right]}
+ 
+\newcommand{\distributionEqual}{\overset{\scrD}{=}}
+\newcommand{\iidEqual}{\overset{\mathrm{i.i.d.}}{=}}
+\newcommand{\weak}{\rightharpoonup}
+
+%\linespread{1.2}
+
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\esssup}{ess\,sup}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\surroundwithmdframed[outerlinewidth=0.4pt,middlelinewidth=1pt,innerlinewidth=0.4pt,middlelinecolor=white,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{theorem}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{lemma}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{proposition}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{corollary}
+%\surroundwithmdframed[tikzsetting={draw=black,line width=1pt,dashed},bottomline=false,topline=false,rightline=false,innertopmargin=-5pt,outerlinecolor=white,middlelinecolor=white]{example}
+
+\numberwithin{equation}{chapter}
+
+\title{Advanced Real Analysis} 
+\author{Billy Sumners}
+
+\begin{document}
+\maketitle 
+
+\tableofcontents
+
+\chapter{Distributions}
+\section{Definitions and Examples}
+
+Throughout this section, all our functions (unless stated otherwise) will be $\bbC$-valued. In particular, $C_c^\infty(\Omega)$ is the set of all smooth functions $\phi \colon \Omega \to \bbC$ with compact support, $L^p(\Omega)$ is the set of all $L^p$ functions $f \colon \Omega \to \bbC$, and so on.
+\begin{example}
+    Consider the Poisson equation $- \Delta u = 4\pi f$ on $\bbR^3$ for some $f \in C^\infty(\bbR^3)$. Classic theory tells us that a solution to this equation is given by 
+    \begin{equation}
+        u(x) = \int_{\bbR^3} \frac{f(y)}{\abs{x-y}} \; \d y.
+    \end{equation}
+    If $u(x) = \abs{x}^{-1}$, then $-\Delta u = 4\pi \delta_0$, in the sense that
+    \begin{equation}
+        \int_{\bbR^3} \frac{\Delta \phi(x)}{\abs{x}} \; \d x = - 4\pi \phi(0)
+    \end{equation}
+    for all $\phi \in C^\infty_c(\bbR^3)$. The purpose of this chapter is to provide a rigorous framework for the above idea of the derivative of nonsmooth functions.
+\end{example}
+Let $\Omega \subseteq \bbR^n$ be open. A linear functional $u \colon C_c^\infty(\Omega) \to \bbC$ is a \textit{distribution on} $\Omega$ if, for all compact $K \Subset \Omega$, there exists $C = C_K > 0$ and $N = N_K \in \bbN_0$ such that 
+\begin{equation} \label{eq:definitionOfDistribution}
+    \abs{\langle u, \phi \rangle} \leq C \sum_{\abs{\alpha} \leq N} \norm{\partial^{\alpha}\phi}_{L^\infty(\Omega)} 
+    \text{ for all } \phi \in C_c^\infty(\Omega) \text{ with } \supp{\phi} \subseteq K.
+\end{equation}
+We write $\scrD'(\Omega)$ for the space of distributions on $\Omega$.
+\begin{example} \label{eg:locallyIntegrableFunctionsAreDistributions}
+    Let $f \in L_{\text{loc}}^1(\Omega)$. Define $u_f \colon C_c^\infty(\Omega) \to \bbC$ by 
+    \begin{equation}
+        \langle u_f, \phi \rangle := \int_\Omega f\phi \; \d x.
+    \end{equation}
+    Then $u_f$ is a distribution. Indeed, $u_f$ is clearly linear, and if $K \Subset \Omega$ is compact, and $phi \in C_c^\infty(\Omega)$ has support contained in $K$, then
+    \begin{equation}
+        \abs{\langle u_f, \phi \rangle} =    \abs{\int_\Omega f\phi \; \d x} 
+                                        \leq \norm{f}_{L^1(K)} \norm{\phi}_{L^\infty(K)} 
+                                        \leq \norm{f}_{L^1(K)} \norm{\phi}_{L^\infty(\Omega)}.
+    \end{equation}
+    There is a linear map $L_\text{loc}^1(\Omega) \hookrightarrow \scrD'(\Omega)$ given by $f \mapsto u_f$. If $u_f = 0$, then $f = 0$ by the Fundamental Lemma of the Calculus of Variations, so this map is an injective inclusion. We will usually abuse notation and write $f$ for the corresponding distribution $u_f$. Note that $L^p(\Omega) \subseteq L_\text{loc}^1(\Omega)$ for all $p \in [1,\infty]$, so already we have a wide class of distributions.
+\end{example}
+\begin{example} \label{eg:deltaDistribution}
+    Let $y \in \Omega$. Define $\delta_y \colon C_c^\infty(\Omega) \to \bbC$ by 
+    \begin{equation}
+        \angles{\delta_y,\phi} := \phi(y).
+    \end{equation}
+    Then $\delta_y$ is linear, and $\abs{\angles{\delta_y,\phi}} \leq \norm{\phi}_{L^\infty(\Omega)}$, so $\delta_y$ is a distribution on $\Omega$. This example also provides us with a distribution which doesn't arise from a function as in example \ref{eg:locallyIntegrableFunctionsAreDistributions}. Suppose it were the case that $f \in L_\text{loc}^1(\Omega)$ is such that $u_f = \delta_y$. Then, for all $\phi \in C_c^\infty(\Omega)$ with $\supp{\phi} \subseteq \Omega \setminus \set{y}$, we have
+    \begin{equation}
+        \int_\Omega f\phi \; \d x = \angles{\delta_y,\phi} = \phi(y) = 0.
+    \end{equation}
+    This implies $f = 0$ on $\Omega \setminus \set{y}$. But $\set{y}$ is a null set, so $\int_\Omega f\phi \; \d x = 0$ for all $\phi \in C_c^\infty(\Omega)$, a contradiction.
+\end{example}
+Let $\Omega \subseteq \bbR^n$ be open. A sequence $\phi_j \in C_c^\infty(\Omega)$ \textit{converges to} $\phi$ \textit{in} $C_c^\infty(\Omega)$ if there exists a compact $K \Subset \Omega$ such that $\supp{\phi_j} \subseteq K$ for all $j$, $\supp{\phi} \subseteq K$, and 
+\begin{equation}
+    \norm{\partial^\alpha \phi_j - \partial^\alpha \phi}_{L^\infty(\Omega)} \rightarrow 0 \text{ as } j \to \infty
+\end{equation}    
+for all multiindices $\alpha$. The following theorem tells us that distributions are precisely the continuous linear functionals on $C_c^\infty(\Omega)$ with respect to this notion of convergence.
+\begin{theorem} \label{thm:continuityAndBoundednessAreEquivalent}
+    A linear functional $u \colon C_c^\infty(\Omega) \to \bbC$ is a distribution on $\Omega$ if and only if $\angles{u,\phi_j} \rightarrow \angles{u,\phi}$ whenever $\phi_j \rightarrow \phi$ in $C_c^\infty(\Omega)$.
+\end{theorem}
+\begin{proof}
+    By linearity, we may consider sequences $\phi_j$ converging to zero in $C_c^\infty(\Omega)$ without loss of generality. Suppose first that $u$ is a distribution. Let $\phi_j$ be a sequence converging to $0$ in $C_c^\infty(\Omega)$. Let $K \Subset \Omega$ be a compact set such that $\supp{\phi_j} \subseteq K$ for all $j$. Let $C = C_K > 0$ and $N = N_K \in \bbN_0$ be such that (\ref{eq:definitionOfDistribution}) holds. Then
+    \begin{equation}
+        \lim_{j \rightarrow \infty} \abs{\angles{u,\phi_j}} \leq \lim_{j \rightarrow \infty} C \sum_{\abs{\alpha} \leq N} \norm{\partial^{\alpha}\phi_j}_{L^\infty(\Omega)}                                           
+                                                            =    0,
+    \end{equation}
+    which shows continuity of $u$.
+
+    Conversely, suppose $u$ is continuous in the above sense. For a contradiction, suppose $u$ is not a distribution. Then there exists a compact set $K$ such that for all $N \in \bbN$, there exists $\phi_N \in C_c^\infty(\Omega)$ with $\supp{\phi_N} \subseteq K$ and
+    \begin{equation} \label{eq:continuityImpliesDistributionTheorem-inequalityEstablishingContradiction}
+        \abs{\angles{u,\phi_N}} > N\sum_{\abs{\alpha} \leq N} \norm{\partial^\alpha \phi_N}_{L^\infty(\Omega)}.
+    \end{equation}
+    Note that the right hand side cannot be zero, since otherwise $\phi_N = 0$, implying the left hand side is zero, which would be a contradiction. Define 
+    \begin{equation}
+        \psi_N := \frac{\phi_N}{N\sum_{\abs{\alpha} \leq N} \norm{\partial^\alpha \phi_N}_{L^\infty(\Omega)}}.
+    \end{equation}
+    Then $\supp{\psi_N} \subseteq K$ for all $N$, and whenever $\alpha$ is a multiindex with $\abs{\alpha} \leq N$, we have $\norm{\partial^\alpha \psi_N}_{L^\infty(\Omega)} \leq \frac{1}{N}$. Therefore $\norm{\partial^\alpha \psi_N}_{L^\infty(\Omega)} \rightarrow 0$ as $N \rightarrow \infty$ for all multiindices $\alpha$, and so $\psi_N \rightarrow 0$ in $C_c^\infty(\Omega)$. By continuity of $u$, $\angles{u,\psi_N} \rightarrow 0$. However, (\ref{eq:continuityImpliesDistributionTheorem-inequalityEstablishingContradiction}) implies $\abs{\angles{u,\psi_N}} > 1$ for all $N$. We have therefore reached a contradiction.
+\end{proof}
+A distribution $u \in \scrD'(\Omega)$ has \textit{finite order} if the number $N = N_K$ in (\ref{eq:definitionOfDistribution}) can be taken independently of $K$. More precisely, there exists $N \in \bbN_0$ such that for all compact $K \Subset \Omega$, there exists $C = C_K > 0$ such that (\ref{eq:definitionOfDistribution}) holds. The \textit{order} of $u$ is the least such $N$. We write $\scrD'_m(\Omega)$ for the set of all distributions on $\Omega$ with order at most $m$. This is a subspace of $\scrD'(\Omega)$.
+\begin{example}
+    \begin{enumerate}[label=(\arabic*)]
+        \item The delta distribution $\delta_y$ has order $0$, and any locally integrable function $f \in L_\text{loc}^1(\Omega)$ also has order $0$. This can be seen from our calculations in examples \ref{eg:locallyIntegrableFunctionsAreDistributions} and \ref{eg:deltaDistribution}.
+
+        \item Let $\alpha$ be a multiindex. Define $u \in \scrD'(\bbR^n)$ by 
+        \begin{equation}
+            \angles{u,\phi} := \partial^\alpha \phi(0).
+        \end{equation}
+        Then $u$ has order $\abs{\alpha}$.
+
+        \item Let $\Omega = (0,\infty) \subseteq \bbR$. Define $u \in \scrD'(\Omega)$ by 
+        \begin{equation}
+            \angles{u,\phi} = \sum_{k=1}^\infty \phi^{(k)}\left(\frac{1}{k}\right).
+        \end{equation}
+        Then $u$ has infinite order.
+    \end{enumerate}
+\end{example}
+
+\section{Localization and Support}
+Let $\Omega' \subseteq \Omega \subseteq \bbR^n$ be open. There is an inclusion map $i \colon C_c^\infty(\Omega') \hookrightarrow C_c^\infty(\Omega)$ defined by extending a function $\phi \in C_c^\infty(\Omega')$ by zero to $\Omega$. This map is clearly continuous with respect to the notion of convergence on $C_c^\infty(\Omega)$. So if $u \in \scrD'(\Omega)$ is a distribution, we can restrict it to a distribution $u\vert_{\Omega'} \in \scrD'(\Omega')$ via $\angles{ u\vert_{\Omega'}, \phi} := \angles{ u, i(\phi) }$. Continuity of $u\vert_{\Omega'}$ arises from continuity of $i$ and $u$. We will usually write $\angles{u,\phi}$ in place of $\angles{ u\vert_{\Omega'},\phi }$ for $\phi \in C_c^\infty(\Omega')$.
+
+We say distributions $u,v \in \scrD'(\Omega)$ are \textit{equal on} $\Omega' \subseteq \Omega$ if $\angles{u,\phi} = \angles{v,\phi}$ for all $\phi \in C_c^\infty(\Omega')$. That is, they are equal on $\Omega'$ if $u\vert_{\Omega'} = v\vert_{\Omega'}$. An important question to ask is, given $u \in \scrD'(\Omega)$, can we recover $u$ from its restrictions $u\vert_{\Omega_i} \in \scrD'(\Omega)$ whenever $\Omega_i$ is an open cover of $\Omega$. It turns out that this is indeed possible, and theorem \ref{thm:recoveringDistributions} will show us how. To do this, we need the following notion. Let $\Omega \subseteq \bbR^n$ be open, and let $K \Subset \Omega$ be compact. Let $\Omega_1,\dots,\Omega_m \subseteq \Omega$ be open sets such that $K \subseteq \bigcup_{i=1}^m \Omega_i$. Then there exist $\psi_i \in C_c^\infty(\Omega)$ such that 
+\begin{enumerate}[label=(\roman*)]
+    \item $\supp{\psi_i} \subseteq \Omega_i$ for all $i=1,\dots,m$,
+    \item $0 \leq \psi_i \leq 1$ for all $i = 1,\dots,m$,
+    \item $\sum_{i=1}^m \psi_i \leq 1$,
+    \item $\sum_{i=1}^m \psi_i = 1$ on a neighborhood of $K$.
+\end{enumerate}
+We call $\psi_i$ a \textit{partition of unity on} $K$ \textit{subordinate to} $\Omega_i$.
+
+Let $\Omega \subseteq \bbR^n$ be open, and let $u \in \scrD'(\Omega)$ be a distribution. The \textit{support} of $u$ is the set 
+\begin{equation}
+    \supp{u} := \Omega \setminus \set{ x \in \Omega : u = 0 \text{ on a neighborhood of } x }.
+\end{equation}
+Unraveling this definition, we see that $x \in \Omega \setminus \supp{u}$ if and only if there exists a neighborhood $U \subseteq \Omega$ of $x$ such that $\angles{ u,\phi } = 0$ for all $\phi \in C_c^\infty(U)$. On the other hand, $x \in \supp{u}$ if and only if for all neighborhoods $U \subseteq \Omega$ of $x$, there exists $\phi \in C_c^\infty(U)$ such that $\angles{ u,\phi } \neq 0$. The support $\supp{u}$ is closed since its complement is open practically by definition.
+\begin{example}
+    \begin{enumerate}[label=(\arabic*)]
+        \item Consider the distribution $\delta = \delta_0 \in \scrD'(\bbR^n)$. Suppose $x = 0$, fix a neighborhood $U$ of $x$, and $\phi \in C_c^\infty(U)$ with $\phi(0) \neq 0$. Then $\angles{ \delta,\phi } = \phi(0) \neq 0$. This implies $0 \in \supp{\delta}$. 
+        
+        On the other hand, fix $x \in \bbR^n \setminus \set{0}$, and let $U$ be a neighborhood of $x$ which does not contain $0$. Then, if $\phi \in C_c^\infty(U)$, we have $\phi(0) = 0$, and so $\angles{\delta,\phi} = \phi(0) = 0$. Hence $\bbR^n \setminus \set{0} \subseteq \bbR^n \setminus \supp{\delta}$. We have proved that $\supp{\delta} = \set{0}$.
+
+        \item Let $\Omega \subseteq \bbR^n$ be open, and fix $f \in C^0(\Omega)$. Take $\supp{f}$ to be the usual support of $f$ as a function. Let $x \in \Omega \setminus \supp{f}$ be some point, and choose a neighborhood $U$ of $x$ contained entirely in $\Omega \setminus \supp{f}$. Then $f(y) = 0$ for all $y \in U$, so if we fix $\phi \in C_c^\infty(U)$, we must have 
+        \begin{equation}
+            \angles{ f,\phi } = \int_{\Omega} f \phi \; \d x = 0.
+        \end{equation}
+        So the support of $f$ as a distribution is contained in $\supp{f}$.
+
+        Conversely, choose $x \in \supp{f}$. Then, for a neighborhood $U$ of $x$, $U$ intersects $\set{ y \in \Omega : f(y) \neq 0 }$ in a nonempty set $V$. This set $V$ is open since $f$ is continuous Choose $\phi \in C_c^\infty(U)$ such that $\phi$ is nonzero on a subset of $V$ with positive measure. Then $f\phi \neq 0$ on a subset of $U$ with positive meausure, and therefore $\angles{ f,\phi } \neq 0$. It follows that $\supp{f}$ is contained in the distributional support of $f$. We have therefore shown that the support of $f$ as a distribution is equal to its support as a function.
+    \end{enumerate}
+\end{example}
+We now proof an intuitively clear result.
+\begin{lemma} \label{lem:disjointSupportsImplyPairingIsZero}
+    Let $\Omega \subseteq \bbR^n$ be open. Fix a distribution $u \in \scrD'(\Omega)$ and a test function $\phi \in C_c^\infty(\Omega)$. If $\supp{u} \cap \supp{\phi} = \emptyset$, then $\angles{ u,\phi } = 0$.
+\end{lemma}
+\begin{proof}
+    Write $K = \supp{\phi} \Subset \Omega$. Then $K \subseteq \set{ x \in \Omega : u = 0 \textit{ on a neighborhood of } x }$. For all $x \in K$, choose a neighborhood $U_x \subseteq \Omega$ such that $u = 0$ on $U_x$. Then $U_x$ is an open cover of the compact set $K$, so we can pick a finite subcover $U_1 = U_{x_1},\dots,U_m = U_{x_m}$. Let $\psi_i$ be a partition of unity on $K$ subordinate to $U_i$. Then $\psi_i \phi \in C_c^\infty(U_i)$ and $\sum_{i=1}^m \psi_i \phi = \phi$, and therefore 
+    \begin{equation}
+        \angles{ u,\phi } = \angles{ u, \sum_{i=1}^m \psi_i \phi } = \sum_{i=1}^m \angles{ u,\psi_i \phi} = 0,
+    \end{equation}
+    as required.
+\end{proof}
+This lemma has an immediate corollary directly related to the problem of recovering a distribution from its localizations. In this special case, all the localizations of $u$ are zero.
+\begin{corollary} \label{cor:recoveringDistributionsWhoseLocalizationsAreZero}
+    If $u \in \scrD'(\Omega)$ is a distribution on an open set $\Omega \subseteq \bbR^n$ with $\supp{u} = \emptyset$ (i.e. every $x \in \Omega$ has a neighborhood on which $u = 0$), then $u = 0$.
+\end{corollary}
+
+Having shown this special case, we now aim to show the far more general case with the following \textit{recovery theorem}.
+\begin{theorem}[Recovery] \label{thm:recoveringDistributions}
+    Let $\Omega \subseteq \bbR^n$ be open, and let $(\Omega_\lambda)_{\lambda \in \Lambda}$ be an open cover of $\Omega$. Suppose we are given a collection $(u_\lambda)_{\lambda \in \Lambda}$ of distributions $u_\lambda \in \scrD'(\Omega_\lambda)$ such that $u_\lambda = u_\mu$ on $\Omega_\lambda \cap \Omega_\mu$ for all $\lambda,\mu \in \Lambda$. Then there exists a unique $u \in \scrD'(\Omega)$ such that $u = u_\lambda$ on $\Omega_\lambda$ for all $\lambda \in \Lambda$.
+\end{theorem}
+\begin{proof}
+    We first prove existence of $u$. Fix $\phi \in C_c^\infty(\Omega)$, and write $K = \supp{\phi}$. Then $\Omega_\lambda$ is an open cover of $K$, and so we can pick a finite subcover $\Omega_1 = \Omega_{\lambda_1},\dots,\Omega_m = \Omega_{\lambda_m}$. Choose a partition of unity $\psi_i$ on $K$ subordinate to $\Omega_i$. We define 
+    \begin{equation} \label{eq:recoveringADistributionFromACover}
+        \angles{ u,\phi } = \sum_{i=1}^m \angles{ u_{\lambda_i},\psi_i \phi }.
+    \end{equation}
+    We must show that $u$ is well-defined. Suppose $\widetilde{\Omega}_j = \Omega_{\mu_j}$ ($j=1,\dots,k$) is another finite subcover of $K$, and $\widetilde{\psi}_j$ a partition of unity on $K$ subordinate to $\widetilde{\Omega}_j$. Then 
+    \begin{equation} \begin{aligned}
+        \sum_{i=1}^m \angles{ u_{\lambda_i},\psi_i \phi } &= \sum_{i=1}^m \angles{ u_{\lambda_i},\sum_{j=1}^k \widetilde{\psi}_j \psi_i \phi } \\
+                                                           &= \sum_{i=1}^m \sum_{j=1}^k \angles{ u_{\lambda_i}, \widetilde{\psi}_j \psi_i \phi} \\
+                                                           &= \sum_{j=1}^k \sum_{i=1}^m \angles{ u_{\mu_j}, \psi_i \widetilde{\psi}_j \phi}      \\
+                                                           &= \sum_{j=1}^k \angles{ u_{\mu_j}, \widetilde{\psi}_j \phi }.
+    \end{aligned} \end{equation}
+    Here, we made use of the fact that $\widetilde{\psi}_j \psi_i \phi \in C_c^\infty(\Omega_i \cap \widetilde{\Omega}_j)$, and this function has support contained in $K$.
+
+    So $u$ is well-defined, and a quick glance shows us that $u$ is linear. A further quick glance shows us that $u$ satistfies (\ref{eq:definitionOfDistribution}), and is therefore a distribution. This relies on the Leibniz rule: for any mulitindex $\alpha$,
+    \begin{equation}
+        \partial^\alpha(\psi_i \phi) = \sum_{\beta \leq \alpha} {\alpha \choose \beta} (\partial^\beta \phi)(\partial^{\alpha - \beta} \psi_i),
+    \end{equation}
+    where 
+    \begin{equation}
+        {\alpha \choose \beta} := \frac{\alpha!}{\beta!(\alpha - \beta)!},
+    \end{equation}
+    and $\alpha! := \alpha_1 ! \cdots \alpha_n !$. Finally, suppose $\phi \in C_c^\infty(\Omega_\lambda)$ for some $\lambda \in \Lambda$. Then if we choose the partition of unity $\psi$ with one element which is equal to 1 on $K$ and has support in $\Omega_\lambda$, definition (\ref{eq:recoveringADistributionFromACover}) gives us 
+    \begin{equation}
+        \angles{ u,\phi } = \angles{ u_\lambda, \psi \phi } = \angles{ u_\lambda,\phi },
+    \end{equation}
+    as required.
+
+    Finally, we show uniqueness. Suppose $u,v \in \scrD'(\Omega)$ are such that $u = u_\lambda$, $v = u_\lambda$ on $\Omega_\lambda$ for all $\lambda \in \Lambda$. Then $u - v = 0$ on $\Omega_\lambda$ for all $\lambda \in \Lambda$. Corollary \ref{cor:recoveringDistributionsWhoseLocalizationsAreZero} immediately implies $u - v = 0$.
+\end{proof}
+
+\section{Convergence of Distributions}
+Let $\Omega \subseteq \bbR^n$, and let $u_j \in \scrD'(\Omega)$ be a sequence of distributions. We say $u_j$ \textit{converges to} $u$ \textit{in} $\scrD'(\Omega)$ if $\angles{ u_j,\phi } \rightarrow \angles{ u,\phi }$ for all $\phi \in C_c^\infty(\Omega)$.
+
+To study convergence a little, we introduce the notion of \textit{mollification}
+\begin{lemma}
+    Let $\phi \in C_c^\infty(\bbR^n)$ be such that $\supp{\phi} \subseteq B(0,1)$ and $\int_{\bbR^n} \phi \; \d x = 1$. Given $f \in C_c^0(\bbR^n)$ and $\epsilon > 0$, define
+    \begin{align}
+        \phi_\epsilon(x) &:= \frac{1}{\epsilon^n}\phi\left(\frac{x}{\epsilon}\right) \\
+           f_\epsilon(x) &:= (f \ast \phi_\epsilon)(x) = \frac{1}{\epsilon^n} \int_{\bbR^n} f(y)\phi\left(\frac{x-y}{\epsilon}\right) \; \d y. \label{eq:mollificationOfAContinuousCompactlySupportedFunction}
+    \end{align}
+    We call $f_\epsilon$ the $\epsilon$-\textit{mollification of} $f$. Then
+    \begin{enumerate}[label=\rm{(\roman*)}]
+        \item $f_\epsilon \in C_c^\infty(\bbR^n)$,
+        \item $\supp{f_\epsilon} \subseteq \set{ x \in \bbR^n : d(\supp{f},x) \leq \epsilon}$,
+        \item $f_\epsilon \rightarrow f$ uniformly as $\epsilon \downarrow 0$.
+    \end{enumerate}
+    Thus $\phi_\epsilon$ is what is known as an \textit{approximation to the identity}.
+\end{lemma}
+\begin{proof}
+    \begin{enumerate}[label=(\roman*)]
+        \item Note that the integrand and its derivatives in (\ref{eq:mollificationOfAContinuousCompactlySupportedFunction}) are continuous with compact support. So by the dominated convergence theorem, we can differentiate under the integral sign to obtain
+        \begin{equation}
+            \partial^\alpha f_\epsilon(x) = \frac{1}{\epsilon^n} \int_{\bbR^n} f(y) \frac{1}{\epsilon^{\abs{\alpha}}} \partial^\alpha\phi\left(\frac{x-y}{\epsilon}\right) \; \d y
+        \end{equation}
+        for any multiindex $\alpha$.
+
+        \item Suppose $x \in \bbR^n$ is such that $d(\supp{f},x) > \epsilon$. Then, for all $y \in \supp{f}$, $\frac{\abs{x-y}}{\epsilon} > 1$, and so $\phi\left( \frac{x-y}{\epsilon} \right) = 0$. Thus $f_\epsilon(x) = 0$. Now, $f$ has compact support, so the set $\set{ x \in \bbR^n : d(\supp{f},x) > \epsilon }$ is open. This implies $x$ has a neighborhood on which $d(\supp{f},x) > \epsilon$, therefore $x \in (\bbR^n \setminus \set{ x \in \bbR^n : f_\epsilon(x) \neq 0 })^\circ = \bbR^n \setminus \supp{f_\epsilon}$.
+        
+        \item Since $\int_{\bbR^n} \phi \; \d x = 1$, we also have $\int_{\bbR^n} \phi_{\epsilon} \; \d x = 1$ by a change of variables, and so we may write
+        \begin{equation} \begin{aligned}
+            \abs{ f_\epsilon(x) - f(x) } &= \frac{1}{\epsilon^n} \abs{ \int_{\bbR^n} [f(y) - f(x)]\phi\left( \frac{x-y}{\epsilon} \right) } \\
+                                         &= \abs{ \int_{B(0,1)} [f(x) - f(x-\epsilon z)]\phi(z) \; \d z }                                   \\
+                                         &\leq \norm{\phi}_{L^1(\bbR^n)} \sup_{\abs{z} \leq 1} \abs{ f(x) - f(x-\epsilon z) },
+        \end{aligned} \end{equation}
+        where we made the change of variables $z = \frac{x-y}{\epsilon}$, and used the fact that $\phi$ is supported in $B(0,1)$. Fix $\delta > 0$. By uniform continuity of $f$, we can find $\eta > 0$ such that for all $\epsilon z \in \bbR^n$ with $\abs{\epsilon z} < \eta$, we have $\abs{ f(x) - f(x - \epsilon z) } < \delta$ for all $x \in \bbR^n$. So $\epsilon < \eta$ implies $\sup_{\abs{z} \leq 1} \abs{ f(x) - f(x-\epsilon z) } < \eta$ for all $x \in \bbR^n$. This implies $\abs{ f_\epsilon(x) - f(x) } \rightarrow 0 $ as $\epsilon \downarrow 0$ uniformly in $x$
+    \end{enumerate}
+\end{proof}
+\begin{example}
+    \begin{enumerate}[label=(\arabic*)]
+        \item Let $\phi \in C_c^\infty(\bbR^n)$ be such that $\int_{\bbR^n} \phi \; \d x = 1$. Fix $\psi \in C_c^\infty(\bbR^n)$. Then
+        \begin{equation} \begin{aligned}
+            \abs{ \angles{ \phi_\epsilon,\psi } - \angles{ \delta,\psi } } &= \abs{ \int_{\bbR^n} \phi_\epsilon (\psi - \psi(0)) \; \d x }                                                      \\
+                                                                          &\leq \frac{1}{\epsilon^n} \int_{\bbR^n} \abs{ \phi\parens{ \frac{x}{\epsilon} } } \abs{ \psi(x) - \psi(0) } \; \d x \\
+                                                                          &= \int_{K} \abs{ \phi(y) } \abs{ \psi(\epsilon y) - \psi(0) } \; \d x                                               \\
+                                                                          &\leq \norm{\phi}_{L^1(\bbR^n)} \sup_{y \in K} \abs{ \psi(\epsilon y) - \psi(0) }                                    \\
+                                                                          &\rightarrow 0 \text{ as } \epsilon \downarrow 0,
+        \end{aligned} \end{equation}
+        where $K$ denotes the support of $\phi$. Therefore $\phi_\epsilon \rightarrow \delta$ in $\scrD'(\bbR^n)$.
+
+        \item Define $u_j \in L_{\rm loc}^1(\bbR)$ by $u_m(x) := \e^{2\pi\i j x}$. Fix $\phi \in C_c^\infty(\bbR)$. Then 
+        \begin{equation} \begin{aligned}
+            \abs{\angles{ u_j,\phi}} &= \abs{ \int_{\bbR} \phi(x) \e^{2\pi\i j x} \; \d x }                \\
+                                     &= \frac{1}{2\pi j} \abs{ \int_\bbR \phi'(x) \e^{2\pi\i jx} \; \d x } \\
+                                     &\leq \frac{1}{2\pi j} \norm{\phi'}_{L^1(\bbR)}                       \\
+                                     &\rightarrow 0 \text{ as } j \rightarrow \infty.
+        \end{aligned} \end{equation}
+        Therefore $u_j \rightarrow 0$ in $\scrD'(\bbR)$.
+    \end{enumerate}
+\end{example}
+
+\section{Operations on Distributions}
+Let $\Omega \subseteq \bbR^n$ be open, and let $u \in \scrD'(\Omega)$ be a distribution. Define the \textit{distributional derivative of} $u$ by 
+\begin{equation}
+    \angles{ \partial_i u, \phi } = - \angles{ u,\partial_i\phi } \text{ for } i=1,\dots,n.
+\end{equation}
+If $u \in C^1(\Omega)$, note that integration by parts implies this definition agrees with the usual partial derivative. If $n=1$, the distributional derivative is usually denoted $u'$, as in ordinary calculus. More generally, for a multiindex $\alpha$, we define 
+\begin{equation}
+    \angles{ \partial^\alpha,\phi } = (-1)^{\abs{\alpha}} \angles{ u,\partial^\alpha \phi }.
+\end{equation}
+And for $n=1$, the $k$th distributional derivative is denoted $u^{(k)}$. Clearly, $\partial^\alpha u$ is linear. Note that $\partial^\alpha u$ is continuous with respect to the notion of convergence on $C_c^\infty(\Omega)$, so theorem \ref{thm:continuityAndBoundednessAreEquivalent} implies $\partial^\alpha u$ is a distribution.
+\begin{lemma}
+    Let $u_j \in \scrD'(\Omega)$ be a sequence of distributions with $u_j \rightarrow u$ in $\scrD'(\Omega)$. Then $\partial^\alpha u_j \rightarrow \partial^\alpha u$ in $\scrD'(\Omega)$ for all multiindices $\alpha$.
+\end{lemma}
+\begin{proof}
+    Fix $\phi \in C_c^\infty(\Omega)$. Then $\partial^\alpha \phi \in C_c^\infty(\Omega)$, so 
+    \begin{equation}
+        \angles{ \partial^\alpha u_j, \phi } = (-1)^{\abs{\alpha}} \angles{ u_j, \partial^\alpha \phi }
+                                             \rightarrow (-1)^{\abs{\alpha}} \angles{ u, \partial^\alpha \phi }
+                                             = \angles{ \partial^\alpha u, \phi },
+    \end{equation}
+    as required.
+\end{proof}
+\begin{example}
+    \begin{enumerate}[label=(\arabic*)]
+        \item The derivative of the delta distribution is given by $\angles{ \partial^\alpha \delta, \phi } = (-1)^{\abs{\alpha}} \angles{ \delta,\partial^\alpha \phi } = (-1)^{\abs{\alpha}} \partial^\alpha \phi(0)$.
+        
+        \item Define the Heaviside function $H \in L_{\rm loc}^1(\bbR)$ by 
+        \begin{equation}
+            H(x) = 
+            \begin{cases}
+                1 & x \geq 0; \\
+                0 & x < 0.
+            \end{cases}
+        \end{equation}
+        Then the distributional derivative of $H$ is given by
+        \begin{equation}
+            \angles{ H',\phi } = - \angles{ H,\phi' } = - \int_0^\infty \phi' \; \d x = \phi(0) = \angles{ \delta,\phi }.
+        \end{equation}
+        That is, $H' = \delta$.
+
+        \item Fix $f \in C^\infty(\bbR)$. The distributional derivative of the discontinuous function $fH$ is given by 
+        \begin{equation} \begin{aligned}
+            \angles{ (fH)',\phi } &= - \angles{ fH,\phi' }                                           \\
+                                  &= - \int_0^\infty f\phi' \; \d x                                  \\
+                                  &= - \int_0^\infty (f\phi)' \; \d x + \int_0^\infty f'\phi \; \d x \\
+                                  &= f(0)\phi(0) + \int_\bbR f'H \phi \; \d x                        \\
+                                  &= \angles{ f(0) \delta,\phi } + \angles{ f'H,\phi }.
+        \end{aligned} \end{equation}
+        That is, $(fH)' = f(x) \delta + f'H$.
+
+        \item Define the \textit{principal value of} $\frac{1}{x}$ to be the distribution $\rm{p.v.} \frac{1}{x} \in \scrD'(\bbR)$ given by 
+        \begin{equation}
+            \angles{ \rm{p.v.}\frac{1}{x},\phi } := \lim_{\epsilon \downarrow 0} \int_{\bbR \setminus [-\epsilon,\epsilon]} \frac{\phi(x)}{x} \; \d x.
+        \end{equation}
+        On $\bbR \setminus \set{0}$, $\rm{p.v.} \frac{1}{x} = \frac{1}{x}$. The exercise sheets show this is a well-defined distribution. We claim that the distributional derivative of $\log{\abs{x}} \in L_{\rm loc}^1(\bbR)$ is precisely $\rm{p.v.}\frac{1}{x}$. Fix $\phi \in C_c^\infty(\bbR)$. Then
+        \begin{equation} \begin{aligned}
+            \angles{ (\log{\abs{x}})',\phi } &= - \angles{ \log{\abs{x}},\phi' }                                                   \\
+                                             &= - \int_\bbR \phi'(x) \log{\abs{x}} \; \d x                                         \\
+                                             &= - \lim_{\epsilon \downarrow 0} \parens{ \int_{-\infty}^{-\epsilon} \phi'(x) \log(-x) \; \d x 
+                                                + \int_\epsilon^\infty \phi'(x) \log{x} \; \d x }                                  \\
+                                             &= - \lim_{\epsilon \downarrow 0} \parens{ \phi(-\epsilon)\log{\epsilon} - \int_{-\infty}^{-\epsilon} \frac{\phi(x)}{x} \; \d x 
+                                                - \phi(\epsilon)\log{\epsilon} - \int_\epsilon^\infty \frac{\phi(x)}{x} \; \d x }  \\
+                                             &= \angles{ \rm{p.v.}\frac{1}{x},\phi } 
+                                                + \lim_{\epsilon \downarrow 0} (\phi(\epsilon) - \phi(-\epsilon))\log{\epsilon}.
+        \end{aligned} \end{equation}
+        Now, $\abs{ (\phi(\epsilon) - \phi(-\epsilon))\log{\epsilon} } \leq C\epsilon\abs{ \log{\epsilon} } \rightarrow 0$, completing the proof.
+    \end{enumerate}
+\end{example}
+        
+Next, we show how to multiply a distribution by a smooth function. Let $\Omega \subseteq \bbR^n$ be open, let $u \in \scrD'(\Omega)$ and $f \in C^\infty(\Omega)$. For $\phi \in C_c^\infty(\Omega)$, define 
+\begin{equation}
+    \angles{ fu,\phi } := \angles{ u, f\phi }
+\end{equation}
+Then $fu$ is linear, and is a distribution by theorem \ref{thm:continuityAndBoundednessAreEquivalent}. Equivalently, we can use the Leibniz rule to check (\ref{eq:definitionOfDistribution}).
+
+\begin{example}
+    \begin{enumerate}[label=(\arabic*)]
+        \item Let $u \in \scrD'(\Omega)$, $f \in C^\infty(\Omega)$, $i \in \set{1,\dots,n}$ and $\phi \in C_c^\infty(\Omega)$. We then calculate
+        \begin{equation} \begin{aligned}
+            \angles{ \partial_i(fu),\phi } &= - \angles{ fu,\partial_i \phi } \\
+                                           &= - \angles{ u,f\partial_i \phi } \\
+                                           &= - \angles{ u,\partial_i(f\phi) } + \angles{ u,\partial_i f \phi } \\
+                                           &= \angles{ f\partial_i u,\phi } + \angles{ \partial_i f u,\phi }.
+        \end{aligned} \end{equation}
+        So the distributional derivatives of $fu$ are given by $\partial_i(fu) = f\partial_i u + \partial_i f u$.
+
+        \item Let $f \in C^\infty(\Omega)$ and $x \in \Omega$. If $\delta_x \in \scrD'(\Omega)$ is the delta function, then $f\delta_x$ is given by 
+        \begin{equation}
+            \angles{ f\delta_x,\phi } = \angles{ \delta_x,f\phi } = f(x)\phi(x) = \angles{ f(x)\delta_x,\phi }.
+        \end{equation}
+        So $f\delta_x = f(x)\delta_x$.
+
+        \item The distribution $f\partial_i \delta_x$ is given by 
+        \begin{equation} \begin{aligned}
+            \angles{ f\partial_i \delta_x,\phi } &= - \angles{ \delta_x,\partial_i(f\phi) } \\
+                                                 &= - \angles{ \delta_x,\partial_i f \phi } - \angles{ \delta_x, f\partial_i \phi } \\
+                                                 &= - \partial_i f(x) \phi(x) - f(x)\partial_i \phi(x) \\
+                                                 &= - \angles{ \partial_i f(x) \delta_x,\phi } + \angles{ f(x)\partial_i \delta_x,\phi}.
+        \end{aligned} \end{equation}
+        So $f \partial_i \delta_x = f(x) \partial_i \delta_x - \partial_i f(x) \delta_x$.
+    \end{enumerate}
+\end{example}
+
+For fixed $v \in \scrD'(\Omega)$ and $f \in C^\infty(\Omega)$, we would like to solve the equation $fu = v$ for $u \in \scrD'(\Omega)$. In general, this is a hard problem. However, if $f \neq 0$ everywhere, then the unique solution is $u = v/f$. We will solve the following nontrivial distributional equation on $\bbR$.
+\begin{theorem} \label{thm:solutionsOfxmu}
+    Let $m \in \bbN$, and suppose $u \in \scrD'(\bbR)$ is a solution of $x^m u = 0$. Then there exist $c_0,\dots,c_{m-1} \in \bbC$ such that 
+    \begin{equation} \label{eq:solutionsOfx^mu}
+        u = \sum_{j=0}^{m-1} c_j \delta^{(j)}.
+    \end{equation}
+\end{theorem}
+Note that all distributions of the form (\ref{eq:solutionsOfx^mu}) solve $x^m u = 0$. So if we prove this theorem, we have classified all the distributional solutions of this equation.
+\begin{proof}
+    Fix $\phi \in C_c^\infty(\bbR)$. Let $\eta \in C_c^\infty(\bbR)$ be a smooth cutoff function which is equal to 1 on a neighborhood of $0$. We write 
+    \begin{equation} \label{eq:decompositionOfTestFunctionForSolutionsOfx^mu}
+        \phi(x) = \eta(x)\parens{ \sum_{j=0}^{m-1} \frac{x^j}{j!}\phi^{(j)}(0) } + \psi(x)
+    \end{equation}
+    for some $\psi \in C_c^\infty(\bbR)$. Since $\eta$ is equal to 1 in a neighborhood of $0$, we have $\psi^{(j)}(0) = 0$ for $j = 1,\dots,m-1$. Using Taylor's theorem \ref{thm:taylor} with integral remainder, we write 
+    \begin{equation} \begin{aligned}
+        \psi(x) &= \sum_{j=0}^{m-1} \frac{x^j}{j!} \psi^{(j)}(0) + \frac{1}{(m-1)!}\int_0^x \psi^{(m)}(t)(x-t)^{m-1} \; \d t \\
+                &= \frac{1}{(m-1)!}\int_0^1 \psi^{(m)}(sx)(x-sx)^{m-1}x \; \d s \\
+                &= x^m \parens{ \frac{1}{(m-1)!}\int_0^1 \psi^{(m)}(sx)(1-s)^{m-1} \; \d s } \\
+                &=: x^m \widetilde{\psi}(x).
+    \end{aligned} \end{equation}
+    Note $\widetilde{\psi} \in C_c^\infty(\bbR)$. It follows that
+    \begin{equation}
+        \angles{ u,\psi } = \angles{ u,x^m\widetilde{\psi} } = \angles{ x^m u,\widetilde{\psi} } = 0.
+    \end{equation}
+    Plugging this into (\ref{eq:decompositionOfTestFunctionForSolutionsOfx^mu}) and applying $u$, we find 
+    \begin{equation}
+        \angles{ u,\phi } = \sum_{j=0}^{m-1} (-1)^j\angles{ u,\frac{\eta(x)x^j}{j!} } \fhangles{ \delta^{(j)},\phi }
+        = \angles{ \sum_{j=0}^{m-1} c_j \delta^{(j)}, \phi }.
+    \end{equation}
+    This completes the proof.
+\end{proof}
+
+\section{Distributions with Compact Support}
+Let $\Omega \subset \bbR^n$ be open. A linear functional $u \colon C^\infty(\Omega) \to \bbC$ is a \textit{distribution with compact support} if there exists a compact subset $K \Subset \Omega$, $C > 0$, and $N \in \bbN$, such that
+\begin{equation} \label{eq:distributionWithCompactSupport}
+    \abs{\angles{ u,\phi }} \leq C \sum_{\abs{\alpha} \leq N} \norm{ \partial^\alpha \phi }_{L^\infty(K)c} \quad \text{for all } \phi \in C^\infty(\Omega).
+\end{equation}
+The set of all distributions with compact support on $\Omega$ is denoted $\scrE'(\Omega)$
+
+We say a sequence $\phi_j$ \textit{converges to} $\phi$ \textit{in} $C^\infty(\Omega)$ if, for all multiindices $\alpha$, we have
+\begin{equation}
+    \norm{ \partial^\alpha \phi_j - \partial^\alpha \phi }_{L^\infty(K)} \quad \text{for all compact } K \Subset \Omega.
+\end{equation}
+The following theorem mirrors theorem \ref{thm:continuityAndBoundednessAreEquivalent}:
+\begin{theorem}
+    Let $u \colon C^\infty(\Omega) \to \bbC$ be a linear functional. Then $u$ is a distribution with compact support if and only if $\angles{ u,\phi_j } \rightarrow \angles{ u,\phi }$ whenever $\phi_j \rightarrow \phi$ in $C^\infty(\Omega)$.
+\end{theorem}
+\begin{proof}
+    Omitted. It follows exactly the same lines as the proof of theorem \ref{thm:continuityAndBoundednessAreEquivalent}.
+\end{proof}
+Note that by linearity, it suffices to show $\angles{ u,\phi_j } \rightarrow 0$ whenever $\phi_j \rightarrow 0$ in $C^\infty(\Omega)$.
+
+Next, we should show where the name for $\scrE'(\Omega)$ comes from. One would expect it has something to do with the compact set $K$ in (\ref{eq:distributionWithCompactSupport}). In particular, $\supp{u}$ should somehow be related to $K$.
+\begin{theorem}
+    Let $\Omega \subseteq \bbR^n$ be open. Let $u \in \scrD'(\Omega)$ be such that $\supp{u}$ is compact. Then there exists a unique $\widetilde{u} \in \scrE'(\Omega)$ such that 
+    \begin{equation} \label{eq:extensionOfCompactlySupportedDistribution}
+        \angles{ \widetilde{u},\phi } = \angles{ u,\phi } \quad \text{for all } \phi \in C_c^\infty(\Omega).
+    \end{equation}
+    Conversely, suppose $\widetilde{u}$ is a distribution with compact support. Then $u := \widetilde{u} \vert_{C_c^\infty(\Omega)}$ is a distribution whose support is compact.
+\end{theorem}
+\begin{proof}
+    We need to extend $u$ to $C^\infty(\Omega)$. Let $K = \supp{u} \Subset \Omega$. Fix a bump function $\eta \in C_c^\infty(\Omega)$ which is equal to $1$ on an open neighborhood of $K$, and denote by $\widetilde{K}$ its support. For $\phi \in C^\infty(\Omega)$, define 
+    \begin{equation}
+        \angles{ \widetilde{u},\phi } := \angles{ u, \eta\phi }.
+    \end{equation}
+    Note that this is well-defined, since $\eta\phi$ is smooth and has compact support. Let $\phi_j \in C^\infty(\Omega)$ be a sequence converging to $0$ in $C^\infty(\Omega)$. Then $\eta\phi_j$ is supported in $\widetilde{K}$ for all $j$, and for all multiindices $\alpha$,
+    \begin{equation}
+        \norm{ \partial^\alpha(\eta\phi_j) }_{L^\infty(\Omega)} =           \norm{ \partial^\alpha(\eta\phi_j) }_{L^\infty(\widetilde{K})}
+                                                                \leq        \sum_{\beta \leq \alpha} c_\beta \norm{ \partial^\alpha \phi_j }_{L^\infty(\widetilde{K})}
+                                                                \rightarrow 0.
+    \end{equation}
+    Therefore $\eta\phi_j \rightarrow 0$ in $C^\infty_c(\Omega)$, so by continuity of $u$, we must have that $\angles{ \widetilde{u},\phi_j } \rightarrow 0$. Thus $\widetilde{u}$ is a distribution with compact support.
+    
+    Next, we check (\ref{eq:extensionOfCompactlySupportedDistribution}). Let $\phi \in C_c^\infty(\Omega)$. We decompose $\phi$ as $\phi = \eta\phi + (1-\eta)\phi$. Then 
+    \begin{equation}
+        \angles{ u,\phi } = \angles{ u,\eta\phi } + \angles{ u,(1-\eta)\phi } = \angles{ \widetilde{u},\phi } + \angles{ u,(1-\eta)\phi }.
+    \end{equation}
+    But by assumption, $\supp(1-\eta) \subseteq \Omega \setminus K$, and so $\supp((1-\eta)\phi) \cap \supp{u} = \emptyset$. Lemma \ref{lem:disjointSupportsImplyPairingIsZero} then gives us $\angles{ u,(1-\eta)\phi } = 0$, completing the proof.
+
+    Finally, it remains to check uniqueness. [{\color{red} HEY BILLY CHECK THIS WHEN YOU WANT}]
+
+    The converse statement is easy [{\color{red} BUT MAYBE YOU'D LIKE TO PROVE IT???}]
+\end{proof}
+With this theorem in hand, we will identify distributions with compact support with distributions whose support is compact. In particular, all the theory we have developed for distributions thus far applies for distributions with compact support. Note in particular that (\ref{eq:distributionWithCompactSupport}) implies every distribution with compact support has finite order.
+ 
+An interesting class of distributions with compact support are those supported at a point. For example, $\delta$ is supported at the origin. More generally, the distribution $\sum_{\alpha \leq N} c_\alpha \partial^\alpha \delta$ is also supported at the origin. The following theorem tells us these are the only such distributions.
+\begin{theorem}
+    Suppose $u \in \scrD'(\bbR^n)$ has support $\set{0}$. Then there exists $N \in \bbN$ and $c_\alpha \in \bbC$ for $\abs{\alpha} \leq N$ such that 
+    \begin{equation}
+        u = \sum_{\abs{\alpha} \leq N} c_\alpha \partial^\alpha \delta.
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    Since $u$ has compact support, we may find a compact set $K \subseteq \bbR^n$, a constant $C > 0$, and a natural number $N \in \bbN$ such that (\ref{eq:distributionWithCompactSupport}) holds. Fix $\phi \in C_c^\infty(\bbR^n)$. We write 
+    \begin{equation}
+        \phi(x) = \sum_{\abs{\alpha} \leq N} \frac{x^\alpha}{\alpha!} \partial^\alpha \phi(0) + \psi(x)
+    \end{equation}
+    for some $\psi \in C^\infty(\bbR^n)$ satisfying $\partial^\alpha \psi(0) = 0$ for all $\abs{\alpha} \leq N$. With this, we can write 
+    \begin{equation}
+        \angles{ u,\phi } = \sum_{\abs{\alpha} \leq N} \angles{ u, \frac{(-1)^{\abs{\alpha}} x^\alpha}{\alpha!} } \angles{ \partial^\alpha \delta, \phi } + \angles{ u, \psi }.
+    \end{equation}
+    Note that every expression here is well-defined since $u \in \scrE'(\bbR^n)$. Thus it suffices to show $\angles{ u,\psi } = 0$.
+
+    Let $\eta \in C_c^\infty(\bbR^n)$ be a bump function which is equal to $1$ on $B(0,\frac{1}{2})$, and supported in $\overline{B(0,1)}$. For $\epsilon \in (0,1)$, define $\eta_\epsilon(x) := \eta(x/\epsilon)$. Then by lemma \ref{lem:disjointSupportsImplyPairingIsZero}, we have $\angles{u,\psi} = \angles{u,\eta_\epsilon \psi}$ for any $\epsilon \in (0,1)$. By estimate (\ref{eq:distributionWithCompactSupport}) and the fact all $\eta_\epsilon \psi$ are supported in $\overline{B(0,1)}$, it suffices to show that for all multiindices $\alpha$ with $\abs{\alpha} \leq N$, we have 
+    \begin{equation}
+        \sup_{\abs{x} \leq 1} \abs{\partial^\alpha(\eta_\epsilon \psi)} \rightarrow 0 \quad \text{as } \epsilon \downarrow 0.
+    \end{equation}
+    First, note that $\eta_\epsilon \psi$ has support in $\overline{B(0,\epsilon)}$, so we will show 
+    \begin{equation}
+        \sup_{\abs{x} \leq \epsilon} \abs{\partial^\alpha(\eta_\epsilon \psi)} \rightarrow 0 \quad \text{as } \epsilon \downarrow 0.
+    \end{equation}
+    By the Leibniz rule, we have 
+    \begin{equation}
+        \partial^\alpha(\eta_\epsilon \psi) = \sum_{\beta + \gamma = \alpha} c_{\alpha,\beta,\gamma} \epsilon^{-\abs{\gamma}} \partial^\gamma \eta \partial^\beta \psi,
+    \end{equation}
+    so that 
+    \begin{equation} \label{eq:estimateOnEtaEpsilonPsi}
+        \sup_{\abs{x} \leq \epsilon} \abs{\partial^\alpha(\eta_\epsilon \psi)} 
+        \leq \sum_{\beta + \gamma = \alpha} c_{\alpha,\beta,\gamma} \epsilon^{-\abs{\gamma}} \sup_{\abs{x} \leq \epsilon} \abs{\partial^\beta \psi(x)}.
+    \end{equation}
+    By Taylor's theorem, we write 
+    \begin{equation}
+        \psi(x) = \sum_{\abs{\delta} \leq N} \frac{x^\delta}{\delta!} \partial^\delta \psi(0) + \sum_{\abs{\delta} = N+1} \abs{\delta} \frac{x^\delta}{\delta!} \int_0^1 (1-t)^N \partial^\delta \psi(xt) \; \d t.
+    \end{equation}
+    The first term is zero since $\partial^\delta \psi(0) = 0$ for all $\abs{\delta} \leq N$. Differentiating $\beta$ times, we have 
+    \begin{equation}
+        \partial^\beta \psi(x) \sum_{\abs{\delta} = N+1} \abs{\delta} \frac{x^{\set{\delta - \beta}}}{\beta!} \int_0^1 (1-t)^N t^{\abs{\beta}} \partial^{\delta + \beta} \psi(xt) \; \d t.
+    \end{equation}
+    We therefore have the estimate 
+    \begin{equation}
+        \sup_{\abs{x} \leq \epsilon} \abs{\partial^\beta \psi(x)} \leq c_{\beta,N,\psi} \epsilon^{(N+1) - \abs{\beta}}.
+    \end{equation}
+    Substituting into (\ref{eq:estimateOnEtaEpsilonPsi}), 
+    \begin{equation} \begin{aligned}
+        \sup_{\abs{x} \leq \epsilon} \abs{\partial^\alpha(\eta_\epsilon \psi)} &\leq \sum_{\beta + \gamma = \alpha} c_{\alpha,\beta,\gamma,N,\psi} \epsilon^{(N+1) - (\abs{\beta} + \abs{\gamma})} \\
+                                                                               &=    \sum_{\beta + \gamma = \alpha} c_{\alpha,\beta,\gamma,N,\psi} \epsilon^{(N+1) - \abs{\alpha}}.
+    \end{aligned} \end{equation}
+    By assumption, $\abs{\alpha} \leq N$ and $\epsilon \in (0,1)$, which implies $\epsilon^{(N+1) - \abs{\alpha}} \leq \epsilon$. We conclude 
+    \begin{equation}
+        \sup_{\abs{x} \leq \epsilon} \abs{\partial^\alpha(\eta_\epsilon \psi)} \leq C \epsilon \rightarrow 0 \quad \text{as } \epsilon \downarrow 0,
+    \end{equation}
+    as required.
+\end{proof}
+
+\section{Tempered Distributions}
+Recall the \textit{Schwartz class} $\scrS(\bbR^n)$ is the set of functions $f \in C^\infty(\bbR^n)$ satisfying 
+\begin{equation}
+    \rho_{\alpha,\beta}(f) := \sup_{x \in \bbR^n} \abs{x^\alpha \partial^\beta f(x)} < \infty \quad \text{for all multiindices } \alpha,\beta.
+\end{equation}
+The $\rho_{\alpha,\beta}$ are called the \textit{Schwartz seminorms}. In a sense, the Schwartz functions are the smooth functions whose decay at infinity is faster than the inverse of any polynomial.
+
+There are strict inclusions $C_c^\infty(\bbR^n) \subsetneq \scrS(\bbR^n) \subsetneq C^\infty(\bbR^n)$. Indeed, for strictness of the first inclusion, the Gaussian function $\e^{-\pi\abs{x}^2}$ is in $\scrS(\bbR^n)$ but doesn't have compact support. For strictness of the second inclusion, simply the function $\abs{x}^2$ will work.
+
+Given a Schwartz function $f \in \scrS(\bbR^n)$, its \textit{Fourier transform} $\scrF f = \widehat{f}$ is defined by
+\begin{equation}
+    \scrF f(\xi) = \widehat{f}(\xi) := \int_{\bbR^n} f(x)\e^{-2\pi\i x \cdot \xi} \; \d x.
+\end{equation}
+The Fourier transform of a Schwartz function is again a Schwartz function, and the map $\scrF \colon \scrS(\bbR^n) \to \scrS(\bbR^n)$ is a homeomorphism with inverse 
+\begin{equation}
+    \scrF^{-1} f(\xi) = \check{f}(\xi) := \int_{\bbR^n} f(x)\e^{2\pi\i x \cdot \xi} \; \d x.
+\end{equation}
+We state some properties of the Fourier transform. The proofs are easy exercises.   
+\begin{lemma}
+    Let $f,g \in \scrS(\bbR^n)$. Then 
+    \begin{enumerate}[label=\rm (\roman*)]
+        \item $(\widehat{\partial_j f})(\xi) = 2\pi\i\xi_j\widehat{f}(\xi)$.
+        \item $\partial_j\widehat{f}(\xi) = (-2\pi\i x_j f)^\wedge(\xi)$.
+        \item $(f \ast g)^\wedge = \widehat{f}\widehat{g}$.
+        \item For $h$ in $\bbR^n$, define $\tau_h f(x) := f(x-h)$. Then $(\widehat{\tau_h f})(\xi) = \e^{-2\pi\i h \cdot \xi} \widehat{f}(\xi)$.
+        \item $(\e^{2\pi\i h \cdot x}f)^\wedge(\xi) = \widehat{f}(\xi - h)$.
+        \item For $\lambda > 0$, define $f_\lambda(x) := \lambda^{-n}f(x/\lambda)$. Then $\widehat{f_\lambda}(\xi) = \widehat{f}(\lambda \xi)$.
+        \item $\skew{5.5}\widehat{\widehat{f}}(x) = f(-x) =: \widetilde{f}$. In particular, $\scrF^4 = \id$.
+        \item (Parseval's identity) $(f,\widehat{g})_{L^2} = (\widehat{f},g)_{L^2}$.
+        \item (Plancherel's identity) $\norm{f}_{L^2} = \lVert \widehat{f} \rVert_{L^2}$.
+        \item $(\e^{-\pi\abs{x}^2})^\wedge(\xi) = \e^{-\pi\abs{\xi}^2}$.
+    \end{enumerate}
+\end{lemma}
+
+A linear functional $u \colon \scrS(\bbR^n) \to \bbC$ is a \textit{tempered distribution}, written $u \in \scrS'(\bbR^n)$, if there exist $C > 0$ and $N \in \bbN$ such that 
+\begin{equation} \label{eq:temperedDistribution}
+    \abs{\angles{u,f}} \leq C\sum_{\abs{\alpha},\abs{\beta} \leq N} \rho_{\alpha,\beta}(f) \quad \text{for all } f \in \scrS(\bbR^n).
+\end{equation}
+We say a sequence $f_j \in \scrS(\bbR^n)$ \textit{converges to} $f$ \textit{in} $\scrS(\bbR^n)$ if $\rho_{\alpha,\beta}(f_j - f) \rightarrow 0$ for all multiindices $\alpha,\beta$. Analogous to theorem \ref{thm:continuityAndBoundednessAreEquivalent}, we have the following 
+\begin{theorem}
+    A linear functional $u \colon \scrS(\bbR^n) \to \bbC$ is a tempered distribution if and only if $\angles{u,f_j} \rightarrow \angles{u,f}$ whenever $f_j \rightarrow f$ in $\scrS(\bbR^n)$.
+\end{theorem}
+\begin{proof}
+    Omitted.
+\end{proof}
+
+Observe that $\scrS'(\bbR^n) \subseteq \scrD'(\bbR^n)$. Indeed, fix a compact set $K \subseteq \bbR^n$. Then, for $\phi \in C_c^\infty(\bbR^n)$ with $\supp{\phi} \subseteq K$, we have 
+\begin{equation}
+    \rho_{\alpha,\beta}(\phi) = \sup_{x \in \bbR^n} \abs{x^\alpha \partial^\beta \phi(x)}
+                              = \sup_{x \in K} \abs{x^\alpha \partial^\beta \phi(x)}
+                              \leq C_K \lVert \partial^\beta \phi \rVert_{L^\infty(\bbR^n)}.
+\end{equation}
+So if $u \in \scrS'(\bbR^n)$, and $C > 0$ and $N \in \bbN$ are such that (\ref{eq:temperedDistribution}) holds, we have 
+\begin{equation}
+    \abs{\angles{u,\phi}} \leq C \sum_{\abs{\alpha},\abs{\beta} \leq N} \rho_{\alpha,\beta}(\phi)
+                          \leq C_K \sum_{\abs{\beta} \leq N} \lVert \partial^\beta \phi \rVert_{L^\infty(\bbR^n)}.
+\end{equation}
+In particular, note that tempered distributions have finite order. In a similar vein, observe $\scrE'(\bbR^n) \subseteq \scrS'(\bbR^n)$. Indeed, this is since $\lVert \partial^\beta f \rVert_{L^\infty(\bbR^n)} = \rho_{0,\beta}(f)$ for any $f \in \scrS(\bbR^n)$, so (\ref{eq:distributionWithCompactSupport}) transfers to (\ref{eq:temperedDistribution}) immediately.
+
+\begin{lemma}
+    The space of tempered distributions is closed under differentiation and multiplication by polynomials.
+\end{lemma}
+\begin{proof}
+    Let $u \in \scrS'(\bbR^n)$ and $j \in \set{1,\dots,n}$. Then, for $C > 0$ and $N \in \bbN$ as in (\ref{eq:temperedDistribution}), we have  
+    \begin{equation}
+        \abs{\angles{\partial_j u,f}} \leq C\sum_{\abs{\alpha},\abs{\beta} \leq N} \sup_{x \in \bbR^n} \abs{x^\alpha \partial^\beta \partial_j f(x)}
+        \leq C\sum_{\abs{\alpha},\abs{\beta} \leq N+1} \sup_{x \in \bbR^n} \abs{x^\alpha \partial^\beta f(x)}
+    \end{equation}
+    for all $f \in \scrS(\bbR^n)$. The proof for $x_j u$ is the same.
+\end{proof}
+
+\begin{example} 
+    For $p \in [1,\infty]$, we have $L^p(\bbR^n) \subseteq \scrS'(\bbR^n)$. Indeed, this is easy for $p = 1$. For $p > 1$, let $u \in L^p(\bbR^n)$ and $f \in \scrS(\bbR^n)$. H\"older's inequality immediately implies 
+    \begin{equation}
+        \abs{\angles{u,f}} = \abs{ \int_{\bbR^n} uf \; \d x } \leq \norm{u}_{L^p} \parens{ \int_{\bbR^n} \abs{f(x)}^{p'} \; \d x}^{\frac{1}{p'}},
+    \end{equation}
+    where $\frac{1}{p} + \frac{1}{p'} = 1$. Choose $N \in \bbN$ such that $Np' > n$. Then $(1+\abs{x})^{-Np'}$ is integrable over $\bbR^n$. We also have 
+    \begin{equation}
+        \sup_{x \in \bbR^n} \abs{(1+\abs{x})^N f(x)} \leq C \sum_{\abs{\alpha} \leq N} \rho_{\alpha,0}(f)
+    \end{equation}
+    for some $C > 0$. Putting this estimate together with the previous, we have 
+    \begin{equation}
+        \abs{\angles{u,f}} \leq \norm{u}_{L^p} C \sum_{\abs{\alpha} \leq N} \rho_{0,\alpha}(f) \int_{\bbR^n} \frac{1}{(1+\abs{x})^{Np'}} \; \d x.
+    \end{equation}
+    This shows (\ref{eq:temperedDistribution}).
+\end{example}
+
+Let $u \in \scrS'(\bbR^n)$ be a tempered distribution. Define its \textit{Fourier transform} by 
+\begin{equation}
+    \angles{\widehat{u},f} = \fhangles{u,\widehat{f}}.
+\end{equation}
+Note that $\widehat{u}$ is linear. Furthermore, it is a tempered distribution since $\scrF$ is a homeomorphism. In particular, if $f_j \rightarrow f$ in $\scrS(\bbR^n)$, then $\widehat{f_j} \rightarrow \widehat{f}$ in $\scrS(\bbR^n)$, so continuity of $\widehat{u}$ is immediate. Alternatively, we could figure out (\ref{eq:temperedDistribution}) directly. [{\color{red} try it}]
+
+\begin{lemma}
+    Let $u \in \scrS'(\bbR^n)$. Then
+    \begin{enumerate}[label={\rm (\roman*)}]
+        \item For $j \in \set{1,\dots,n}$, $(\partial_j u)^\wedge = 2\pi\i\xi_j\widehat{u}$.
+        \item Similarly, $\partial_j \widehat{u} = (-2\pi\i x_j u)^\wedge$.
+        \item $\skew{2.5}\widehat{\widehat{u}} = \widetilde{u}$, where $\angles{\widetilde{u},f} := \angles{u,\widetilde{f}}$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    Fix $f \in \scrS(\bbR^n)$. We then have
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+        \begin{equation}
+            \angles{ (\partial_j u)^\wedge, f } = \angles{ \partial_j u , \widehat{f} } 
+                                                = - \angles{ u, \partial_j\widehat{f} }
+                                                = - \angles{ u, (-2\pi\i x_j f)^\wedge }
+                                                = \angles{ 2\pi\xi_j\widehat{u}, f },
+        \end{equation}
+
+        \item 
+        \begin{equation}
+            \angles{ \partial_j\widehat{u}, f } = - \angles{ u, (\partial_j f)^\wedge }
+                                                = - \angles{ u, 2\pi\i\xi_j\widehat{f} }
+                                                = \angles{ (-2\pi\i x_j u)^\wedge, f },
+        \end{equation}
+        
+        \item 
+        \begin{equation}
+            \angles{ \skew{2.5}\widehat{\widehat{u}}, f } = \angles{ u, \skew{5.5}\widehat{\widehat{f}} }
+                                                = \angles{ u, \widetilde{f} }
+                                                = \angles{ \widetilde{u}, f },
+        \end{equation}
+    \end{enumerate}
+    as required.
+\end{proof}
+
+\begin{example}
+    \begin{enumerate}[label=(\arabic*)]
+        \item Note that $\delta \in \scrS'(\bbR^n)$ since it has compact support. Let $f \in \scrS(\bbR^n)$. Then 
+        \begin{equation}
+            \angles{ \widehat{\delta}, f } = \angles{ \delta,\widehat{f} } = \widehat{f}(0) = \int_{\bbR^n} f(x) \; \d x = \angles{ 1, f }.
+        \end{equation}
+        That is, $\widehat{\delta} = 1$.
+        
+        Taking the Fourier transform again, we see $\widehat{1} = \skew{3}\widehat{\widehat{\delta}} = \widetilde{\delta} = \delta$. That is,
+        \begin{equation}
+            \int_{\bbR^n} \widehat{f}(\xi) \; \d\xi = f(0).
+        \end{equation}
+        We have therefore proved the Fourier inversion formula!
+
+        \item Let's calculate the Fourier transform of the sign function $\sgn \in L^\infty(\bbR)$, defined by 
+        \begin{equation}
+            \sgn{x} :=
+            \begin{cases}
+                1  & x > 0, \\
+                -1 & x < 0.
+            \end{cases}
+        \end{equation}
+        Recall $\sgn'{x} = 2\delta$. Taking the Fourier transform of this, we find 
+        \begin{equation}
+            2 = 2\widehat{\delta} = \widehat{\sgn'}{\xi} = 2\pi\i\xi\widehat{\sgn}{\xi}.
+        \end{equation}
+        Also, note that $\xi{\rm p.v.}\frac{1}{\xi} = 1$, since
+        \begin{equation}
+            \angles{ \xi{\rm p.v.}\frac{1}{\xi}, f } = \lim_{\epsilon \downarrow 0} \int_{-\infty}^{-\epsilon} f(\xi) \; \d \xi + \int_\epsilon^\infty f(\xi) \; \d\xi
+            = \int_\bbR f(\xi) \; \d\xi 
+            = \angles{1,f}.
+        \end{equation}
+        So
+        \begin{equation}
+            \xi\parens{ \widehat{\sgn}{\xi} - \frac{1}{\pi\i}{\rm p.v.}\frac{1}{\xi} } = 0.
+        \end{equation}
+        Theorem \ref{thm:solutionsOfxmu} then tells us 
+        \begin{equation} \label{eq:fourierTransformOfSgn}
+            \widehat{\sgn}{\xi} = \frac{1}{\pi\i}{\rm p.v.}\frac{1}{\xi} + c\delta 
+        \end{equation}
+        for some $c \in \bbC$. Now, define $f \in \scrS(\bbR^n)$ by $f(x) = \e^{-\pi\abs{x}^2}$, so that $\widehat{f} = f$. Since $f$ is even, we have both $\angles{\widehat{\sgn}{\xi},f} = 0$ and $\angles{ {\rm p.v.}\frac{1}{\xi}, f } = 0$. Applying both sides of (\ref{eq:fourierTransformOfSgn}) to $f$, we obtain $c = 0$, and so
+        \begin{equation}
+            \widehat{\sgn}{\xi} = \frac{1}{\pi\i}{\rm p.v.}\frac{1}{\xi}
+        \end{equation}
+
+        \item The Heaviside function can be written as $H(\xi) = 1 + \frac{1}{2}\sgn{\xi}$. Using the previous two examples, its Fourier transform is then 
+        \begin{equation}
+            \widehat{H}(\xi) = \delta + \frac{1}{2\pi\i}{\rm p.v.}\frac{1}{\xi}.
+        \end{equation}
+    \end{enumerate}
+\end{example}
+
+Let $f,g \in \scrS(\bbR^n)$ be Schwartz functions. Their convolution is the function $f \ast g \in \scrS(\bbR^n)$ defined by 
+\begin{equation}
+    (f \ast g)(x) = \int_{\bbR^n} f(y)g(x-y) \; \d y.
+\end{equation}
+Recall $(f \ast g)^\wedge = \widehat{f}\widehat{g}$.
+
+Given a tempered distribution $u \in \scrS'(\bbR^n)$ and a Schwartz function $f \in \scrS(\bbR^n)$, define their convolution by 
+\begin{equation}
+    \angles{ u \ast f, g } := \angles{ u, \widetilde{f} \ast g } \quad \text{for } g \in \scrS(\bbR^n).
+\end{equation}
+Evidently, $u \ast f$ is well-defined and linear. We must now check that $u \ast f$ is a tempered distribution {\color{red} complete this}
+
+\begin{lemma}
+    Let $u \in \scrS'(\bbR^n)$ and $f \in \scrS(\bbR^n)$. Then $(u \ast f)^\wedge = \widehat{f}\widehat{u}$.
+\end{lemma}
+\begin{proof}
+    Fix $g \in \scrS(\bbR^n)$. Then 
+    \begin{equation} \begin{aligned}
+        \angles{(u \ast f)^\wedge, g} &= \angles{ u, \widetilde{f} \ast \widehat{g} } \\
+                                      &= \angles{ u, (\widehat{f}g)^\wedge } \\
+                                      &= \angles{ \widehat{f} \widehat{u}, g },
+    \end{aligned} \end{equation}
+    as required.
+\end{proof}
+
+
+
+
+
+\chapter{Singular Integral Operators}
+In this chapter, we study operators of the form $Tf = K \ast f$ for $K$ a ``singular'' integral kernel.
+
+\section{Prerequisites}
+Let $(X,\mu)$ be a measures space, and let $p \in [1,\infty]$. The \textit{weak} $L^p$ space $L^{p,\infty}(X,\mu)$ is the set of measurable functions $f \colon (X,\mu) \to \bbC$ such that quantity
+\begin{equation}
+    \norm{f}_{L^{p,\infty}} := 
+    \begin{cases}
+        \sup_{\lambda > 0} \lambda \mu(\set{\abs{f} > \lambda})^{1/p} & p < \infty, \\
+        \norm{f}_{L^\infty}                                           & p = \infty
+    \end{cases}
+\end{equation}
+is finite.
+\begin{remark}
+    The set $L^{p,\infty}(X,\mu)$ is a vector space. However, $\norm{\cdot}_{L^{p,\infty}}$ is not a norm (for $p < \infty$).
+\end{remark}
+
+Let $(Y,\nu)$ be another measure space, and let $p,q \in [1,\infty]$. Let $T$ be a function on $L^p(X,\mu)$ taking values in the space of measurable functions on $(Y,\nu)$. We say $T$ is \textit{strong} $(p,q)$ if there exists $C > 0$ such that 
+\begin{equation}
+    \norm{Tf}_{L^q(Y,\nu)} \leq C \norm{f}_{L^p(X,\mu)} \quad \text{for all } f \in L^p(X,\mu).
+\end{equation}
+We say $T$ is \textit{weak} $(p,q)$ if there exists $C > 0$ such that 
+\begin{equation}
+    \norm{Tf}_{L^{q,\infty}(Y,\nu)} \leq C \norm{f}_{L^p(X,\mu)} \quad \text{for all } f \in L^p(X,\mu).
+\end{equation}
+Equivalently, 
+\begin{equation}
+    \nu(\set{\abs{Tf} > \lambda}) \leq \parens{ \frac{C \norm{f}_{L^p(X,\mu)}}{\lambda} }^p \quad \text{for all } \lambda > 0 \text{ and } f \in L^p(X,\mu).
+\end{equation}
+We say $T$ is \textit{sublinear} if 
+\begin{equation} \begin{aligned}
+    \abs{T(f+g)}      &\leq \abs{Tf} + \abs{Tg} & \text{for all } f,g \in L^p(X,\mu), \text{ and} \\
+    \abs{T(\alpha f)} &= \abs{\alpha}\abs{Tf}   & \text{for all } f \in L^p(X,\mu) \text{ and } \alpha \in \bbC.
+\end{aligned} \end{equation}
+
+\begin{theorem}[Marcinkiewicz Interpolation]
+    Let $(X,\mu)$ be a measure space, and $(Y,\nu)$ a $\sigma$-finite measure space. Let $1 \leq p_0 < p_1 \leq \infty$. Let $T$ be a sublinear operator defined on $(L^{p_0} + L^{p_1})(X,\mu)$ and taking values in the space of measurable functions on $(Y,\nu)$, such that $T$ is weak $(p_j,p_j)$ for $j = 0,1$. Then $T$ is strong $(p,p)$ for any $p \in (p_0,p_1)$.
+\end{theorem}
+
+Given $k \in \bbZ$, denote by $\scrQ_k$ the set of cubes of the form $\prod_{i=1}^n [2^{-k}m_i, 2^{-k}(m_i + 1))$ with $m_i \in \bbZ$. Elements of $\scrQ_k$ are called \textit{dyadic cubes} of \textit{generation} $k$. Given a function $f \in L^1_\text{loc}(\bbR^n)$, we define
+\begin{equation}
+    E_k f := \sum_{Q \in \scrQ_k} \dashint_Q f(x) \; \d x \, \bbone_Q
+\end{equation}
+We can interpret $E_k f$ as being the conditional expectation of $f$ given the sigma algebra generated by $\scrQ_k$.
+
+\begin{theorem}[Calder\'on-Zygmund Decomposition]
+    Let $f \in L^1(\bbR^n)$ be nonnegative, and let $\lambda > 0$. Then there exists a countable collection $\set{Q_j}_{j \in I}$ of disjoint dyadic cubes such that
+    \begin{enumerate}[label={\rm (\roman*)}]
+        \item $f \leq \lambda$ a.e. on $(\bigcup_{j \in I} Q_j)^{\rm c}$,
+        \item $\abs{\bigcup_{j \in I} Q_j} \leq \frac{1}{\lambda} \norm{f}_{L^1}$,
+        \item $\lambda < \dashint_{Q_j} f(x) \; \d x \leq 2^n \lambda$ for all $j \in I$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Given $k \in \bbZ$, define $\Omega_k := \set{ x \in \bbR^n : E_kf(x) > \lambda, E_jf(x) \leq \lambda \text{ for } j < k }$. Then, since $E_k$ is constant on dyadic cubes of generation $k$, we have that $\Omega_k$ is a union of such dyadic cubes. Note that if $Q \subseteq \Omega_k$ is a dyadic cube, then none of its descendants can lie in $\Omega_j$ for $j > k$, so $\Omega := \bigcup_{k \in \bbZ} \Omega_k$ is a disjoint union of dyadic cubes. Let $\set{ Q_j }$ be this countable family.
+
+    It remains to prove (i), (ii), and (iii). For (i), the Lebesgue differentiation theorem with dyadic cubes implies $f = \lim_{k \to \infty} E_k f$ a.e. Note that if $x \in \Omega^c$, then $E_k f(x) \leq \lambda$ for all $k \in \bbZ$. It follows that $f(x) \leq \lambda$ for a.e. $x \in \Omega^c$.
+
+    For (ii), take $Q \subseteq \Omega$ to be a dyadic cube of generation $k$. By definition, $1 \leq \lambda^{-1} E_k f(x)$ for all $x \in Q$, so we estimate 
+    \begin{equation} \begin{aligned}
+        \abs{Q} &= \int_Q 1 \; \d x \\
+                &\leq \frac{1}{\lambda} \int_Q E_k f(x) \; \d x \\
+                &= \frac{1}{\lambda} \int_Q \dashint_Q f(y) \; \d y \, \d x \\
+                &= \frac{1}{\lambda} \int_Q f(y) \; \d y.
+    \end{aligned} \end{equation}
+    Summing over all dyadic cubes $Q \subseteq \Omega$, and using the monotone convergence theorem (along with nonnegativity of $f$) we obtain (ii).
+
+    For (iii), note that the lower inequality holds by definition. For the upper inequality, take a dyadic cube $Q \subseteq \Omega$ of generation $k$. Let $Q' \in \scrQ_{k-1}$ be its parent. By definition of $\Omega_k$, we have $E_{k-1}f(x) \leq \lambda$ for all $x \in Q'$. We estimate
+    \begin{equation} \begin{aligned}
+        \dashint_Q f(x) \; \d x \leq \frac{\abs{Q'}}{\abs{Q}} \frac{1}{\abs{Q'}} \int_{Q'} f(x) \; \d x \leq 2^n \lambda,
+    \end{aligned} \end{equation}
+    as required.
+\end{proof}
+Given such a family $\set{Q_j}$ and $\Omega := \bigcup_{j} Q_j$, we may decompose $f = g + b$, where
+\begin{equation}
+    g(x) := \begin{cases}
+        f(x) & x \notin \Omega, \\
+        \dashint_{Q_j} f(x) \; \d x & x \in Q_j
+    \end{cases}
+\end{equation}
+is the \textit{good part} of $f$, and $b := f - g$ is the \textit{bad part}. This decomposition (along with the family $\set{Q_j}$) is called the \textit{Calder\'on-Zygmund decomposition} of $f$ at \textit{height} $\lambda$.
+
+\section{Calder\'on-Zygmund Operators}
+In this section, we will study operators which generalize the Hilbert transform. Let $K \in \scrS'(\bbR^n)$ be a tempered distribution. Suppose
+\begin{enumerate}[label=(\roman*)]
+    \item The distribution $K$ coincides with a locally integrable function away from the origin.
+    \item Its Fourier transform $\widehat{K}$ coincides with an $L^\infty$ function on all of $\bbR^n$.
+    \item (Smoothness criterion) There exists $M \geq 0$ such that 
+    \begin{equation}
+        \int_{\abs{x} > 2\abs{y}} \abs{K(x-y) - K(x)} \; \d x \leq M \quad \text{for all } y \in \bbR^n.
+    \end{equation}
+\end{enumerate}
+We call $K$ a \textit{Calder\'on-Zygmund kernel}. Define its corresponding \textit{Calder\'on-Zygmund operator} by $T_K f := K \ast f$ for $f \in \scrS(\bbR^n)$.
+\begin{example}
+    On $\bbR$, consider $K = \frac{1}{\pi}\text{p.v.} \frac{1}{x}$. We know $K(x) = \frac{1}{\pi x}$ away from the origin, and $\widehat{K}(\xi) = -\i \sgn{\xi}$. To show the smoothness criterion, fix $y \in \bbR$. Then 
+    \begin{equation} \begin{aligned}
+        \int_{\abs{x} > 2\abs{y}} \abs{K(x-y) - K(x)} \; \d x &= \int_{\abs{x} > 2\abs{y}} \frac{\abs{y}}{\abs{x}\abs{x-y}} \; \d x \\
+                                                              &\leq \int_{\abs{x} > 2\abs{y}} \frac{2\abs{y}}{\abs{x}^2} \; \d x \\
+                                                              &= \left. -\frac{4\abs{y}}{r} \right\vert_{r=2\abs{y}}^\infty \\ 
+                                                              &= 2,
+    \end{aligned} \end{equation}
+    where the inequality follows from $\abs{x - y} \geq \abs{x} - \abs{y} \geq \abs{x}/2$.
+\end{example}
+The importance of Calder\'on-Zygmund operators is shown by the following theorem:
+\begin{theorem} \label{thm:caldZyg}
+    Let $T$ be a Calder\'on-Zygmund operator with kernel $K$. Then $T$ can be extended to an operator which is weak $(1,1)$, and strong $(p,p)$ for $1 < p < \infty$.
+\end{theorem}
+\begin{proof}
+    We first show $T$ is strong $(2,2)$. Given $f \in \scrS(\bbR^n)$, we know $\widehat{Tf} = \widehat{K} \widehat{f}$, which is in $L^2(\bbR^n)$ by assumption on $\widehat{K}$. So $Tf$ is in $L^2(\bbR^n)$, and by Plancherel's theorem, $\norm{Tf}_{L^2} = \fhnorm{\widehat{Tf}}_{L^2} \leq A\norm{f}_{L^2}$ for some $A > 0$ independent of $f$. It follows immediately by density of $\scrS(\bbR^n)$ in $L^2(\bbR^n)$ that $T$ may be extended to a strong $(2,2)$ operator.
+    
+    The bulk of the proof will be from showing $T$ can be extended to a weak $(1,1)$ operator. Fix a nonnegative $f \in \scrS(\bbR^n)$ and $\lambda > 0$. Form the Calder\'on-Zygmund decomposition $f = g + b$, $\Omega = \bigcup_j Q_j$ of $f$, and write $b_j = b \bbone_{Q_j}$. Since $f$ is a Schwartz function, $\Omega$ is compact (indeed, $f(x) \leq \lambda$ for $x$ outside of a compact set). It follows that $g$ and $b$ are in $L^2(\bbR^n)$, and so from the above, $Tg$ and $Tb$ are in $L_c^2(\bbR^n)$. We therefore have the simple estimate 
+    \begin{equation}
+        \abs{\set{ \abs{Tf} > \lambda }} \leq \abs{\set{ \abs{Tg} > \frac{\lambda}{2} }} + \abs{\set{ \abs{Tb} > \frac{\lambda}{2} }}.
+    \end{equation}
+    The estimate on the good part is immediate from Markov's inequality:
+    \begin{equation} \begin{aligned}
+        \abs{\set{ \abs{Tg} > \frac{\lambda}{2} }} 
+        &\leq \parens{\frac{2}{\lambda}}^2 \int_{\bbR^n} \abs{Tg}^2 \; \d{x} \\
+        &\leq \frac{4A}{\lambda^2} \int_{\bbR^n} \abs{g}^2 \; \d{x} \\
+        &\leq \frac{4A}{\lambda^2} 2^n \lambda \int_{\bbR^n} g \; \d{x} \\
+        &= \frac{2^{n+2}A}{\lambda} \norm{f}_{L^1(\bbR^n)},
+    \end{aligned} \end{equation}
+    where, in the third line, we used $g \leq 2^n \lambda$, and in the final line, we use $\norm{g}_{L^1(\bbR^n)} = \norm{f}_{L^1(\bbR^n)}$. Indeed, $g = f$ on $\Omega^c$, and for each $j$, 
+    \begin{equation}
+        \int_{Q_j} g \; \d{x} 
+        = \int_{Q_j} \dashint_{Q_j} f \; \d{x} \; \d{y}
+        = \int_{Q_j} f \; \d{x},
+    \end{equation}
+    recalling $f \geq 0$. So by monotone convergence, 
+    \begin{equation}
+        \int_\Omega g \; \d{x}
+        = \sum_j \int_{Q_j} g \; \d{x}
+        = \sum_j \int_{Q_j} f \; \d{x}
+        = \int_\Omega f \; \d{x}.
+    \end{equation}
+    Adding the integrals for $\Omega$ and for $\Omega^c$ to finish the claim.
+
+    We will now estimate the bad part. Let $c_j$ denote the center of the cube $Q_j$, and write $Q_j^*$ for the cube centered at $c_j$ with side length $2\sqrt{n} \ell_j$, where $\ell_j$ is the side length of $Q_j$. We also write $\Omega^* := \bigcup_j Q_j^*$. The sum $\sum_j b_j$ converges in $L^2(\bbR^n)$ to $b$, so by continuity, $\sum_j Tb_j$ converges in $L^2(\bbR^n)$ to $Tb$. We pass to a subsequence which converges a.e. Thus $\abs{Tb} \leq \sum_j \abs{Tb_j}$ a.e., which implies 
+    \begin{equation} \begin{aligned}
+        \abs{\set{ \abs{Tb} > \frac{\lambda}{2} }}
+        &\leq \abs{\set{ \sum_j \abs{Tb_j} > \frac{\lambda}{2} }} \\
+        &= \abs{\set{ x \in \Omega^* : \sum_j \abs{Tb_j} > \frac{\lambda}{2} }} 
+        + \abs{\set{ x \notin \Omega^* : \sum_j \abs{Tb_j} > \frac{\lambda}{2} }}.
+    \end{aligned} \end{equation}
+    The first term is easy to estimate:
+    \begin{equation} \begin{aligned}
+        \abs{\set{ x \in \Omega^* : \sum_j \abs{Tb_j} > \frac{\lambda}{2} }}
+        &\leq \abs{\Omega^*} \\
+        &\leq \sum_j \abs{Q_j^*} \\
+        &= \sum_j (2\sqrt{n})^n \abs{Q_j} \\
+        &= (2\sqrt{n})^n \abs{\Omega} \\
+        &\leq \frac{(2\sqrt{n})^n}{\lambda} \norm{f}_{L^1(\bbR^n)}.
+    \end{aligned} \end{equation}
+
+    The second term is nastier. First, we will show that if a function $f$ is in the set $L^2_c(\bbR^n)$ of $L^2$ functions with compact essential support, then $Tf \in L^2(\bbR^n)$ has the concrete expression 
+    \begin{equation}
+        Tf(x) = \int_{\bbR^n} K(x-y) f(y) \; \d y \quad \text{for a.e. } x \in (\esssup{f})^c.
+    \end{equation}
+    This will be important in the forthcoming estimates. {\color{red} do eet}
+    
+    Returning to estimating the bad part, the Markov inequality gives us 
+    \begin{equation} \begin{aligned} \label{eq:reallyBadPart}
+        \abs{\set{ x \notin \Omega^* : \sum_j \abs{Tb_j} > \frac{\lambda}{2} }}
+        &\leq \sum_{j} \frac{2}{\lambda} \int_{\bbR^n \setminus \Omega^*} \abs{Tb_j} \; \d{x} \\
+        &\leq \sum_j \frac{2}{\lambda} \int_{\bbR^n \setminus Q_j^*} \abs{Tb_j} \; \d{x}.
+    \end{aligned} \end{equation}
+    Now, each $b_j$ is in $L^2_c(\bbR^n)$ with essential support contained in $Q_j^*$, so for a.e. $x \in \bbR^n \setminus Q_j^*$, we have 
+    \begin{equation}
+        Tb_j(x) = \int_{Q_j} K(x - y) f(y) \; \d{y}.
+    \end{equation}
+    Since $\int_{Q_j} b_j \; \d{x} = 0$, we have 
+    \begin{equation}
+        Tb_j(x) = \int_{Q_j} (K(x - y) - K(x - c_j)) b_j(y) \; \d{y}.
+    \end{equation}
+    Choose $y \in Q_j$. Then 
+    \begin{equation}
+        \abs{y - c_j} \leq \frac{\sqrt{n}}{2} \ell_j,
+    \end{equation}
+    and if $x \in \bbR^n \setminus Q_j^*$, then 
+    \begin{equation}
+        \abs{x - c_j} > \ell_j \sqrt{n} \geq 2 \abs{y - c_j}.
+    \end{equation}
+    So $\bbR^n \setminus Q_j^* \subseteq \set{x \in \bbR^n : \abs{x - c_j} > 2 \abs{y - c_j}}$. This allows us to estimate 
+    \begin{equation} \begin{aligned}
+        \int_{\bbR^n \setminus Q_j^*} \abs{Tb_j} \; \d{x} 
+        &\leq \int_{\bbR^n \setminus Q_j^*} \int_{Q_j} \abs{ K(x - y) - K(x - c_j) } \abs{ b_j(y) } \; \d{y} \, \d{x} \\
+        &\leq \int_{Q_j} \abs{b_j(y)} \int_{\abs{x-c_j} > 2 \abs{y-c_j}} \abs{ K(x-y) - K(x-c_j) } \; \d{x} \, \d{y} \\
+        &\leq \int_{Q_j} M \abs{b_j(y)} \; \d{y} \\
+        &\leq 2M \int_{Q_j} \abs{f(y)} \; \d{y}
+    \end{aligned} \end{equation}
+    by the smoothness criterion on $K$, and the fact that $b_j(y) = \vert f(y) - \dashint_{Q_j} f(y) \; \d{y} \vert$ on $Q_j$. Recalling (\ref{eq:reallyBadPart}), we then have 
+    \begin{equation} \begin{aligned}
+        \abs{\set{ x \notin \Omega^* : \sum_j \abs{Tb_j} > \frac{\lambda}{2} }}
+        &\leq \sum_j \frac{2}{\lambda} \int_{\bbR^n \setminus Q_j^*} \abs{Tb_j} \; \d{x} \\
+        &\leq \sum_j \frac{4M}{\lambda} \int_{Q_j} \abs{f(y)} \; \d{y} \\
+        &\leq \frac{4M}{\lambda} \norm{f}_{L^1(\bbR^n)},
+    \end{aligned} \end{equation}
+    finishing the estimate on $\abs{\set{ \abs{Tb} > \lambda/2 }}$, and therefore on $\abs{\set{ \abs{Tf} > \lambda }}$.
+
+    {\color{red} finish showing $T$ is weak (1,1) and strong (p,p)}
+\end{proof}
+{\color{red} do the extensions}
+
+
+
+\chapter{Littlewood-Paley Theory}
+
+\section{Fourier Multipliers}
+
+Given a function $m \colon \bbR^n \to \bbC$, we would like to investigate the boundedness properties of the operator $m(D)f := (m \widehat{f})^\vee$ acting on suitable functions $f$. For example, if $m$ has polynomial growth and $f$ is Schwartz, then $m(D)f$ is a tempered distribution. We call $m$ and its associated operator $m(D)$ \textit{Fourier multipliers}. The partial derivative operators $\partial_j$ are Fourier multipliers, with $m(\xi) = 2\pi i \xi_j$. Note that $m(D)f = \check{m} \ast f$ in physical space (so long as $m$ has polynomial growth), but we will often be working in frequency space.
+
+If $m \in L^\infty(\bbR^n)$, then $m(D)$ is a bounded operator $L^2(\bbR^n) \to L^2(\bbR^n)$ with operator norm $\norm{m}_{L^\infty(\bbR^n)}$. Similarly, if $\check{m} \in L^1(\bbR^n)$, then $m(D)$ is a bounded operator $L^r(\bbR^n) \to L^r(\bbR^n)$ for any $r \in [1,\infty]$ with operator norm $\norm{\check{m}}_{L^1(\bbR^n)}$ by Young's inequality.
+
+\begin{theorem}[Mikhlin Multiplier Theorem] \label{thm:mikhlin}
+    Suppose $m \in C^{n+2}(\bbR^n \setminus \set{0})$ satisfies, for some $C > 0$,
+    \begin{equation} \label{eq:mikhlinCondition}
+        \abs{\partial^\alpha m(\xi)} \leq C \abs{\xi}^{-\abs{\alpha}}
+    \end{equation}
+    for all $\xi \neq 0$ and $\abs{\alpha} \leq n+2$. Then, for $p \in (1,\infty)$, there exists $B = B_{m,n,p} > 0$ such that
+    \begin{equation}
+        \norm{m(D)f}_{L^p(\bbR^n)} \leq B \norm{f}_{L^p(\bbR^n)}
+    \end{equation}
+    for all $f \in \scrS(\bbR^n)$.
+\end{theorem}
+Note that (\ref{eq:mikhlinCondition}) implies, in particular, that $m$ is bounded. So for any $f \in \scrS(\bbR^n)$, the function $m\widehat{f}$ is a tempered distribution. The idea of the proof is fairly simple: we show that $K = \check{m}$ coincides with a locally integrable function on $\bbR^n \setminus \set{0}$ satisfying the H\"ormander condition, and is thus a Calder\'on-Zygmund kernel, allowing us to apply theorem \ref{thm:caldZyg}. How we do this is the crux of Littlewood-Paley theory: we decompose $m$ in the frequency domain into nicer pieces, establish bounds on these, and then sum them back together. 
+\begin{lemma}
+    There exists a radial and nonnegative $\Psi \in C_c^\infty(\bbR^n)$ such that $\supp{\Psi} \subseteq \bbR^n \setminus \set{0}$ and 
+    \begin{equation}
+        \sum_{j=-\infty}^\infty \Psi(2^{-j} x) = 1
+    \end{equation}
+    for all $x \neq 0$. Furthermore, at most two terms in this sum are nonzero for any $x \neq 0$.
+\end{lemma}
+\begin{proof}
+    Let $\chi \in C_c^\infty(\bbR^n)$ be radial and radially decreasing such that $\chi(x) = 1$ for $\abs{x} \leq 1$, and $\chi(x) = 0$ for $\abs{x} \geq 2$. We define $\Psi(x) := \chi(x) - \chi(2x)$. Then $\Psi \in C_c^\infty(\bbR^n)$ is radial and nonnegative, and if $\abs{x} \leq \frac{1}{2}$, then $\chi(x) = \chi(2x) = 1$, so $\Psi(x) = 0$, implying $\supp{\Psi} \subseteq \bbR^n \setminus \set{0}$. Note also that $\Psi(x) = 0$ for $\abs{x} \geq 2$. Now, let $x \neq 0$ and $N \in \bbN$. Then 
+    \begin{equation}
+        \sum_{j = -N}^N \Psi(2^{-j} x) = \chi(2^{-N} x) - \chi(2^{N+1} x) \to \chi(0) = 1.
+    \end{equation}
+    Finally, recalling that $\Psi$ is supported in the annulus $\frac{1}{2} \leq \abs{x} \leq 2$, we see that at most two terms in the sum are nonzero.
+\end{proof}
+\begin{proof}[Proof of theorem \ref{thm:mikhlin}]
+    With $\Psi$ as in the previous lemma, we write $\Psi_j(x) := \Psi(2^{-j} x)$, and define $m_j := \Psi_j m$. Then $m_j \in (L^1 \cap L^2)(\bbR^n)$, so $m_j(D)f = K_j \ast f$, where $K_j = \check{m_j} \in L^\infty(\bbR^n)$. The series $\sum_{j=-\infty}^\infty K_j$ converges to $K$ in $\scrS'(\bbR^n)$. Indeed, for any $f \in \scrS(\bbR^n)$,
+    \begin{equation} \begin{aligned}
+        \angles{ \sum_{j=-N}^N K_j, f }
+        &= \sum_{j=-N}^N \angles{ \check{m_j},f } \\
+        &= \sum_{j=-N}^N \angles{ \Psi_j m, \check{f} } \\
+        &= \angles{ m, \sum_{j=-N}^N \Psi_j \check{f} } \\
+        &\to \angles{ m, \check{f} } \\
+        &= \angles{ K, f }.
+    \end{aligned} \end{equation}
+    
+    We shall now establish bounds on $K_j$ and $\nabla K_j$. We use the notation $A \lesssim_{a_1,\dots,a_k} B$ to mean there exists $C = C_{a_1,\dots,a_k} > 0$ such that $A \leq CB$. We will show 
+    \begin{align}
+        \abs{K_j(x)} &\lesssim_n \abs{x}^{-n} \min\set{ (2^j\abs{x})^n, (2^j\abs{x})^{-2} }, \label{eq:kjBound} \\
+        \abs{\nabla K_j(x)} &\lesssim_n \abs{x}^{-(n+1)} \min\set{ (2^j\abs{x})^{n+1}, (2^j\abs{x})^{-1} } \label{eq:gradKjBound}
+    \end{align}
+    for all $x \neq 0$ and $j \in \bbZ$. For the first bound on $\abs{K_j(x)}$, we have 
+    \begin{equation} \begin{aligned}
+        \abs{K_j(x)}
+        &= \abs{\check{m_j}(x)}  \\
+        &\leq \abs{\int_{\bbR^n} \Psi_j(\xi) m(\xi) \e^{2\pi\i x \cdot \xi} \; \d{\xi}} \\
+        &\leq \int_{\abs{\xi} \leq 2^{j+1}} \Psi(2^{-j} \xi) \abs{m(\xi)} \; \d{\xi} \\
+        &\lesssim_n 2^{jn} \\
+        &\lesssim_n \abs{x}^{-n} (2^j\abs{x})^n,
+    \end{aligned} \end{equation}
+    noting $\Psi_j$ is supported in the ball $B(0,2^{j+1})$, $\Psi$ and $m$ are bounded, and the ball $B(0,2^{j+1})$ has measure proportional to $2^n 2^{jn}$. Forthe second bound on $\abs{K_j(x)}$, we do something a little stranger. First, note that for any $x \neq 0$, we have 
+    \begin{equation}
+        \parens{ \frac{-\i x}{2\pi\abs{x}^2} \cdot \nabla_\xi } \e^{2\pi\i x \cdot \xi} = \e^{2\pi\i x \cdot \xi}.
+    \end{equation}
+    We then estimate, for any $k \leq n+2$,
+    \begin{equation} \begin{aligned}
+        \abs{K_j(x)}
+        &= \abs{\int_{\bbR^n} m_j(\xi) \e^{2\pi\i x \cdot \xi} \; \d{\xi}} \\
+        &= \abs{\int_{\bbR^n} m_j(\xi) \parens{ \frac{-\i x}{2\pi\abs{x}^2} \cdot \nabla_\xi }^k \e^{2\pi\i x \cdot \xi} \; \d{\xi} } \\
+        &= \abs{\int_{\bbR^n} \parens{ \frac{-\i x}{2\pi\abs{x}^2} \cdot \nabla_\xi }^k m_j(\xi) \e^{2\pi\i x \cdot \xi} \; \d{\xi} } \\
+        &\lesssim_n \frac{1}{\abs{x}^k} 2^{-jk} 2^{jn}.
+    \end{aligned} \end{equation}
+    In particular, taking $k = n + 2$, we have 
+    \begin{equation}
+        \abs{K_j(x)} \lesssim_n \abs{x}^{-n} (2^{j} \abs{x})^{-2} 2^{-jn} 2^{jn} = \abs{x}^{-n} (2^j \abs{x})^{-2}.
+    \end{equation}
+    The bound (\ref{eq:kjBound}) has therefore been found.
+
+    For the bound on the gradient, we note first that for $x \neq 0$,
+    \begin{equation} \begin{aligned}
+        \abs{\nabla K_j(x)}
+        &= \abs{ \int_{\bbR^n} m_j(\xi) 2\pi\i\xi \e^{2\pi\i x \cdot \xi} \; \d{\xi} } \\
+        &\leq \int_{\abs{\xi} \leq 2^{j+1}} \abs{m_j(\xi)} 2\pi \abs{\xi} \; \d{\xi} \\
+        &\lesssim_n 2^{j+1} 2^{n(j+1)} \\
+        &\lesssim_n \abs{x}^{-(n+1)} (2^j \abs{x})^{n+1}.
+    \end{aligned} \end{equation}
+    The other bound is similar, noting again that the additional $\xi$ coming from the derivative of $\e^{2\pi\i x \cdot \xi}$ adds an additional factor of $2^j$.
+
+    Summing the $K_j$, we have 
+    \begin{equation} \begin{aligned}
+        \sum_{j = -\infty}^\infty \abs{K_j(x)}
+        &\lesssim_n \frac{1}{\abs{x}^n} \sum_{j=-\infty}^\infty \min\set{ (2^j\abs{x})^n, (2^j\abs{x})^{-2} } \\
+        &\lesssim_n \frac{1}{\abs{x}^n} \parens{ \sum_{2^j\abs{x} < 1} (2^j\abs{x})^n + \sum_{2^j\abs{x} \geq 1} (2^j\abs{x})^{-2} } \\
+        &\lesssim_n \abs{x}^{-n},
+    \end{aligned} \end{equation}
+    which implies that $\sum_{j=-\infty}^\infty K_j$ converges locally uniformly on $\bbR^n \setminus \set{0}$ to some function $K$. Using the dominated convergence theorem, one can check that this $K$ agrees with the tempered distribution $K$ as above. Finally, since the gradients of the partial sums $\sum_{j=-N}^n K_j$ also converge locally uniformly (with bound proportional to $\abs{x}^{-(n+1)}$), we see that $K$ is differentiable with $\abs{\nabla K(x)} \lesssim_n \abs{x}^{-(n+1)}$. But this is precisely the H\"ormander condition for Calder\'on-Zygmund kernels. Since $\widehat{K} = m$ is bounded and $K$ is locally integrable on $\bbR^n \setminus \set{0}$, the proof is finished by theorem \ref{thm:caldZyg}.
+\end{proof}
+Our proof above shows that $m(D)$ can be extended to an operator which is weak $(1,1)$ and strong $(p,p)$ for $p \in (1,\infty)$.
+
+\begin{example}
+    For $m = 1$, define the Fourier multiplier $m(\xi) = -\i \sgn{\xi}$. Then, clearly, $m^{(k)}(\xi) \lesssim \abs{\xi}^{-k}$ for $k \leq 3$, and so the Hilbert transform $Hf = (-\i\sgn{\xi} \widehat{f})^\vee$ is weak $(1,1)$ and strong $(p,p)$ for $p \in (1,\infty)$ by the Mikhlin multiplier theorem.
+\end{example}
+\begin{example}
+    For $j \in \set{1,\dots,n}$, define the \textit{Riesz transform} $R_j$ to be the operator with multiplier $-\i\xi_j / \abs{\xi}$. Then $R_j$ is weak $(1,1)$ and strong $(p,p)$ for $p \in (1,\infty)$ by the Mikhlin multiplier theorem.
+\end{example}
+
+
+\section{Littlewood-Paley Inequality}
+
+We will spend this section proving the following theorem which lies at the heart of Littlewood-Paley theory. We write $A \approx_{a_1,\dots,a_k} B$ to mean $A \lesssim_{a_1,\dots,a_k} B \lesssim_{a_1,\dots,a_k} A$. We take $\Psi$ to be the function as in the previous section, and write $\Delta_j$ for the multiplier operator $\Psi_j(D)$.
+\begin{theorem}[Littlewood-Paley Inequality] \label{thm:littlePaley}
+    For $p \in (1,\infty)$, we have 
+    \begin{equation}
+        \norm{ \sqrt{ \sum_{j=-\infty}^\infty \abs{\Delta_j f}^2 } }_{L^p(\bbR^n)}
+        \approx_{n,p} \norm{f}_{L^p(\bbR^n)}
+    \end{equation}
+    for all $f \in L^p(\bbR^n)$.
+\end{theorem}
+Thus an $L^p$ function on $\bbR^n$ can be decomposed in frequency space into its components of frequencies approximately $2^j$ without changing the behavior of its norm. For $f \in L^p(\bbR^n)$, the function 
+\begin{equation}
+    Sf := \sqrt{ \sum_{j=-\infty}^\infty \abs{\Delta_j f}^2 }
+\end{equation}
+is called the \textit{Littlewood-Paley square function} of $f$.
+
+There are two common proofs of the Littlewood-Paley inequality. One uses an analog of Calder\'on-Zygmund theory for vector-valued operators. We will do something slightly different. Namely, we will use the following inequality from probability theory:
+\begin{theorem}[Khinchine Inequality]
+    For $N \in \bbN$, let $x_{-N},\dots,x_N \in \bbC$ be constants, and $\epsilon_{-N},\dots,\epsilon_N$ i.i.d. random variables with 
+    \begin{equation}
+        \epsilon_i =
+        \begin{cases}
+            1 & \text{with probability} \frac{1}{2}, \\
+            -1 & \text{with probability} \frac{1}{2}.
+        \end{cases}
+    \end{equation}
+    Then, for $p \in [1,\infty)$,
+    \begin{equation}
+        \bbE\bracks{ \abs{ \sum_{j=-N}^N \epsilon_j x_j }^p }^{\frac{1}{p}} 
+        \approx_p \sqrt{ \sum_{j=-N}^N \abs{x_j}^2 }.
+    \end{equation}
+    In particular,
+    \begin{equation}
+        \bbE\bracks{ \abs{ \sum_{j=-\infty}^\infty \epsilon_j x_j }^p }^{\frac{1}{p}} 
+        \approx_p \sqrt{ \sum_{j=-\infty}^\infty \abs{x_j}^2 }.
+    \end{equation}
+    whenever either side is finite.
+\end{theorem}
+By integrating and using Fubini's theorem, we have the following immediate corollary:
+\begin{corollary}
+    For $p \in [1,\infty)$ and $N \in \bbN$, let $f_{-N},\dots,f_N \in L^p(\bbR^n)$ be functions, and $\epsilon_{-N},\dots,\epsilon_N$ i.i.d. random variables as before. Then 
+    \begin{equation}
+        \bbE\bracks{ \norm{ \sum_{j=-N}^N \epsilon_j f_j }_{L^p(\bbR^n)}^p }^\frac{1}{p}
+        \approx_p \norm{ \sqrt{ \sum_{j=-N}^N \abs{f_j}^2 } }_{L^p(\bbR^n)}.
+    \end{equation}
+    In particular,
+    \begin{equation}
+        \bbE\bracks{ \norm{ \sum_{j=-\infty}^\infty \epsilon_j f_j }_{L^p(\bbR^n)}^p }^\frac{1}{p}
+        \approx_p \norm{ \sqrt{ \sum_{j=-\infty}^\infty \abs{f_j}^2 } }_{L^p(\bbR^n)}.
+    \end{equation}
+    whenever either side is finite.
+\end{corollary}
+
+\begin{proof}[Proof of theorem \ref{thm:littlePaley}]
+\end{proof}
+
+
+\section{Sobolev Spaces}
+
+Given $s \in \bbR$, we define the \textit{Sobolev space} $H^s(\bbR^n)$ of order $s$ by 
+\begin{equation}
+    H^s(\bbR^n) := \set{ u \in \scrS'(\bbR^n) : (1 + \abs{\xi}^2)^{s/2} \widehat{u} \in L^2(\bbR^n) }.
+\end{equation}
+More generally, we define 
+\begin{equation}
+    W^{s,p}(\bbR^n) := \set{ u \in \scrS'(\bbR^n) : (1 + \abs{\xi}^2)^{s/2} \widehat{u} \in L^p(\bbR^n) }.
+\end{equation}
+So $H^s(\bbR^n) = W^{s,2}(\bbR^n)$. The function $\angles{\xi} := (1 + \abs{\xi}^2)^{1/2}$ is called the \textit{Japanese bracket}. The multiplier operator corresponding to $\angles{\xi}^s$ is denoted $\D^s$. That is,
+\begin{equation}
+    \D^s u := (\angles{\xi}^s \widehat{u})^\vee.
+\end{equation}
+Note that this is well-defined whenever $u$ is a tempered distribution. By Plancherel's theorem, $u$ is in $H^s(\bbR^n)$ if and only if $\D^s u$ is in $L^2(\bbR^n)$. For this reason, we define an inner product on $H^s(\bbR^n)$ by 
+\begin{equation}
+    (u,v)_{H^s(\bbR^n)} 
+    := (\D^s u, \D^s v)_{L^2(\bbR^n)}
+    = \int_{\bbR^n} (1+\abs{\xi}^2) \widehat{u}(\xi) \overline{\widehat{v}(\xi)} \; \d{\xi}.
+\end{equation}
+ 
+
+
+
+\appendix
+\chapter{Appendix}
+\begin{theorem}[Taylor] \label{thm:taylor}
+    Let $f \in C^{k+1}(\bbR)$. Then 
+    \begin{equation}
+        f(x) = \sum_{j=0}^k \frac{x^j}{j!} f^{(j)}(0) + \frac{1}{k!}\int_0^x f^{(k+1)}(t)(x-t)^{k} \; \d t.
+    \end{equation}
+\end{theorem}
+
+\end{document}
