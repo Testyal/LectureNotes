@@ -1,0 +1,108 @@
+\documentclass{book}
+
+\usepackage{amsmath, mathrsfs, amssymb, bbm, amsthm, enumitem, mathtools, tikz, mathptmx, xcolor, wrapfig, fontspec}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[margin=3cm]{geometry}
+
+\setmainfont{PT Serif}
+
+\linespread{1.1}
+
+\usetikzlibrary{cd, decorations.markings, arrows}
+
+\newcommand{\scrA}{\mathscr{A}}
+\newcommand{\scrB}{\mathscr{B}}
+\newcommand{\scrC}{\mathscr{C}}
+\newcommand{\scrD}{\mathscr{D}}
+\newcommand{\scrE}{\mathscr{E}}
+\newcommand{\scrF}{\mathscr{F}}
+\newcommand{\scrL}{\mathscr{L}} 
+\newcommand{\scrN}{\mathscr{N}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbRP}{\mathbb{RP}}
+\newcommand{\bbT}{\mathbb{T}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbZmod}[1]{\bbZ/{#1}\bbZ}
+\newcommand{\bbone}{\mathbbm{1}}
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\e}{\mathrm{e}}
+\renewcommand{\i}{\mathrm{i}}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+\newcommand{\abs}[1]{\left\vert {#1} \right\vert}
+\newcommand{\norm}[1]{\left\Vert {#1} \right\Vert}
+\newcommand{\set}[1]{\left\{ {#1} \right\}}
+\newcommand{\parens}[1]{\left( {#1} \right)}
+ 
+\newcommand{\distributionEqual}{\overset{\scrD}{=}}
+\newcommand{\iidEqual}{\overset{\mathrm{i.i.d.}}{=}}
+\newcommand{\weak}{\rightharpoonup}
+
+\newcommand{\consum}{\mathop{\vcenter{\hbox{\LARGE\#}}}\limits}
+%\newcommand{\consum}{\mathop{\mathchoice
+%  {\vcenter{\hbox{\LARGE$\#$}}}
+%  {\vcenter{\hbox{\large$\#$}}}
+%  {\vcenter{\hbox{\footnotesize$\#$}}}
+%  {\vcenter{\hbox{\scriptsize$\#$}}}
+%}\displaylimits}
+
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\Ob}{Ob}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\rank}{rank}
+
+\DeclareRobustCommand{\coprod}{\mathop{\text{\fakecoprod}}}
+\newcommand{\fakecoprod}{%
+  \sbox0{$\prod$}%
+  \smash{\raisebox{\dimexpr.9625\depth-\dp0}{\scalebox{1}[-1]{$\prod$}}}%
+  \vphantom{$\prod$}%
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\surroundwithmdframed[outerlinewidth=0.4pt,middlelinewidth=1pt,innerlinewidth=0.4pt,middlelinecolor=white,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{theorem}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{lemma}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{proposition}
+\surroundwithmdframed[outerlinewidth=0.4pt,bottomline=false,topline=false,rightline=false,innertopmargin=-9pt,innerbottommargin=-1pt]{corollary}
+%\surroundwithmdframed[tikzsetting={draw=black,line width=1pt,dashed},bottomline=false,topline=false,rightline=false,innertopmargin=-5pt,outerlinecolor=white,middlelinecolor=white]{example}
+
+\numberwithin{equation}{section}
+
+\title{Homotopy Theory} 
+\author{Billy Sumners}
+
+\begin{document}
+\maketitle 
+
+\chapter{Homotopy Groups}
+\section{Definitions}
+Let $I^n$ be the $n$-dimensional unit cube. For a pointed topological space $(X, x_0)$, we define $\pi_n(X, x_0)$ to be the set of homotopy classes of maps $f \colon (I^n, \partial I^n) \to (X, x_0)$. Giving this set a group structure is similar to the case of the fundamental group: given maps $f, g \colon (I^n, \partial I^n) \to (X, x_0)$, we define 
+\begin{equation}
+    (f + g)(s_1, \dots, s_n) := 
+    \begin{cases}
+        f(2s_1, s_2, \dots, s_n)     & s_1 \in [0, \frac{1}{2}], \\
+        g(2s_1 - 1, s_2, \dots, s_n) & s_1 \in [\frac{1}{2}, 1].
+    \end{cases}
+\end{equation}
+We then define $[f] + [g] := [f + g]$, where $[f]$ denotes the homotopy class of $f$ as usual. To check this is well-defined, we need to check that if $f_0 \simeq f_1$, then $f_0 + g \simeq f_1 + g$. Indeed, if $f_t$ is a homotopy from $f_0$ to $f_1$ (through maps $(I^n, \partial I^n) \to (X, x_0)$), then $f_t + g$ is a homotopy from $f_0 + g$ to $f_1 + g$.
+
+To check that $+$ is a group operation,
+
+\end{document}
